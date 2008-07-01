@@ -308,7 +308,7 @@ public class FilterByPOS implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: FilterByPOS.doit()");
+			_logger.severe("ERROR: FilterByPOS.");
 			throw new ComponentExecutionException(ex);
 		}
 	}
