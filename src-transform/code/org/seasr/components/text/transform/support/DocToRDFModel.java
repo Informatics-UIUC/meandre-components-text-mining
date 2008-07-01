@@ -76,7 +76,7 @@ import org.seasr.components.text.util.vocabulary.DocumentVocabulary;
  * 
  * TODO: Testing, Unit Testing
  */
-public class DocumentToRDFModel {
+public class DocToRDFModel {
 
 	// ==============
 	// Data Members
@@ -302,7 +302,7 @@ public class DocumentToRDFModel {
 	// Constructor(s)
 	// ==============
 
-	public DocumentToRDFModel() {
+	public DocToRDFModel() {
 	}
 
 }

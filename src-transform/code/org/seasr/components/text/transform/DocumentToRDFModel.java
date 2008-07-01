@@ -53,7 +53,7 @@ import java.util.logging.*;
 //===============
 
 import org.seasr.components.text.datatype.corpora.Document;
-import org.seasr.components.text.transform.support.DocumentToRDFModel;
+import org.seasr.components.text.transform.support.DocToRDFModel;
 
 import org.meandre.core.*;
 import org.meandre.annotations.*;
@@ -85,7 +85,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 + "Trigger Criteria: "
 + "Standard.",
 	name = "DocumentToRDFModel", tags = "text document rdf jena transform")
-public class DocumentToRDFModel_Comp implements ExecutableComponent {
+public class DocumentToRDFModel implements ExecutableComponent {
 
 	// ==============
 	// Data Members
@@ -174,7 +174,7 @@ public class DocumentToRDFModel_Comp implements ExecutableComponent {
 	// Constructor(s)
 	// ================
 
-	public DocumentToRDFModel_Comp() {
+	public DocumentToRDFModel() {
 	}
 
 	// ================
@@ -236,7 +236,7 @@ public class DocumentToRDFModel_Comp implements ExecutableComponent {
 			
 			Document doc = (Document)ctx.getDataComponentFromInput(DATA_INPUT_DOCUMENT);
 			
-			Model mod = DocumentToRDFModel.getModelFromDocument(doc, getVerbose(ctx));
+			Model mod = DocToRDFModel.getModelFromDocument(doc, getVerbose(ctx));
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_RDF_MODEL, mod);
 			if (getFreeDoc(ctx)) {
 				doc.free();
