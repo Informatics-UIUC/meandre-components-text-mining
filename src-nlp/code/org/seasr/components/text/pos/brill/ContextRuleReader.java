@@ -193,7 +193,7 @@ public class ContextRuleReader implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: ContextRuleReader.doit()");
+			_logger.severe("ERROR: ContextRuleReader.");
 			throw new ComponentExecutionException(ex);
 		}
 	}

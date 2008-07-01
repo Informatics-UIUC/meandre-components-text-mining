@@ -523,7 +523,7 @@ public class ConTag implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: ConTagger.doit()");
+			_logger.severe("ERROR: ConTagger.");
 			throw new ComponentExecutionException(ex);
 		}
 	}

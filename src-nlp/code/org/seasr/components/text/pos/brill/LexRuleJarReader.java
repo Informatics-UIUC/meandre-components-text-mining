@@ -214,7 +214,7 @@ public class LexRuleJarReader implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: LexRuleJarReader.doit()");
+			_logger.severe("ERROR: LexRuleJarReader.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}

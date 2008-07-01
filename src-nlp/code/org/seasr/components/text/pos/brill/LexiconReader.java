@@ -144,7 +144,7 @@ public class LexiconReader implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			System.out.println(ex.getMessage());
-			System.out.println("ERROR: LexiconReader.doit()");
+			System.out.println("ERROR: LexiconReader.");
 			throw new ComponentExecutionException(ex);
 		}
 	}
