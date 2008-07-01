@@ -441,7 +441,7 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: OpenNLP_TreebankLinker.doit()");
+			_logger.severe("ERROR: OpenNLP_TreebankLinker.");
 			throw new ComponentExecutionException(ex);
 		}
 	}
