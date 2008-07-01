@@ -224,8 +224,7 @@ public class FilterStopWords implements ExecutableComponent {
 						Annotation tok = iter.next();
 						if (tok.getType().equals(
 								AnnotationConstants.TOKEN_ANNOT_TYPE)) {
-							String img = (String) tok.getFeatures().get(
-									AnnotationConstants.TOKEN_ANNOT_FEAT_IMAGE);
+							String img = tok.getContent(doc);
 							if (m_stops.contains(img.toLowerCase())) {
 								removes.add(tok);
 								cnt++;

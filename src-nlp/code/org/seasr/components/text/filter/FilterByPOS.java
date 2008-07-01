@@ -204,7 +204,6 @@ public class FilterByPOS implements ExecutableComponent {
 	public void initialize(ComponentContextProperties ccp) {
 		_logger.fine("initialize() called");
 		m_docsProcessed = 0;
-		m_docsProcessed = 0;
 		if (_tags == null) {
 			_tags = new HashSet<String>();
 			StringTokenizer toker = new StringTokenizer(getTagList(ccp), ",");
@@ -251,8 +250,7 @@ public class FilterByPOS implements ExecutableComponent {
 				if (tok.getType().equals(AnnotationConstants.TOKEN_ANNOT_TYPE)) {
 					PoSTag postag = (PoSTag) tok.getFeatures().get(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
-					String tokimg = (String) tok.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_IMAGE);
+					String tokimg = tok.getContent(doc);
 					if ((hasTag(postag))
 							&& (Character.isLetter(tokimg.charAt(0)))) {
 						toks_selected++;
@@ -280,8 +278,7 @@ public class FilterByPOS implements ExecutableComponent {
 						Annotation tok2 = (Annotation) list.get(i);
 						PoSTag postag = (PoSTag) tok2.getFeatures().get(
 								AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
-						String tokimg = (String) tok2.getFeatures().get(
-								AnnotationConstants.TOKEN_ANNOT_FEAT_IMAGE);
+						String tokimg = tok2.getContent(doc);
 						if ((hasTag(postag))
 								&& (Character.isLetter(tokimg.charAt(0)))) {
 							keep = true;
