@@ -474,7 +474,7 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: OpenNLP_NameFinder.");
+			_logger.severe("ERROR: OpenNLP_NameFinder.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}

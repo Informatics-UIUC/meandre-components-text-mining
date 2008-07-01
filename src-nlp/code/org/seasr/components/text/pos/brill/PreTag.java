@@ -388,7 +388,7 @@ public class PreTag implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: PreTag.");
+			_logger.severe("ERROR: PreTag.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}

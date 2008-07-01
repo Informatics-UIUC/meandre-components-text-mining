@@ -343,7 +343,7 @@ public class OpenNLP_Tokenizer implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: OpenNLP_Tokenizer.");
+			_logger.severe("ERROR: OpenNLP_Tokenizer.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}

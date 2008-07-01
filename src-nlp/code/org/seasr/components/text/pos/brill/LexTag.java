@@ -323,7 +323,7 @@ public class LexTag implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: LexTag.");
+			_logger.severe("ERROR: LexTag.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}

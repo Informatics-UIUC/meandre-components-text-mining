@@ -349,7 +349,7 @@ public class OpenNLP_PosTagger implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: OpenNLP_PosTagger.");
+			_logger.severe("ERROR: OpenNLP_PosTagger.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}

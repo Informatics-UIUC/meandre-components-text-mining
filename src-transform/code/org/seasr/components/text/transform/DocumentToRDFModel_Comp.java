@@ -244,7 +244,7 @@ public class DocumentToRDFModel_Comp implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: DocumentToRDFModel.");
+			_logger.severe("ERROR: DocumentToRDFModel.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}

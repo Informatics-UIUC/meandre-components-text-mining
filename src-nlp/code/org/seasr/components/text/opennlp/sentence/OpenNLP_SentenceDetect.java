@@ -274,7 +274,7 @@ public class OpenNLP_SentenceDetect implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: OpenNLP_SentenceDetect.");
+			_logger.severe("ERROR: OpenNLP_SentenceDetect.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}

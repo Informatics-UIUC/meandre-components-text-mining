@@ -557,7 +557,7 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: OpenNLP_TreebankParser.");
+			_logger.severe("ERROR: OpenNLP_TreebankParser.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}

@@ -229,7 +229,7 @@ public class TextFileToDoc implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: TextFileToDoc.");
+			_logger.severe("ERROR: TextFileToDoc.execute()");
 			throw new ComponentExecutionException(ex);
 		} finally {
 			if (m_reader != null) {

@@ -249,7 +249,7 @@ public class FilterStopWords implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: FilterStopWords.");
+			_logger.severe("ERROR: FilterStopWords.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}
