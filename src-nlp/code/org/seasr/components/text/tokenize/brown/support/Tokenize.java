@@ -143,8 +143,6 @@ public class Tokenize {
 				FeatureMap fm = Factory.newFeatureMap();
 				fm.put(AnnotationConstants.TOKEN_ANNOT_FEAT_INTITLE,
 						new Boolean(true));
-//				fm.put(AnnotationConstants.TOKEN_ANNOT_FEAT_IMAGE, tok
-//						.getImage());
 				transfer_flags(fm, tok);
 				annots.add(pos1, pos1 + img.length(), AnnotationConstants.TOKEN_ANNOT_TYPE, fm);
 				cnt++;
@@ -172,7 +170,6 @@ public class Tokenize {
 					continue;
 				}
 				FeatureMap fm = Factory.newFeatureMap();
-//				fm.put(AnnotationConstants.TOKEN_ANNOT_FEAT_IMAGE, img);
 				transfer_flags(fm, tok);
 				annots.add((pos1), (pos1 + img.length()),
 						AnnotationConstants.TOKEN_ANNOT_TYPE, fm);
