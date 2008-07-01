@@ -267,7 +267,7 @@ public class Tokenizer implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: Tokenizer_Comp.doit()");
+			_logger.severe("ERROR: Tokenizer_Comp.");
 			throw new ComponentExecutionException(ex);
 		}
 	}
