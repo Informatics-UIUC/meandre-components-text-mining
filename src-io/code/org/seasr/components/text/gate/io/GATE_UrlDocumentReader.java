@@ -177,7 +177,7 @@ public class GATE_UrlDocumentReader extends GATE_DocumentReader {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: GATE_DocumentReader.doit()");
+			_logger.severe("ERROR: GATE_DocumentReader.");
 			throw new ComponentExecutionException(ex);
 		}
 	}

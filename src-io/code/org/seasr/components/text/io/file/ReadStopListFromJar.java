@@ -154,7 +154,7 @@ public class ReadStopListFromJar implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: ReadStopListFromJar.doit()");
+			_logger.severe("ERROR: ReadStopListFromJar.");
 			throw new ComponentExecutionException(ex);
 		}
 	}
