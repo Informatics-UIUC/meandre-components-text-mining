@@ -62,8 +62,6 @@ public interface AnnotationConstants {
 	
 	// === TOKEN ATTRIBUTES =================================================
 	
-	public static final String TOKEN_ANNOT_FEAT_IMAGE = "$@token_image";
-
 	public static final String TOKEN_ANNOT_FEAT_INTITLE = "$@in_title";
 
 	public static final String TOKEN_ANNOT_FEAT_POS = "$@pos_tag";
@@ -92,8 +90,6 @@ public interface AnnotationConstants {
 
 	// === NGRAMS ATTRIBUTES ========================================================
 	
-	public static final String NGRAM_ANNOT_FEAT_IMAGE = "$@ngram_img";
-
 	public static final String NGRAM_ANNOT_FEAT_NORM_IMAGE = "$@ngram_norm_img";
 
 	public static final String NGRAM_ANNOT_FEAT_ARITY = "$@ngram_arity";
