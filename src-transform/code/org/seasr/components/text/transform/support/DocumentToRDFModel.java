@@ -40,7 +40,7 @@
  * WITH THE SOFTWARE.
  */ 
 
-package org.seasr.components.text.transform;
+package org.seasr.components.text.transform.support;
 
 //==============
 // Java Imports
