@@ -247,7 +247,7 @@ public class AddTokenNGrams implements ExecutableComponent {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: AddTokenNGrams.doit()");
+			_logger.severe("ERROR: AddTokenNGrams.");
 			throw new ComponentExecutionException(ex);
 		}
 	}
