@@ -152,7 +152,7 @@ public class DocToRDFModel {
 					.getDocID()));
 		}
 		// Adding document features
-		Map<String, Object> features = doc.getFeatures();
+		Map<String, String> features = doc.getFeatures();
 		for (String sKey : features.keySet()) {
 			String sValue = features.get(sKey).toString();
 			root.addProperty(DocumentVocabulary.feature_set, model
