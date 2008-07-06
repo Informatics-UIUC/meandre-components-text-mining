@@ -132,4 +132,6 @@ public interface Document extends FeatureBearer, Serializable {
 	 * Free this object for garbage collection.
 	 */
 	public void free();
+	
+	public Map<String, Object> getAuxMap();
 }

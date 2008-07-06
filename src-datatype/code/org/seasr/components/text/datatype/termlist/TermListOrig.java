@@ -77,7 +77,7 @@ public class TermListOrig implements TermList, Serializable {
 
 	private long m_date = -1;
 
-	private Hashtable<String, Object> m_properties = null;
+	private Hashtable<String, String> m_properties = null;
 
 	private static Logger _logger = Logger.getLogger("TermListOrig");
 
@@ -102,8 +102,8 @@ public class TermListOrig implements TermList, Serializable {
 	 * 
 	 * @param ht
 	 */
-	public void setProperties(Map<String, Object> ht) {
-		m_properties = new Hashtable<String, Object>(ht);
+	public void setProperties(Map<String, String> ht) {
+		m_properties = new Hashtable<String, String>(ht);
 	}
 
 	/**
@@ -111,8 +111,8 @@ public class TermListOrig implements TermList, Serializable {
 	 * 
 	 * @return
 	 */
-	public Map<String, Object> getProperties() {
-		return new Hashtable<String, Object>(m_properties);
+	public Map<String, String> getProperties() {
+		return new Hashtable<String, String>(m_properties);
 	}
 
 	/**

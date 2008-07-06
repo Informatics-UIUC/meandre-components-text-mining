@@ -62,21 +62,39 @@ public interface AnnotationConstants {
 	
 	// === TOKEN ATTRIBUTES =================================================
 	
-	public static final String TOKEN_ANNOT_FEAT_INTITLE = "$@in_title";
+	/**
+	 * boolean
+	 */
+	public static final String TOKEN_ANNOT_FEAT_INTITLE_BOOL = "$@in_title";
 
 	public static final String TOKEN_ANNOT_FEAT_POS = "$@pos_tag";
 
 	public static final String TOKEN_ANNOT_FEAT_NORM_IMAGE = "$@normalized_form";
 
-	public static final String TOKEN_ANNOT_FEAT_PRETAGGED = "$@pretagged";
+	/**
+	 * boolean
+	 */
+	public static final String TOKEN_ANNOT_FEAT_PRETAGGED_BOOL = "$@pretagged";
 
-	public static final String TOKEN_ANNOT_FEAT_LEXTAGGED = "$@lextagged";
+	/**
+	 * boolean
+	 */
+	public static final String TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL = "$@lextagged";
 
-	public static final String TOKEN_ANNOT_FEAT_CONTAGGED = "$@contagged";
+	/*
+	 * boolean
+	 */
+	public static final String TOKEN_ANNOT_FEAT_CONTAGGED_BOOL = "$@contagged";
 
-	public static final String TOKEN_ANNOT_FEAT_START_OF_LINE = "$@start_of_line";
+	/**
+	 * boolean
+	 */
+	public static final String TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL = "$@start_of_line";
 
-	public static final String TOKEN_ANNOT_FEAT_END_OF_LINE = "$@end_of_line";
+	/**
+	 * boolean
+	 */
+	public static final String TOKEN_ANNOT_FEAT_END_OF_LINE_BOOL = "$@end_of_line";
 
 	public static final String TOKEN_ANNOT_FEAT_PRETAGGED_DESC = "$@pretagged_desc";
 
@@ -84,37 +102,66 @@ public interface AnnotationConstants {
 
 	public static final String TOKEN_ANNOT_FEAT_CONTAGGED_DESC = "$@contagged_desc";
 
-	public static final String TOKEN_ANNOT_FEAT_WEIGHT = "$@token_weight";
+	public static final String TOKEN_ANNOT_FEAT_OCCURENCE_MULTIPLIER = "$@token_weight_mult";
 
 	public static final String TOKEN_ANNOT_FEAT_ANTECEDENT = "$@antecedent_offset";
 
 	// === NGRAMS ATTRIBUTES ========================================================
 	
 	public static final String NGRAM_ANNOT_FEAT_NORM_IMAGE = "$@ngram_norm_img";
+	
+	/**
+	 * An integer value.
+	 */
+	public static final String NGRAM_ANNOT_FEAT_ARITY_INT = "$@ngram_arity";
 
-	public static final String NGRAM_ANNOT_FEAT_ARITY = "$@ngram_arity";
-
+	/**
+	 * List of Annotation Objects
+	 */
 	public static final String NGRAM_ANNOT_FEAT_TOKEN_LIST = "$@ngram_tok_lst";
 	
 	// === SENTENCES ATTRIBUTES =====================================================
 
-	public static final String SENTENCE_ANNOT_PARSES = "$@sent_parses";
+	/**
+	 * Set of Strings (representing ints)
+	 */
+	public static final String SENTENCE_ANNOT_PARSES_SET = "$@sent_parses";
 
-	public static final String SENTENCE_PENNTREEBANK_FMT_ANNOT_PARSES = "$@penntreebank_fmt_parses";
+	/**
+	 * Set of String
+	 */
+	public static final String SENTENCE_PENNTREEBANK_FMT_ANNOT_PARSES_SET = "$@penntreebank_fmt_parses";
 	
 	// === PARSE ATTRIBUTES =========================================================
 	
 	public static final String PARSE_ANNOT_CONSTITUENT_TYPE = "$@parse_cons_type";
-
-	public static final String PARSE_ANNOT_PARENT = "$@parse_parent";
 	
-	public static final String PARSE_ANNOT_CHILDREN = "$@parse_children";
+	/**
+	 * Integer
+	 * 
+	 * Annotation ID of parent.
+	 */
+	public static final String PARSE_ANNOT_PARENT_INT = "$@parse_parent";
 	
-	// Probability = for statistical parsers this is the prob associated with this type.
-	public static final String PARSE_ANNOT_PROB = "$@parse_prob";
+	/**
+	 * Set of Strings (representing ints)
+	 * 
+	 * Annotations ID's of children.
+	 */
+	public static final String PARSE_ANNOT_CHILDREN_SET = "$@parse_children";
 
-	// Subject of Analysis - usually a sentence annotation ID
-	public static final String PARSE_ANNOT_SOFA = "$@parse_sofa";
+	/**
+	  * Double
+	  * Probability = for statistical parsers this is the prob associated with this type.
+	  */
+	public static final String PARSE_ANNOT_PROB_DOUBLE = "$@parse_prob";
+
+	/**
+	 * Integer
+	 * 
+	 * Subject of Analysis - usually a sentence annotation ID
+	 */
+	public static final String PARSE_ANNOT_SOFA_INT = "$@parse_sofa";
 	
 	public static final String PARSE_ANNOT_PARSER = "$@parse_parser";
 	

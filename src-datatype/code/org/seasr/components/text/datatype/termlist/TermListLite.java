@@ -74,7 +74,7 @@ public class TermListLite implements TermList, java.io.Serializable {
 
 	private String m_source = "";
 
-	private Hashtable<String, Object> m_properties = null;
+	private Hashtable<String, String> m_properties = null;
 
 	private long m_date = -1;
 
@@ -162,7 +162,7 @@ public class TermListLite implements TermList, java.io.Serializable {
 							i += 3;
 							appendToValue = false;
 							if (m_properties == null) {
-								m_properties = new Hashtable<String, Object>();
+								m_properties = new Hashtable<String, String>();
 							}
 							m_properties.put(key.toString(), value.toString());
 							key = new StringBuffer();
@@ -282,8 +282,8 @@ public class TermListLite implements TermList, java.io.Serializable {
 	 * 
 	 * @param ht
 	 */
-	public void setProperties(Map<String, Object> ht) {
-		m_properties = new Hashtable<String, Object>(ht);
+	public void setProperties(Map<String, String> ht) {
+		m_properties = new Hashtable<String, String>(ht);
 	}
 
 	/**
@@ -291,11 +291,11 @@ public class TermListLite implements TermList, java.io.Serializable {
 	 * 
 	 * @return
 	 */
-	public Map<String, Object> getProperties() {
+	public Map<String, String> getProperties() {
 		if (m_properties == null) {
-			m_properties = new Hashtable<String, Object>();
+			m_properties = new Hashtable<String, String>();
 		}
-		return new Hashtable<String, Object>(m_properties);
+		return new Hashtable<String, String>(m_properties);
 	}
 
 	/**
@@ -304,7 +304,7 @@ public class TermListLite implements TermList, java.io.Serializable {
 	 * @param key
 	 * @return
 	 */
-	public Object getProperty(String key) {
+	public String getProperty(String key) {
 		if (m_properties == null) {
 			return null;
 		}

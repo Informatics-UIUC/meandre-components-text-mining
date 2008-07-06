@@ -69,7 +69,7 @@ public interface TermList extends java.io.Serializable
 	 * @param ht
 	 */
 
-	public void setProperties(Map<String, Object> ht);
+	public void setProperties(Map<String, String> ht);
 
 	/**
 	 * put your documentation comment here
@@ -77,7 +77,7 @@ public interface TermList extends java.io.Serializable
 	 * @return
 	 */
 
-	public Map<String, Object> getProperties();
+	public Map<String, String> getProperties();
 
 	/**
 	 * put your documentation comment here
@@ -86,7 +86,7 @@ public interface TermList extends java.io.Serializable
 	 * @return
 	 */
 
-	public Object getProperty(String key);
+	public String getProperty(String key);
 
 	/**
 	 * put your documentation comment here

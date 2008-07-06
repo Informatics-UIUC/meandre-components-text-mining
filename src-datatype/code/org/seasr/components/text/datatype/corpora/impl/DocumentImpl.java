@@ -95,6 +95,13 @@ public class DocumentImpl extends AbstractFeatureBearer implements Document,
 	 * Named annotation sets for this document.
 	 */
 	private HashMap<String, AnnotationSet> namedAnnots;
+	
+	/**
+	 * This map is used to store temp data that is not to be saved in the 
+	 * store.  This is auxillary processing data that is not annotation
+	 * material.
+	 */
+	private Map<String, Object> _auxillaryMap = null;
 
 	// ==============
 	// Constructors
@@ -121,8 +128,19 @@ public class DocumentImpl extends AbstractFeatureBearer implements Document,
 			defaultAnnots = null;
 		}
 		content = null;
+		if (this._auxillaryMap != null){
+			this._auxillaryMap.clear();
+			this._auxillaryMap = null;
+		}
 	}
 
+	public Map<String, Object> getAuxMap(){
+		if (this._auxillaryMap == null){
+			this._auxillaryMap = new HashMap<String, Object>();
+		}
+		return this._auxillaryMap;
+	}
+	
 	public void setDocID(String s) {
 		getFeatures().put(s_docID, s);
 	}

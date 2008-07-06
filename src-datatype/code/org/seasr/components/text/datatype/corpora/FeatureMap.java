@@ -56,7 +56,7 @@ import java.util.Set;
  * @author Xiaolei Li
  * @author D. Searsmith
  */
-public interface FeatureMap extends Map<String, Object> {
+public interface FeatureMap extends Map<String, String> {
 	/**
 	 * Returns true if this feature map has all the features in <b>fmap</b>.
 	 */

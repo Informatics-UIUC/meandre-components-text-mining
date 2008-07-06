@@ -60,7 +60,7 @@ import org.seasr.components.text.datatype.corpora.FeatureMap;
  * @author Xiaolei Li
  * @author D. Searsmith
  */
-public class FeatureMapImpl extends HashMap<String, Object> implements FeatureMap {
+public class FeatureMapImpl extends HashMap<String, String> implements FeatureMap {
 
 	//==============
 	// Data Members

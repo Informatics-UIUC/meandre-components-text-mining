@@ -51,6 +51,9 @@ public interface DocumentConstants {
 
 	public static final String BRILL_TOK_MAP = "$@brill_token_map";
 
-	public static final String TOKENIZER_NUM_TOKS = "$@tokenizer_num_tokens";
+	/**
+	 * Integer
+	 */	
+	public static final String TOKENIZER_NUM_TOKS_INT = "$@tokenizer_num_tokens";
 
 }

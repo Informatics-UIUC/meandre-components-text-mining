@@ -61,7 +61,7 @@ import java.util.*;
  * @author Xiaolei Li
  * @author D. Searsmith
  */
-public interface Annotation extends FeatureBearer, Serializable {
+public interface Annotation extends FeatureBearer, Serializable, FeatureEncodeDecode<Annotation> {
 
 	// ==============
 	// Data Members
