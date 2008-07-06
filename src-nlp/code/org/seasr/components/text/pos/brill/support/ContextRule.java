@@ -424,7 +424,7 @@ public class ContextRule implements Serializable {
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
 
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -444,31 +444,31 @@ public class ContextRule implements Serializable {
 
 				PoSTag termL = null;
 				if (tok.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termL = PoSTag.PoS_STAART;
 				} else {
-					termL = (PoSTag) dtmap.getAnnotationAtPos(pos - 1)
+					termL = PoSTag.getPoSTag(dtmap.getAnnotationAtPos(pos - 1)
 							.getFeatures().get(
-									AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+									AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				Annotation tokR = dtmap.getAnnotationAtPos(pos + 1);
 				PoSTag termR = null;
 				if (tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termR = PoSTag.PoS_STAART;
 				} else {
-					termR = (PoSTag) tokR.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					termR = PoSTag.getPoSTag(tokR.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				if ((termL == cr.getTag1()) && (termR == cr.getTag2())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -507,7 +507,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -524,20 +524,20 @@ public class ContextRule implements Serializable {
 				Annotation tokR = dtmap.getAnnotationAtPos(pos + 1);
 				PoSTag termR = null;
 				if (tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termR = PoSTag.PoS_STAART;
 				} else {
-					termR = (PoSTag) tokR.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					termR = PoSTag.getPoSTag(tokR.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				if (termR == cr.getTag1()) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -574,7 +574,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -586,10 +586,10 @@ public class ContextRule implements Serializable {
 						.getWord1())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -626,7 +626,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -643,7 +643,7 @@ public class ContextRule implements Serializable {
 				Annotation tokR = dtmap.getAnnotationAtPos(pos + 1);
 				String termR = null;
 				if (tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termR = "STAART";
 				} else {
 					termR = (String) tokR.getContent(doc);
@@ -652,10 +652,10 @@ public class ContextRule implements Serializable {
 				if (termR.equals(cr.getWord1())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -692,7 +692,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -709,7 +709,7 @@ public class ContextRule implements Serializable {
 				Annotation tokR = dtmap.getAnnotationAtPos(pos + 1);
 				String termR = null;
 				if (tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termR = "STAART";
 				} else {
 					termR = (String) tokR.getContent(doc);
@@ -720,10 +720,10 @@ public class ContextRule implements Serializable {
 						&& (termR.equals(cr.getWord2()))) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -761,7 +761,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -778,21 +778,21 @@ public class ContextRule implements Serializable {
 				Annotation tokR = dtmap.getAnnotationAtPos(pos + 1);
 				PoSTag termR = null;
 				if (tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termR = PoSTag.PoS_STAART;
 				} else {
-					termR = (PoSTag) tokR.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					termR = PoSTag.getPoSTag(tokR.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				String img = (String) tok.getContent(doc);
 				if ((img.equals(cr.getWord1())) && (termR == cr.getTag1())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -830,7 +830,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -847,7 +847,7 @@ public class ContextRule implements Serializable {
 				Annotation tokR = dtmap.getAnnotationAtPos(pos + 2);
 				String termR = null;
 				if (tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termR = "STAART";
 				} else {
 					termR = (String) tokR.getContent(doc);
@@ -858,10 +858,10 @@ public class ContextRule implements Serializable {
 						&& (termR.equals(cr.getWord2()))) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -899,7 +899,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -916,21 +916,21 @@ public class ContextRule implements Serializable {
 				Annotation tokR = dtmap.getAnnotationAtPos(pos + 2);
 				PoSTag termR = null;
 				if (tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termR = PoSTag.PoS_STAART;
 				} else {
-					termR = (PoSTag) tokR.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					termR = PoSTag.getPoSTag(tokR.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				String img = (String) tok.getContent(doc);
 				if ((img.equals(cr.getWord1())) && (termR == cr.getTag1())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -968,7 +968,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -985,11 +985,11 @@ public class ContextRule implements Serializable {
 				Annotation tokR = dtmap.getAnnotationAtPos(pos + 2);
 				PoSTag termR = null;
 				if (tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termR = PoSTag.PoS_STAART;
 				} else {
-					termR = (PoSTag) tokR.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					termR = PoSTag.getPoSTag(tokR.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				// String img =
@@ -997,10 +997,10 @@ public class ContextRule implements Serializable {
 				if (termR == cr.getTag1()) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -1038,7 +1038,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -1055,7 +1055,7 @@ public class ContextRule implements Serializable {
 				Annotation tokR = dtmap.getAnnotationAtPos(pos + 2);
 				String termR = null;
 				if (tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termR = "STAART";
 				} else {
 					termR = (String) tokR.getContent(doc);
@@ -1066,10 +1066,10 @@ public class ContextRule implements Serializable {
 				if (termR.equals(cr.getWord1())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -1107,7 +1107,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -1125,30 +1125,30 @@ public class ContextRule implements Serializable {
 				PoSTag termL = null;
 				Annotation tokR = dtmap.getAnnotationAtPos(pos + 2);
 				if (tokL.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termL = PoSTag.PoS_STAART;
 					tokR = tokL;
 				} else {
-					termL = (PoSTag) tokL.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					termL = PoSTag.getPoSTag(tokL.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				PoSTag termR = null;
 				if (tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termR = PoSTag.PoS_STAART;
 				} else {
-					termR = (PoSTag) tokR.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					termR = PoSTag.getPoSTag(tokR.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				if ((termL == cr.getTag1()) && (termR == cr.getTag2())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -1186,7 +1186,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -1208,30 +1208,30 @@ public class ContextRule implements Serializable {
 				PoSTag termL = null;
 				Annotation tokR = dtmap.getAnnotationAtPos(pos2);
 				if (tokL.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termL = PoSTag.PoS_STAART;
 					tokR = tokL;
 				} else {
-					termL = (PoSTag) tokL.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					termL = PoSTag.getPoSTag(tokL.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				PoSTag termR = null;
 				if (tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termR = PoSTag.PoS_STAART;
 				} else {
-					termR = (PoSTag) tokR.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					termR = PoSTag.getPoSTag(tokR.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				if ((termL == cr.getTag1()) || (termR == cr.getTag1())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -1268,7 +1268,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -1290,7 +1290,7 @@ public class ContextRule implements Serializable {
 				String termL = null;
 				Annotation tokR = dtmap.getAnnotationAtPos(pos2);
 				if (tokL.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termL = "STAART";
 					tokR = tokL;
 				} else {
@@ -1299,7 +1299,7 @@ public class ContextRule implements Serializable {
 
 				String termR = null;
 				if (tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termR = "STAART";
 				} else {
 					termR = (String) tokR.getContent(doc);
@@ -1309,10 +1309,10 @@ public class ContextRule implements Serializable {
 						|| (termR.equals(cr.getWord1()))) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -1350,7 +1350,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -1377,42 +1377,42 @@ public class ContextRule implements Serializable {
 				Annotation tok2 = dtmap.getAnnotationAtPos(pos2);
 				Annotation tok3 = dtmap.getAnnotationAtPos(pos3);
 				if (tok1.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					term1 = PoSTag.PoS_STAART;
 					tok2 = tok1;
 					tok3 = tok2;
 				} else {
-					term1 = (PoSTag) tok1.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					term1 = PoSTag.getPoSTag(tok1.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				PoSTag term2 = null;
 				if (tok2.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					term2 = PoSTag.PoS_STAART;
 					tok3 = tok2;
 				} else {
-					term2 = (PoSTag) tok2.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					term2 = PoSTag.getPoSTag(tok2.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				PoSTag term3 = null;
 				if (tok3.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					term3 = PoSTag.PoS_STAART;
 				} else {
-					term3 = (PoSTag) tok3.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					term3 = PoSTag.getPoSTag(tok3.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				if ((term1 == cr.getTag1()) || (term2 == cr.getTag1())
 						|| (term3 == cr.getTag1())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -1450,7 +1450,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -1477,7 +1477,7 @@ public class ContextRule implements Serializable {
 				Annotation tok2 = dtmap.getAnnotationAtPos(pos2);
 				Annotation tok3 = dtmap.getAnnotationAtPos(pos3);
 				if (tok1.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					term1 = "STAART";
 					tok2 = tok1;
 					tok3 = tok2;
@@ -1487,7 +1487,7 @@ public class ContextRule implements Serializable {
 
 				String term2 = null;
 				if (tok2.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					term2 = "STAART";
 					tok3 = tok2;
 				} else {
@@ -1496,7 +1496,7 @@ public class ContextRule implements Serializable {
 
 				String term3 = null;
 				if (tok3.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					term3 = "STAART";
 				} else {
 					term3 = (String) tok3.getContent(doc);
@@ -1507,10 +1507,10 @@ public class ContextRule implements Serializable {
 						|| (term3.equals(cr.getWord1()))) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -1548,7 +1548,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -1564,20 +1564,20 @@ public class ContextRule implements Serializable {
 				Annotation tokL = dtmap.getAnnotationAtPos(pos - 1);
 				PoSTag termL = null;
 				if (tokL.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termL = PoSTag.PoS_STAART;
 				} else {
-					termL = (PoSTag) tokL.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					termL = PoSTag.getPoSTag(tokL.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				if (termL == cr.getTag1()) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -1615,7 +1615,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -1631,7 +1631,7 @@ public class ContextRule implements Serializable {
 				Annotation tokL = dtmap.getAnnotationAtPos(pos - 1);
 				String termL = null;
 				if (tokL.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termL = "STAART";
 				} else {
 					termL = (String) tokL.getContent(doc);
@@ -1640,10 +1640,10 @@ public class ContextRule implements Serializable {
 				if (termL.equals(cr.getWord1())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -1681,7 +1681,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -1697,7 +1697,7 @@ public class ContextRule implements Serializable {
 				Annotation tokL = dtmap.getAnnotationAtPos(pos - 1);
 				String termL = null;
 				if (tokL.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termL = "STAART";
 				} else {
 					termL = (String) tokL.getContent(doc);
@@ -1708,10 +1708,10 @@ public class ContextRule implements Serializable {
 						&& (img.equals(cr.getWord2()))) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -1749,7 +1749,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -1765,21 +1765,21 @@ public class ContextRule implements Serializable {
 				Annotation tokL = dtmap.getAnnotationAtPos(pos - 1);
 				PoSTag termL = null;
 				if (tokL.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termL = PoSTag.PoS_STAART;
 				} else {
-					termL = (PoSTag) tokL.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					termL = PoSTag.getPoSTag(tokL.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				String img = (String) tok.getContent(doc);
 				if ((termL == cr.getTag1()) && (img.equals(cr.getWord1()))) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -1817,7 +1817,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -1834,7 +1834,7 @@ public class ContextRule implements Serializable {
 				Annotation tok0 = dtmap.getAnnotationAtPos(pos - 1);
 				String term1 = null;
 				if (tok0.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					term1 = "STAART";
 				} else {
 					term1 = (String) tok1.getContent(doc);
@@ -1845,10 +1845,10 @@ public class ContextRule implements Serializable {
 						&& (img.equals(cr.getWord2()))) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -1886,7 +1886,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -1903,21 +1903,21 @@ public class ContextRule implements Serializable {
 				Annotation tok0 = dtmap.getAnnotationAtPos(pos - 1);
 				PoSTag term1 = null;
 				if (tok0.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					term1 = PoSTag.PoS_STAART;
 				} else {
-					term1 = (PoSTag) tok1.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					term1 = PoSTag.getPoSTag(tok1.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				String img = (String) tok.getContent(doc);
 				if ((term1 == cr.getTag1()) && (img.equals(cr.getWord1()))) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -1958,7 +1958,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -1974,19 +1974,19 @@ public class ContextRule implements Serializable {
 				Annotation tokL = dtmap.getAnnotationAtPos(pos - 2);
 				PoSTag termL = null;
 				if (tok.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					tokL = dtmap.getAnnotationAtPos(pos - 1);
-					termL = (PoSTag) tokL.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					termL = PoSTag.getPoSTag(tokL.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				if (termL == cr.getTag1()) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -2024,7 +2024,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -2040,7 +2040,7 @@ public class ContextRule implements Serializable {
 				Annotation tokL = dtmap.getAnnotationAtPos(pos - 2);
 				String termL = null;
 				if (tok.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					tokL = dtmap.getAnnotationAtPos(pos - 1);
 					termL = (String) tokL.getContent(doc);
 				}
@@ -2048,10 +2048,10 @@ public class ContextRule implements Serializable {
 				if (termL.equals(cr.getWord1())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -2089,7 +2089,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -2110,28 +2110,28 @@ public class ContextRule implements Serializable {
 				PoSTag termR = null;
 				Annotation tokL = dtmap.getAnnotationAtPos(pos2);
 				Annotation tokR = dtmap.getAnnotationAtPos(pos - 1);
-				termR = (PoSTag) tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+				termR = PoSTag.getPoSTag(tokR.getFeatures().get(
+						AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				if (tok.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termR = PoSTag.PoS_STAART;
 					tokL = tokR;
 				}
-				termL = (PoSTag) tokL.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+				termL = PoSTag.getPoSTag(tokL.getFeatures().get(
+						AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 
 				if (tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termL = PoSTag.PoS_STAART;
 				}
 
 				if ((termL == cr.getTag1()) || (termR == cr.getTag1())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -2169,7 +2169,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -2192,14 +2192,14 @@ public class ContextRule implements Serializable {
 				Annotation tokR = dtmap.getAnnotationAtPos(pos - 1);
 				termR = (String) tokR.getContent(doc);
 				if (tok.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termR = "STAART";
 					tokL = tokR;
 				}
 				termL = (String) tokL.getContent(doc);
 
 				if (tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termL = "STAART";
 				}
 
@@ -2207,10 +2207,10 @@ public class ContextRule implements Serializable {
 						|| (termR.equals(cr.getWord1()))) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -2248,7 +2248,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -2273,38 +2273,38 @@ public class ContextRule implements Serializable {
 				PoSTag term3 = null;
 
 				if (tok.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					term1 = PoSTag.PoS_STAART;
 					tok2 = dtmap.getAnnotationAtPos(pos - 1);
 				} else {
-					term1 = (PoSTag) tok.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					term1 = PoSTag.getPoSTag(tok.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				if (tok1.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					term2 = PoSTag.PoS_STAART;
 				} else {
-					term2 = (PoSTag) tok.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					term2 = PoSTag.getPoSTag(tok.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				if (tok2.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					term3 = PoSTag.PoS_STAART;
 				} else {
-					term2 = (PoSTag) tok.getFeatures().get(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+					term2 = PoSTag.getPoSTag(tok.getFeatures().get(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				}
 
 				if ((term1 == cr.getTag1()) || (term2 == cr.getTag1())
 						|| (term3 == cr.getTag1())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -2342,7 +2342,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -2367,7 +2367,7 @@ public class ContextRule implements Serializable {
 				String term3 = null;
 
 				if (tok.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					term1 = "STAART";
 					tok2 = dtmap.getAnnotationAtPos(pos - 1);
 				} else {
@@ -2375,14 +2375,14 @@ public class ContextRule implements Serializable {
 				}
 
 				if (tok1.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					term2 = "STAART";
 				} else {
 					term2 = (String) tok.getContent(doc);
 				}
 
 				if (tok2.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					term3 = "STAART";
 				} else {
 					term2 = (String) tok.getContent(doc);
@@ -2393,10 +2393,10 @@ public class ContextRule implements Serializable {
 						|| (term3.equals(cr.getWord1()))) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -2434,7 +2434,7 @@ public class ContextRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, ContextRule cr,
 				boolean restrict, Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == cr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == cr
 					.getOldTag()) {
 				if (restrict) {
 					if (!(hasTagInLex(doc, tok, cr.getNewTag(), lex))) {
@@ -2451,28 +2451,28 @@ public class ContextRule implements Serializable {
 				PoSTag termR = null;
 				Annotation tokL = dtmap.getAnnotationAtPos(pos - 2);
 				Annotation tokR = dtmap.getAnnotationAtPos(pos - 1);
-				termR = (PoSTag) tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+				termR = PoSTag.getPoSTag(tokR.getFeatures().get(
+						AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 				if (tok.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termR = PoSTag.PoS_STAART;
 					tokL = tokR;
 				}
-				termL = (PoSTag) tokL.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+				termL = PoSTag.getPoSTag(tokL.getFeatures().get(
+						AnnotationConstants.TOKEN_ANNOT_FEAT_POS));
 
 				if (tokR.getFeatures().get(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE) != null) {
+						AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL) != null) {
 					termL = PoSTag.PoS_STAART;
 				}
 
 				if ((termL == cr.getTag1()) && (termR == cr.getTag2())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							cr.getNewTag());
+							cr.getNewTag().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED,
-							Boolean.TRUE);
+							AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()

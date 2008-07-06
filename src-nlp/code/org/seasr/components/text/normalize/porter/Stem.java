@@ -42,7 +42,6 @@
 
 package org.seasr.components.text.normalize.porter;
 
-
 // ==============
 // Java Imports
 // ==============
@@ -66,80 +65,82 @@ import org.seasr.components.text.datatype.corpora.AnnotationSet;
 import org.seasr.components.text.datatype.corpora.Document;
 import org.meandre.core.*;
 import org.meandre.annotations.*;
-
+import org.seasr.components.text.util.feature_maps.FeatureValueEncoderDecoder;
 
 /**
  * 
- * <p>Overview: <br>
- * This component transforms terms into their word stems. In this way, 
- * different forms of the same word (plurals etc...) will be recognized 
- * as the same term. The algorithm used is the Porter stemming method.
+ * <p>
+ * Overview: <br>
+ * This component transforms terms into their word stems. In this way, different
+ * forms of the same word (plurals etc...) will be recognized as the same term.
+ * The algorithm used is the Porter stemming method.
  * </p>
- * <p>References: <br>
+ * <p>
+ * References: <br>
  * See: http://www.tartarus.org/~martin/PorterStemmer/
  * </p>
- * <p>Data Type Restrictions: <br>
+ * <p>
+ * Data Type Restrictions: <br>
  * The input document must have been tokenized.
  * </p>
- * <p>Data Handling: <br>
- * This component will modify (as described above) the document object 
- * that is input.
+ * <p>
+ * Data Handling: <br>
+ * This component will modify (as described above) the document object that is
+ * input.
  * </p>
- * <p>Scalability: <br>
- * This component makes one pass over the token list resulting in 
- * linear time complexity per the number of tokens. Memory usage 
- * is proportional to the number tokens.
+ * <p>
+ * Scalability: <br>
+ * This component makes one pass over the token list resulting in linear time
+ * complexity per the number of tokens. Memory usage is proportional to the
+ * number tokens.
  * </p>
- * <p>Trigger Criteria: <br>
+ * <p>
+ * Trigger Criteria: <br>
  * All.
  * </p>
  * 
- *  
+ * 
  * @author D. Searsmith
  * 
  * TODO: Testing, Unit Tests
  * 
  */
- @Component(creator = "Duane Searsmith",
+@Component(creator = "Duane Searsmith",
 
- description = "<p>Overview: <br>"
- + "This component transforms terms into their word stems. In this way, "
- + "different forms of the same word (plurals etc...) will be recognized as the same term."
- + "The algorithm used is the Porter stemming method."
- + "</p>"
+description = "<p>Overview: <br>"
+		+ "This component transforms terms into their word stems. In this way, "
+		+ "different forms of the same word (plurals etc...) will be recognized as the same term."
+		+ "The algorithm used is the Porter stemming method."
+		+ "</p>"
 
- + "<p>References: <br>"
- + "See: http://www.tartarus.org/~martin/PorterStemmer/"
- + "</p>"
+		+ "<p>References: <br>"
+		+ "See: http://www.tartarus.org/~martin/PorterStemmer/"
+		+ "</p>"
 
- + "<p>Data Type Restrictions: <br>"
- + "The input document must have been tokenized."
- + "</p>"
+		+ "<p>Data Type Restrictions: <br>"
+		+ "The input document must have been tokenized."
+		+ "</p>"
 
- + "<p>Data Handling: <br>"
- + "This component will modify (as described above) the document object that is input."
- + "</p>"
+		+ "<p>Data Handling: <br>"
+		+ "This component will modify (as described above) the document object that is input."
+		+ "</p>"
 
- + "<p>Scalability: <br>"
- + "This compnent makes one pass over the token list resulting in linear time complexity "
- + "per the number of tokens. Memory usage is proportional to the number tokens."
- + "</p>"
+		+ "<p>Scalability: <br>"
+		+ "This compnent makes one pass over the token list resulting in linear time complexity "
+		+ "per the number of tokens. Memory usage is proportional to the number tokens."
+		+ "</p>"
 
- + "<p>Trigger Criteria: <br>"
- + "All."
- + "</p>",
+		+ "<p>Trigger Criteria: <br>" + "All." + "</p>",
 
- name = "Stem",
- tags = "nlp text document normalize stem")
+name = "Stem", tags = "nlp text document normalize stem")
 public class Stem implements ExecutableComponent {
 
+	// ==============
+	// Data Members
+	// ==============
 
-  // ==============
-  // Data Members
-  // ==============
-
-  private int m_docsProcessed = 0;
-  private PorterStemmer _stemmer = null;
+	private int m_docsProcessed = 0;
+	private PorterStemmer _stemmer = null;
 
 	private static Logger _logger = Logger.getLogger("Stem");
 
@@ -155,17 +156,16 @@ public class Stem implements ExecutableComponent {
 
 	@ComponentOutput(description = "Document object.", name = "document")
 	public final static String DATA_OUTPUT_DOCUMENT = "document";
-  
-  
-  // ================
-  // Constructor(s)
-  // ================
-  public Stem() {
-  }
 
-  // ================
-  // Public Methods
-  // ================
+	// ================
+	// Constructor(s)
+	// ================
+	public Stem() {
+	}
+
+	// ================
+	// Public Methods
+	// ================
 
 	public boolean getVerbose(ComponentContextProperties ccp) {
 		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
@@ -174,8 +174,8 @@ public class Stem implements ExecutableComponent {
 
 	public void initialize(ComponentContextProperties ccp) {
 		_logger.fine("initialize() called");
-	     m_docsProcessed = 0;
-	     _stemmer = null;
+		m_docsProcessed = 0;
+		_stemmer = null;
 	}
 
 	public void dispose(ComponentContextProperties ccp) {
@@ -185,8 +185,8 @@ public class Stem implements ExecutableComponent {
 			System.out.println("\nEND EXEC -- Stem -- Docs Processed: "
 					+ m_docsProcessed + "\n");
 		}
-	    m_docsProcessed = 0;
-	    _stemmer = null;
+		m_docsProcessed = 0;
+		_stemmer = null;
 	}
 
 	public void execute(ComponentContext ctx)
@@ -194,50 +194,58 @@ public class Stem implements ExecutableComponent {
 		_logger.fine("execute() called");
 
 		try {
-		      if (_stemmer == null){
-		          _stemmer = new PorterStemmer();
-		        }
+			if (_stemmer == null) {
+				_stemmer = new PorterStemmer();
+			}
 			Document doc = (Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOCUMENT);
 
+			AnnotationSet annots = doc.getAnnotations();
 
-		      AnnotationSet annots = doc.getAnnotations();
+			for (Iterator<Annotation> iter = annots.iterator(); iter.hasNext();) {
+				Annotation tok = iter.next();
+				if (tok.getType().equals(AnnotationConstants.TOKEN_ANNOT_TYPE)) {
+					String img = tok.getContent(doc);
+					String stem = _stemmer.normalizeTerm(img);
+					tok.getFeatures().put(
+							AnnotationConstants.TOKEN_ANNOT_FEAT_NORM_IMAGE,
+							stem);
+				}
+			}
 
-		      for (Iterator<Annotation> iter = annots.iterator(); iter.hasNext();){
-		        Annotation tok = iter.next();
-		        if (tok.getType().equals(AnnotationConstants.TOKEN_ANNOT_TYPE)){
-		          String img = tok.getContent(doc);
-		          String stem = _stemmer.normalizeTerm(img);
-		          tok.getFeatures().put(AnnotationConstants.TOKEN_ANNOT_FEAT_NORM_IMAGE, stem);
-		        }
-		      }
+			// set the image feature for ngrams
+			for (Iterator<Annotation> iter = annots.iterator(); iter.hasNext();) {
+				Annotation tok = iter.next();
+				if (tok.getType().equals(AnnotationConstants.NGRAM_ANNOT_TYPE)) {
+					ArrayList<?> list = FeatureValueEncoderDecoder
+							.decodeToListofAnnotations(tok
+									.getFeatures()
+									.get(
+											AnnotationConstants.NGRAM_ANNOT_FEAT_TOKEN_LIST));
+					StringBuffer s = new StringBuffer("");
+					for (int i = 0, n = list.size(); i < n; i++) {
+						Annotation tok2 = (Annotation) list.get(i);
+						String t = (String) tok2
+								.getFeatures()
+								.get(
+										AnnotationConstants.TOKEN_ANNOT_FEAT_NORM_IMAGE);
+						if (t == null) {
+							s.append(tok2.getContent(doc) + " ");
+						} else {
+							s.append(" ");
+						}
+					}
+					tok.getFeatures().put(
+							AnnotationConstants.NGRAM_ANNOT_FEAT_NORM_IMAGE,
+							s.toString().trim());
+				}
+			}
 
-		      // set the image feature for ngrams
-		      for (Iterator<Annotation> iter = annots.iterator(); iter.hasNext();){
-		        Annotation tok = iter.next();
-		        if (tok.getType().equals(AnnotationConstants.NGRAM_ANNOT_TYPE)){
-		          ArrayList<?> list = (ArrayList<?>)tok.getFeatures().get(AnnotationConstants.NGRAM_ANNOT_FEAT_TOKEN_LIST);
-		          StringBuffer s = new StringBuffer("");
-		          for (int i = 0, n = list.size(); i < n; i++){
-		            Annotation tok2 = (Annotation)list.get(i);
-		            String t = (String)tok2.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_NORM_IMAGE);
-		            if (t == null){
-		              s.append(tok2.getContent(doc) + " ");
-		            } else {
-		              s.append(" ");
-		            }
-		          }
-		          tok.getFeatures().put(AnnotationConstants.NGRAM_ANNOT_FEAT_NORM_IMAGE, s.toString().trim());
-		        }
-		      }
-
-		
-			
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
 			m_docsProcessed++;
-		      if(getVerbose(ctx) && (m_docsProcessed%20 == 0)){
-		          System.out.println("Stem: processed " + m_docsProcessed);
-		        }
+			if (getVerbose(ctx) && (m_docsProcessed % 20 == 0)) {
+				System.out.println("Stem: processed " + m_docsProcessed);
+			}
 
 		} catch (Exception ex) {
 			ex.printStackTrace();

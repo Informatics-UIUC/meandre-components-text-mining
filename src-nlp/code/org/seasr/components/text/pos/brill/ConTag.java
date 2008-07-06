@@ -431,7 +431,7 @@ public class ConTag implements ExecutableComponent {
 
 					Document doc = _docs.get(i);
 
-					DocTokMap dtmap = (DocTokMap) doc.getFeatures().get(
+					DocTokMap dtmap = (DocTokMap) doc.getAuxMap().get(
 							DocumentConstants.BRILL_TOK_MAP);
 					if (dtmap == null) {
 						throw new Exception(
@@ -458,7 +458,7 @@ public class ConTag implements ExecutableComponent {
 							if ((x == (y - 1)) && (tok
 									.getFeatures()
 									.get(
-											AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED) != null)) {
+											AnnotationConstants.TOKEN_ANNOT_FEAT_CONTAGGED_BOOL) != null)) {
 								contagged++;
 							}
 						}

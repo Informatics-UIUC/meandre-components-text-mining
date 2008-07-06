@@ -269,8 +269,7 @@ public class LexTag implements ExecutableComponent {
 					Document doc = _docs.get(i);
 
 					DocTokMap dtmap = new DocTokMap(doc);
-					doc.getFeatures().put(DocumentConstants.BRILL_TOK_MAP,
-							dtmap);
+					doc.getAuxMap().put(DocumentConstants.BRILL_TOK_MAP, dtmap);
 
 					AnnotationSet annots = doc.getAnnotations(AnnotationConstants.ANNOTATION_SET_TOKENS);
 
@@ -286,14 +285,14 @@ public class LexTag implements ExecutableComponent {
 								if (tok
 										.getFeatures()
 										.get(
-												AnnotationConstants.TOKEN_ANNOT_FEAT_PRETAGGED) == null) {
+												AnnotationConstants.TOKEN_ANNOT_FEAT_PRETAGGED_BOOL) == null) {
 									((LexRule) m_rules[x]).applyRule(doc, tok,
 											m_lex, dtmap,
 											getIncludeDescription(ctx));
 									if (tok
 											.getFeatures()
 											.get(
-													AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED) != null) {
+													AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL) != null) {
 										lextagged++;
 									}
 								}

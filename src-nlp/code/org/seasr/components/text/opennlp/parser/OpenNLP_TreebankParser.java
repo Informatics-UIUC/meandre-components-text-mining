@@ -82,6 +82,7 @@ import org.seasr.components.text.datatype.corpora.FeatureMap;
 import org.meandre.components.util.MeandreJarFileReaderUtil;
 import org.meandre.core.*;
 import org.meandre.annotations.*;
+import org.seasr.components.text.util.feature_maps.FeatureValueEncoderDecoder;
 
 /**
  * @author D. Searsmith
@@ -89,9 +90,9 @@ import org.meandre.annotations.*;
  * TODO: Testing, Unit Tests
  */
 
-@Component(creator = "Duane Searsmith", 
-		
-		description = "<p>Usage: TreebankParser <br>"
+@Component(creator = "Duane Searsmith",
+
+description = "<p>Usage: TreebankParser <br>"
 		+ "Props: <br>"
 		+ "Use tag dictionary. <br>"
 		+ "Case insensitive tag dictionary. <br>"
@@ -100,14 +101,14 @@ import org.meandre.annotations.*;
 		+ "Advance outcomes in with at least probability mass X. <br>"
 		+ "Show the top X parses.  This will also display their log-probablities. <br>"
 		+ "The 'ouput in treebank parse format' is neccessary if you intend to do "
-		+ "information extraction and use the linker component.  Also, you should" 
+		+ "information extraction and use the linker component.  Also, you should"
 		+ "choose to parse in sentence order.  You should also choose the default number "
-		+ "of parses -- 1. <br>" 
+		+ "of parses -- 1. <br>"
 		+ "When treebank output format is enabled, the parse information is still stored in "
 		+ "SEASR annotations but treebank format is stored in addition for use in later "
-		+ "components.</p>", 
-		
-		name = "OpenNLP_TreebankParser", tags = "parser text opennlp document", dependency = { "maxent-models.jar" })
+		+ "components.</p>",
+
+name = "OpenNLP_TreebankParser", tags = "parser text opennlp document", dependency = { "maxent-models.jar" })
 public class OpenNLP_TreebankParser implements ExecutableComponent {
 
 	// ==============
@@ -526,19 +527,21 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 							sbuff.append(pi + " " + parses[pi].getProb() + " ");
 						}
 						parses[pi].show(sbuff);
-						Set<String> sentPTBP = (Set<String>) sent
-								.getFeatures()
-								.get(
-										AnnotationConstants.SENTENCE_PENNTREEBANK_FMT_ANNOT_PARSES);
+						Set<String> sentPTBP = FeatureValueEncoderDecoder
+								.decodeToSet(sent
+										.getFeatures()
+										.get(
+												AnnotationConstants.SENTENCE_PENNTREEBANK_FMT_ANNOT_PARSES_SET));
 						if (sentPTBP == null) {
 							sentPTBP = new HashSet<String>();
-							sent
-									.getFeatures()
-									.put(
-											AnnotationConstants.SENTENCE_PENNTREEBANK_FMT_ANNOT_PARSES,
-											sentPTBP);
 						}
 						sentPTBP.add(sbuff.toString());
+						sent
+								.getFeatures()
+								.put(
+										AnnotationConstants.SENTENCE_PENNTREEBANK_FMT_ANNOT_PARSES_SET,
+										FeatureValueEncoderDecoder
+												.encodeSet(sentPTBP));
 					}
 				}
 
@@ -607,7 +610,7 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 			AnnotationSet parseSet) throws Exception {
 		if (parses.length == 0) {
 			FeatureMap fm = Factory.newFeatureMap();
-			fm.put(AnnotationConstants.PARSE_ANNOT_SOFA, sent.getId());
+			fm.put(AnnotationConstants.PARSE_ANNOT_SOFA_INT, Integer.toString(sent.getId()));
 			fm
 					.put(
 							AnnotationConstants.PARSE_ANNOT_PARSER,
@@ -620,22 +623,22 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 					fm);
 
 			// Add parse to sentence annot
-			Set<Integer> s = (Set<Integer>) sent.getFeatures().get(
-					AnnotationConstants.SENTENCE_ANNOT_PARSES);
+			Set<String> s =  FeatureValueEncoderDecoder.decodeToSet(sent.getFeatures().get(
+					AnnotationConstants.SENTENCE_ANNOT_PARSES_SET));
 			if (s == null) {
-				s = new HashSet<Integer>();
-				sent.getFeatures().put(
-						AnnotationConstants.SENTENCE_ANNOT_PARSES, s);
+				s = new HashSet<String>();
 			}
-			s.add(id);
+			s.add(Integer.toString(id));
+			sent.getFeatures().put(
+					AnnotationConstants.SENTENCE_ANNOT_PARSES_SET, FeatureValueEncoderDecoder.encodeSet(s));
 		} else {
 			// Add parse to sentence annot
-			Set<Integer> s = (Set<Integer>) sent.getFeatures().get(
-					AnnotationConstants.SENTENCE_ANNOT_PARSES);
+			Set<String> s = FeatureValueEncoderDecoder.decodeToSet(sent.getFeatures().get(
+					AnnotationConstants.SENTENCE_ANNOT_PARSES_SET));
 			if (s == null) {
-				s = new HashSet<Integer>();
+				s = new HashSet<String>();
 				sent.getFeatures().put(
-						AnnotationConstants.SENTENCE_ANNOT_PARSES, s);
+						AnnotationConstants.SENTENCE_ANNOT_PARSES_SET, FeatureValueEncoderDecoder.encodeSet(s));
 			}
 			for (int i = 0, n = parses.length; i < n; i++) {
 				List<Parse> plist = new ArrayList<Parse>();
@@ -684,17 +687,13 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 
 			// build feature map for new annotation
 			FeatureMap fm = Factory.newFeatureMap();
-			fm.put(AnnotationConstants.PARSE_ANNOT_SOFA, sent.getId());
-			fm
-					.put(
-							AnnotationConstants.PARSE_ANNOT_PARSER,
-							AnnotationConstants.ANNOTATION_PARSER_IMPL_OpenNLP_TreebankParser);
+			fm.put(AnnotationConstants.PARSE_ANNOT_SOFA_INT, Integer.toString(sent.getId()));
+			fm.put(AnnotationConstants.PARSE_ANNOT_PARSER, AnnotationConstants.ANNOTATION_PARSER_IMPL_OpenNLP_TreebankParser);
 			fm.put(AnnotationConstants.PARSE_ANNOT_TYPE, p.getType());
-			fm.put(AnnotationConstants.PARSE_ANNOT_PROB, p.getProb());
-			fm.put(AnnotationConstants.PARSE_ANNOT_CONSTITUENT_TYPE, p
-					.getLabel());
+			fm.put(AnnotationConstants.PARSE_ANNOT_PROB_DOUBLE, Double.toString(p.getProb()));
+			fm.put(AnnotationConstants.PARSE_ANNOT_CONSTITUENT_TYPE, p.getLabel());
 			if (par != null) {
-				fm.put(AnnotationConstants.PARSE_ANNOT_PARENT, par.getId());
+				fm.put(AnnotationConstants.PARSE_ANNOT_PARENT_INT, Integer.toString(par.getId()));
 			}
 			// add annotation to parse set
 			int id = parseSet.add(start, end,
@@ -704,14 +703,12 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 			// if we have a parent add this annotation to the parent's set of
 			// children
 			if (par != null) {
-				Set<Integer> parch = (Set<Integer>) par.getFeatures().get(
-						AnnotationConstants.PARSE_ANNOT_CHILDREN);
+				Set<String> parch =  FeatureValueEncoderDecoder.decodeToSet(par.getFeatures().get(AnnotationConstants.PARSE_ANNOT_CHILDREN_SET));
 				if (parch == null) {
-					parch = new HashSet<Integer>();
-					par.getFeatures().put(
-							AnnotationConstants.SENTENCE_ANNOT_PARSES, parch);
+					parch = new HashSet<String>();
 				}
-				parch.add(id);
+				parch.add(Integer.toString(id));
+				par.getFeatures().put(AnnotationConstants.SENTENCE_ANNOT_PARSES_SET, FeatureValueEncoderDecoder.encodeSet(parch));
 			}
 			// create a list of child parses
 			Parse[] childarr = p.getChildren();

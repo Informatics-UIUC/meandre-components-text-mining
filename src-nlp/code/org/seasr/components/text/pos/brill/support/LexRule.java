@@ -320,10 +320,10 @@ public class LexRule implements Serializable {
 			String img = (String) tok.getContent(doc);
 			if (img.indexOf(lr.getCompareStr()) != -1) {
 				tok.getFeatures().put(AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-						lr.getChangeTo());
+						lr.getChangeTo().toString());
 				tok.getFeatures().put(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-						new Boolean(true));
+						AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+						Boolean.TRUE.toString());
 				if (incdesc) {
 					tok
 							.getFeatures()
@@ -355,16 +355,15 @@ public class LexRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, LexRule lr,
 				Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == lr
-					.getPoSTag()) {
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == lr.getPoSTag()) {
 				String img = (String) tok.getContent(doc);
 				if (img.indexOf(lr.getCompareStr()) != -1) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							lr.getChangeTo());
+							lr.getChangeTo().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-							new Boolean(true));
+							AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -400,10 +399,10 @@ public class LexRule implements Serializable {
 			String img = (String) tok.getContent(doc);
 			if (img.endsWith(lr.getCompareStr())) {
 				tok.getFeatures().put(AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-						lr.getChangeTo());
+						lr.getChangeTo().toString());
 				tok.getFeatures().put(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-						new Boolean(true));
+						AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+						Boolean.TRUE.toString());
 				if (incdesc) {
 					tok
 							.getFeatures()
@@ -435,16 +434,16 @@ public class LexRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, LexRule lr,
 				Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == lr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == lr
 					.getPoSTag()) {
 				String img = (String) tok.getContent(doc);
 				if (img.endsWith(lr.getCompareStr())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							lr.getChangeTo());
+							lr.getChangeTo().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-							new Boolean(true));
+							AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -480,10 +479,10 @@ public class LexRule implements Serializable {
 			String img = (String) tok.getContent(doc);
 			if (img.startsWith(lr.getCompareStr())) {
 				tok.getFeatures().put(AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-						lr.getChangeTo());
+						lr.getChangeTo().toString());
 				tok.getFeatures().put(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-						new Boolean(true));
+						AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+						Boolean.TRUE.toString());
 				if (incdesc) {
 					tok
 							.getFeatures()
@@ -515,16 +514,16 @@ public class LexRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, LexRule lr,
 				Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == lr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == lr
 					.getPoSTag()) {
 				String img = (String) tok.getContent(doc);
 				if (img.startsWith(lr.getCompareStr())) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							lr.getChangeTo());
+							lr.getChangeTo().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-							new Boolean(true));
+							AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -564,10 +563,10 @@ public class LexRule implements Serializable {
 				if ((lex.isInLexicon(newimg)) || (dtmap.isWord(newimg))) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							lr.getChangeTo());
+							lr.getChangeTo().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-							new Boolean(true));
+							AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -601,7 +600,7 @@ public class LexRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, LexRule lr,
 				Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == lr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == lr
 					.getPoSTag()) {
 				String img = (String) tok.getContent(doc);
 				if (img.endsWith(lr.getCompareStr())) {
@@ -610,10 +609,10 @@ public class LexRule implements Serializable {
 					if ((lex.isInLexicon(newimg)) || (dtmap.isWord(newimg))) {
 						tok.getFeatures().put(
 								AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-								lr.getChangeTo());
+								lr.getChangeTo().toString());
 						tok.getFeatures().put(
-								AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-								new Boolean(true));
+								AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+								Boolean.TRUE.toString());
 						if (incdesc) {
 							tok
 									.getFeatures()
@@ -654,10 +653,10 @@ public class LexRule implements Serializable {
 				if ((lex.isInLexicon(newimg)) || (dtmap.isWord(newimg))) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							lr.getChangeTo());
+							lr.getChangeTo().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-							new Boolean(true));
+							AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -692,7 +691,7 @@ public class LexRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, LexRule lr,
 				Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == lr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == lr
 					.getPoSTag()) {
 				String img = (String) tok.getContent(doc);
 				if (img.startsWith(lr.getCompareStr())) {
@@ -700,10 +699,10 @@ public class LexRule implements Serializable {
 					if ((lex.isInLexicon(newimg)) || (dtmap.isWord(newimg))) {
 						tok.getFeatures().put(
 								AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-								lr.getChangeTo());
+								lr.getChangeTo().toString());
 						tok.getFeatures().put(
-								AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-								new Boolean(true));
+								AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+								Boolean.TRUE.toString());
 						if (incdesc) {
 							tok
 									.getFeatures()
@@ -741,10 +740,10 @@ public class LexRule implements Serializable {
 			String newimg = img + lr.getCompareStr();
 			if ((lex.isInLexicon(newimg)) || (dtmap.isWord(newimg))) {
 				tok.getFeatures().put(AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-						lr.getChangeTo());
+						lr.getChangeTo().toString());
 				tok.getFeatures().put(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-						new Boolean(true));
+						AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+						Boolean.TRUE.toString());
 				if (incdesc) {
 					tok
 							.getFeatures()
@@ -776,17 +775,17 @@ public class LexRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, LexRule lr,
 				Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == lr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == lr
 					.getPoSTag()) {
 				String img = (String) tok.getContent(doc);
 				String newimg = img + lr.getCompareStr();
 				if ((lex.isInLexicon(newimg)) || (dtmap.isWord(newimg))) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							lr.getChangeTo());
+							lr.getChangeTo().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-							new Boolean(true));
+							AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -823,10 +822,10 @@ public class LexRule implements Serializable {
 			String newimg = lr.getCompareStr() + img;
 			if ((lex.isInLexicon(newimg)) || (dtmap.isWord(newimg))) {
 				tok.getFeatures().put(AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-						lr.getChangeTo());
+						lr.getChangeTo().toString());
 				tok.getFeatures().put(
-						AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-						new Boolean(true));
+						AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+						Boolean.TRUE.toString());
 				if (incdesc) {
 					tok
 							.getFeatures()
@@ -858,17 +857,17 @@ public class LexRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, LexRule lr,
 				Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == lr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == lr
 					.getPoSTag()) {
 				String img = (String) tok.getContent(doc);
 				String newimg = lr.getCompareStr() + img;
 				if ((lex.isInLexicon(newimg)) || (dtmap.isWord(newimg))) {
 					tok.getFeatures().put(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-							lr.getChangeTo());
+							lr.getChangeTo().toString());
 					tok.getFeatures().put(
-							AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-							new Boolean(true));
+							AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+							Boolean.TRUE.toString());
 					if (incdesc) {
 						tok
 								.getFeatures()
@@ -911,10 +910,10 @@ public class LexRule implements Serializable {
 					if (set.contains(pos - 1)) {
 						tok.getFeatures().put(
 								AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-								lr.getChangeTo());
+								lr.getChangeTo().toString());
 						tok.getFeatures().put(
-								AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-								new Boolean(true));
+								AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+								Boolean.TRUE.toString());
 						if (incdesc) {
 							tok
 									.getFeatures()
@@ -950,7 +949,7 @@ public class LexRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, LexRule lr,
 				Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == lr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == lr
 					.getPoSTag()) {
 				int[] rposits = dtmap.getPositions(lr.getCompareStr());
 				if (rposits != null) {
@@ -961,12 +960,12 @@ public class LexRule implements Serializable {
 						if (set.contains(pos - 1)) {
 							tok.getFeatures().put(
 									AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-									lr.getChangeTo());
+									lr.getChangeTo().toString());
 							tok
 									.getFeatures()
 									.put(
-											AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-											new Boolean(true));
+											AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+											Boolean.TRUE.toString());
 							if (incdesc) {
 								tok
 										.getFeatures()
@@ -1012,10 +1011,10 @@ public class LexRule implements Serializable {
 					if (set.contains(pos + 1)) {
 						tok.getFeatures().put(
 								AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-								lr.getChangeTo());
+								lr.getChangeTo().toString());
 						tok.getFeatures().put(
-								AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-								new Boolean(true));
+								AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+								Boolean.TRUE.toString());
 						if (incdesc) {
 							tok
 									.getFeatures()
@@ -1051,7 +1050,7 @@ public class LexRule implements Serializable {
 		 */
 		public void applyRule(Document doc, Annotation tok, LexRule lr,
 				Lexicon lex, DocTokMap dtmap, boolean incdesc) {
-			if (tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS) == lr
+			if (PoSTag.getPoSTag(tok.getFeatures().get(AnnotationConstants.TOKEN_ANNOT_FEAT_POS)) == lr
 					.getPoSTag()) {
 				int[] rposits = dtmap.getPositions(lr.getCompareStr());
 				if (rposits != null) {
@@ -1062,12 +1061,12 @@ public class LexRule implements Serializable {
 						if (set.contains(pos + 1)) {
 							tok.getFeatures().put(
 									AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-									lr.getChangeTo());
+									lr.getChangeTo().toString());
 							tok
 									.getFeatures()
 									.put(
-											AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED,
-											new Boolean(true));
+											AnnotationConstants.TOKEN_ANNOT_FEAT_LEXTAGGED_BOOL,
+											Boolean.TRUE.toString());
 							if (incdesc) {
 								tok
 										.getFeatures()

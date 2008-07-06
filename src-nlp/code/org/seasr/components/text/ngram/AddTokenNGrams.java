@@ -53,11 +53,6 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import org.meandre.annotations.Component;
-import org.meandre.annotations.ComponentInput;
-import org.meandre.annotations.ComponentOutput;
-import org.meandre.annotations.ComponentProperty;
-
 // ===============
 // Other Imports
 // ===============
@@ -73,13 +68,18 @@ import org.seasr.components.text.datatype.corpora.FeatureMap;
 import org.seasr.components.text.datatype.pos.PoSTag;
 import org.seasr.components.text.util.Factory;
 import org.meandre.core.*;
+import org.seasr.components.text.util.feature_maps.FeatureValueEncoderDecoder;
+import org.meandre.annotations.Component;
+import org.meandre.annotations.ComponentInput;
+import org.meandre.annotations.ComponentOutput;
+import org.meandre.annotations.ComponentProperty;
 
 /**
  * <p>
  * Overview: <br>
- * This component reads a document object as input and in accordance with the user's
- * choice of number of tokens per ngram (arity), a sliding window of size arity is used
- * to create ngram annotation objects.
+ * This component reads a document object as input and in accordance with the
+ * user's choice of number of tokens per ngram (arity), a sliding window of size
+ * arity is used to create ngram annotation objects.
  * </p>
  * Data Type Restrictions: <br>
  * The input document must have been tokenized.
@@ -102,21 +102,17 @@ import org.meandre.core.*;
 @Component(creator = "Duane Searsmith",
 
 description = "<p>Overview: <br>"
-	+ "This component reads a document object as input and in accordance with the user's"
-	+ "choice of number of tokens per ngram (arity), a sliding window of size arity is used"
-	+ "to create ngram annotation objects."
-    + "</p>"
-    + "<p>Data Type Restrictions: <br>" 
-    + "The input document must have been tokenized."
-    + "</p>"
-    + "<p>"
-    + "Data Handling: <br>"
-    + "This module will modify (as described above) the document object that is input."
-    + "</p>"
-    + "<p>"
-    + "Trigger Criteria: <br>"
-    + "All."
-    + "</p>",
+		+ "This component reads a document object as input and in accordance with the user's"
+		+ "choice of number of tokens per ngram (arity), a sliding window of size arity is used"
+		+ "to create ngram annotation objects."
+		+ "</p>"
+		+ "<p>Data Type Restrictions: <br>"
+		+ "The input document must have been tokenized."
+		+ "</p>"
+		+ "<p>"
+		+ "Data Handling: <br>"
+		+ "This module will modify (as described above) the document object that is input."
+		+ "</p>" + "<p>" + "Trigger Criteria: <br>" + "All." + "</p>",
 
 name = "AddTokenNGrams", tags = "nlp text document ngram pos")
 public class AddTokenNGrams implements ExecutableComponent {
@@ -169,11 +165,11 @@ public class AddTokenNGrams implements ExecutableComponent {
 		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
 
-		if (getVerbose(ccp)){
-		_logger.info("\nEND EXEC -- AddTokenNGrams -- Docs Processed: "
-				+ m_docsProcessed + " in " + (end - m_start) / 1000
-				+ " seconds\n");
-		m_docsProcessed = 0;
+		if (getVerbose(ccp)) {
+			_logger.info("\nEND EXEC -- AddTokenNGrams -- Docs Processed: "
+					+ m_docsProcessed + " in " + (end - m_start) / 1000
+					+ " seconds\n");
+			m_docsProcessed = 0;
 		}
 	}
 
@@ -181,13 +177,13 @@ public class AddTokenNGrams implements ExecutableComponent {
 			throws ComponentExecutionException, ComponentContextException {
 		_logger.fine("execute() called");
 
-
 		try {
 			Document doc = (Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOCUMENT);
 
 			AnnotationSet annots = doc.getAnnotations();
-			Set<Annotation> tset = new TreeSet<Annotation>(new Annot_Comparator());
+			Set<Annotation> tset = new TreeSet<Annotation>(
+					new Annot_Comparator());
 			for (Iterator<Annotation> iter = annots.iterator(); iter.hasNext();) {
 				Annotation tok = iter.next();
 				if (tok.getType().equals(AnnotationConstants.TOKEN_ANNOT_TYPE)) {
@@ -199,8 +195,10 @@ public class AddTokenNGrams implements ExecutableComponent {
 			for (Iterator<Annotation> iter = tset.iterator(); iter.hasNext();) {
 				Annotation tok = iter.next();
 				String img = tok.getContent(doc);
-				PoSTag postag = (PoSTag) tok.getFeatures().get(
+				String ptag = tok.getFeatures().get(
 						AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
+
+				PoSTag postag = PoSTag.getPoSTag(ptag);
 
 				if ((PoSTag.isSymbol(postag)) || (img.trim().equals("/"))
 						|| (img.trim().equals("%"))
@@ -217,14 +215,17 @@ public class AddTokenNGrams implements ExecutableComponent {
 
 				if (q.size() == getArity(ctx)) {
 					FeatureMap fm = Factory.newFeatureMap();
-					fm.put(AnnotationConstants.NGRAM_ANNOT_FEAT_TOKEN_LIST,
-							new ArrayList<Annotation>(q));
-					fm.put(AnnotationConstants.NGRAM_ANNOT_FEAT_ARITY,
-							new Integer(getArity(ctx)));
+					fm
+							.put(
+									AnnotationConstants.NGRAM_ANNOT_FEAT_TOKEN_LIST,
+									FeatureValueEncoderDecoder
+											.encodeListofAnnotations(new ArrayList<Annotation>(
+													q)));
+					fm.put(AnnotationConstants.NGRAM_ANNOT_FEAT_ARITY_INT, ""
+							+ getArity(ctx));
 					String nimg = "";
 					for (int i = 0, n = q.size(); i < n; i++) {
-						nimg += q.get(i).getContent(doc)
-								+ " ";
+						nimg += q.get(i).getContent(doc) + " ";
 					}
 					if (this.getVerbose(ctx)) {
 						_logger.info(nimg.trim());
@@ -252,9 +253,9 @@ public class AddTokenNGrams implements ExecutableComponent {
 		}
 	}
 
-	//=================
+	// =================
 	// Private Methods
-	//=================
+	// =================
 
 	private class Annot_Comparator implements Comparator<Annotation> {
 

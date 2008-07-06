@@ -38,17 +38,17 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * WITH THE SOFTWARE.
- */ 
+ */
 
 package org.seasr.components.text.opennlp.ie;
 
-//==============
-//Java Imports
-//==============
+// ==============
+// Java Imports
+// ==============
 
-//===============
-//Other Imports
-//===============
+// ===============
+// Other Imports
+// ===============
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,9 +66,8 @@ import opennlp.tools.namefind.NameFinderME;
 import opennlp.tools.parser.Parse;
 import opennlp.tools.util.Span;
 
-
-//import org.meandre.tools.components.*;
-//import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
+// import org.meandre.tools.components.*;
+// import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
 
 import org.seasr.components.text.datatype.corpora.Annotation;
 import org.seasr.components.text.datatype.corpora.AnnotationConstants;
@@ -77,7 +76,7 @@ import org.seasr.components.text.datatype.corpora.Document;
 import org.meandre.components.util.MeandreJarFileReaderUtil;
 import org.meandre.core.*;
 import org.meandre.annotations.*;
-
+import org.seasr.components.text.util.feature_maps.FeatureValueEncoderDecoder;
 
 /**
  * @author D. Searsmith
@@ -85,14 +84,14 @@ import org.meandre.annotations.*;
  * TODO: Testing, Unit Tests
  */
 
-@Component(creator = "Duane Searsmith", 
-		
-		description = "<p>Overview:<br> This component wraps the OpenNLP NameFinder class.  The "
-			+ "NameFinder class does name entity extraction.  The NameFinder can be run "
-			+ "Part-of-Speech tagged text or text that has been run through the OpenNLP Treebank "
-			+ "parser (use the 'use_treebank' option).</p>",
-		
-		name = "OpenNLP_NameFinder", tags = "sentence text opennlp document", dependency = { "maxent-models.jar" })
+@Component(creator = "Duane Searsmith",
+
+description = "<p>Overview:<br> This component wraps the OpenNLP NameFinder class.  The "
+		+ "NameFinder class does name entity extraction.  The NameFinder can be run "
+		+ "Part-of-Speech tagged text or text that has been run through the OpenNLP Treebank "
+		+ "parser (use the 'use_treebank' option).</p>",
+
+name = "OpenNLP_NameFinder", tags = "sentence text opennlp document", dependency = { "maxent-models.jar" })
 public class OpenNLP_NameFinder implements ExecutableComponent {
 
 	// ==============
@@ -140,95 +139,95 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 
 	static public void main(String[] args) {
 
-//		// get a flow builder instance
-//		FlowBuilderAPI flowBuilder = new FlowBuilderAPI();
-//		// get a flow object
-//		WorkingFlow wflow = flowBuilder.newWorkingFlow("test");
-//		// add a component
-//		String pushString = wflow
-//				.addComponent("org.seasr.meandre.components.io.PushString");
-//		// set a component property
-//		wflow.setComponentInstanceProp(pushString, "string",
-//				"c:/tmp/sample.txt");
-//		// add another component
-//		String reader = wflow
-//				.addComponent("org.seasr.meandre.components.t2k.io.file.TextFileToDoc");
-//
-//		// // set a component property
-//		wflow.setComponentInstanceProp(reader,
-//				TextFileToDoc.DATA_PROPERTY_ADD_SPACE_AT_NEW_LINES, "true");
-//
-//		// make a connection between two components
-//		wflow.connectComponents(pushString, "output_string", reader,
-//				TextFileToDoc.DATA_INPUT_FILE_NAME);
-//
-//		// add another component
-//		String sentdetector = wflow
-//				.addComponent("org.seasr.meandre.components.t2k.sentence.opennlp.OpenNLP_SentenceDetect");
-//
-//		// make a connection between two components
-//		wflow.connectComponents(reader, TextFileToDoc.DATA_OUTPUT_FILE_DOC,
-//				sentdetector, OpenNLP_SentenceDetect.DATA_INPUT_DOC_IN);
-//
-//		// add another component
-////		String tokenizer = wflow
-////				.addComponent("org.seasr.meandre.components.t2k.tokenize.opennlp.OpenNLP_Tokenizer");
-//
-//		// add another component
-//		String tokenizer = wflow
-//				.addComponent("org.seasr.meandre.components.t2k.tokenize.brown.Tokenizer_Comp");
-//
-//		// make a connection between two components
-//		wflow.connectComponents(sentdetector,
-//				OpenNLP_SentenceDetect.DATA_OUTPUT_DOC_OUT, tokenizer,
-//				Tokenizer_Comp.DATA_INPUT_DOC_IN);
-//
-//		// add another component
-//		String parser = wflow
-//				.addComponent("org.seasr.meandre.components.t2k.parser.opennlp.OpenNLP_TreebankParser");
-//
-//		// make a connection between two components
-//		wflow.connectComponents(tokenizer,
-//				Tokenizer_Comp.DATA_OUTPUT_DOC_OUT, parser,
-//				DATA_INPUT_DOC_IN);
-//
-//		// set a component property
-//		wflow.setComponentInstanceProp(parser,
-//				OpenNLP_TreebankParser.DATA_PROPERT_PARSE_IN_ORDER, "true");
-//
-//		// set a component property
-//		// wflow.setComponentInstanceProp(parser,
-//		// OpenNLP_TreebankParser.DATA_PROPERTY_VERBOSE, "true");
-//
-//		wflow.setComponentInstanceProp(parser,
-//		OpenNLP_TreebankParser.DATA_PROPERTY_TREEBANK_FMT, "true");
-//
-////		wflow.setComponentInstanceProp(parser,
-////				OpenNLP_TreebankParser.DATA_PROPERT_NUMBER_OF_PARSES, "5");
-//
-//		// add another component
-//		String finder = wflow
-//				.addComponent("org.seasr.meandre.components.t2k.ie.opennlp.OpenNLP_NameFinder");
-//
-//		// make a connection between two components
-//		wflow.connectComponents(parser,
-//				OpenNLP_TreebankParser.DATA_OUTPUT_DOC_OUT, finder,
-//				OpenNLP_NameFinder.DATA_INPUT_DOC_IN);
-//
-//		// set a component property
-//		wflow.setComponentInstanceProp(finder, "verbose", "true");
-//
-//		// set a component property
-//		wflow.setComponentInstanceProp(finder, OpenNLP_NameFinder.DATA_PROPERTY_USE_TREEBANK, "true");
-//		
-//		// execute the flow specifying that we want a web UI displayed
-//		flowBuilder.execute(wflow, false);
-//
-//		// For some reason the process does not end without a forced exit.
-//		System.exit(0);
-	}		
-		
-		
+		// // get a flow builder instance
+		// FlowBuilderAPI flowBuilder = new FlowBuilderAPI();
+		// // get a flow object
+		// WorkingFlow wflow = flowBuilder.newWorkingFlow("test");
+		// // add a component
+		// String pushString = wflow
+		// .addComponent("org.seasr.meandre.components.io.PushString");
+		// // set a component property
+		// wflow.setComponentInstanceProp(pushString, "string",
+		// "c:/tmp/sample.txt");
+		// // add another component
+		// String reader = wflow
+		// .addComponent("org.seasr.meandre.components.t2k.io.file.TextFileToDoc");
+		//
+		// // // set a component property
+		// wflow.setComponentInstanceProp(reader,
+		// TextFileToDoc.DATA_PROPERTY_ADD_SPACE_AT_NEW_LINES, "true");
+		//
+		// // make a connection between two components
+		// wflow.connectComponents(pushString, "output_string", reader,
+		// TextFileToDoc.DATA_INPUT_FILE_NAME);
+		//
+		// // add another component
+		// String sentdetector = wflow
+		// .addComponent("org.seasr.meandre.components.t2k.sentence.opennlp.OpenNLP_SentenceDetect");
+		//
+		// // make a connection between two components
+		// wflow.connectComponents(reader, TextFileToDoc.DATA_OUTPUT_FILE_DOC,
+		// sentdetector, OpenNLP_SentenceDetect.DATA_INPUT_DOC_IN);
+		//
+		// // add another component
+		// // String tokenizer = wflow
+		// //
+		// .addComponent("org.seasr.meandre.components.t2k.tokenize.opennlp.OpenNLP_Tokenizer");
+		//
+		// // add another component
+		// String tokenizer = wflow
+		// .addComponent("org.seasr.meandre.components.t2k.tokenize.brown.Tokenizer_Comp");
+		//
+		// // make a connection between two components
+		// wflow.connectComponents(sentdetector,
+		// OpenNLP_SentenceDetect.DATA_OUTPUT_DOC_OUT, tokenizer,
+		// Tokenizer_Comp.DATA_INPUT_DOC_IN);
+		//
+		// // add another component
+		// String parser = wflow
+		// .addComponent("org.seasr.meandre.components.t2k.parser.opennlp.OpenNLP_TreebankParser");
+		//
+		// // make a connection between two components
+		// wflow.connectComponents(tokenizer,
+		// Tokenizer_Comp.DATA_OUTPUT_DOC_OUT, parser,
+		// DATA_INPUT_DOC_IN);
+		//
+		// // set a component property
+		// wflow.setComponentInstanceProp(parser,
+		// OpenNLP_TreebankParser.DATA_PROPERT_PARSE_IN_ORDER, "true");
+		//
+		// // set a component property
+		// // wflow.setComponentInstanceProp(parser,
+		// // OpenNLP_TreebankParser.DATA_PROPERTY_VERBOSE, "true");
+		//
+		// wflow.setComponentInstanceProp(parser,
+		// OpenNLP_TreebankParser.DATA_PROPERTY_TREEBANK_FMT, "true");
+		//
+		// // wflow.setComponentInstanceProp(parser,
+		// // OpenNLP_TreebankParser.DATA_PROPERT_NUMBER_OF_PARSES, "5");
+		//
+		// // add another component
+		// String finder = wflow
+		// .addComponent("org.seasr.meandre.components.t2k.ie.opennlp.OpenNLP_NameFinder");
+		//
+		// // make a connection between two components
+		// wflow.connectComponents(parser,
+		// OpenNLP_TreebankParser.DATA_OUTPUT_DOC_OUT, finder,
+		// OpenNLP_NameFinder.DATA_INPUT_DOC_IN);
+		//
+		// // set a component property
+		// wflow.setComponentInstanceProp(finder, "verbose", "true");
+		//
+		// // set a component property
+		// wflow.setComponentInstanceProp(finder,
+		// OpenNLP_NameFinder.DATA_PROPERTY_USE_TREEBANK, "true");
+		//		
+		// // execute the flow specifying that we want a web UI displayed
+		// flowBuilder.execute(wflow, false);
+		//
+		// // For some reason the process does not end without a forced exit.
+		// System.exit(0);
+	}
 
 	// ================
 	// Public Methods
@@ -270,9 +269,9 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 				File modelFile = MeandreJarFileReaderUtil
 						.findAndInstallFileResource("models/English/namefind/"
 								+ modelName + ".bin.gz",
-								"/opennlp/models/English/namefind/"
-										+ modelName + "_" + _version
-										+ ".bin.gz", (ComponentContext)ccp);
+								"/opennlp/models/English/namefind/" + modelName
+										+ "_" + _version + ".bin.gz",
+								(ComponentContext) ccp);
 				if (modelFile == null) {
 					throw new RuntimeException(
 							"UNable to resove resource to a file: "
@@ -314,7 +313,7 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 
 			// =============================
 			AnnotationSet neSet = idoc
-			.getAnnotations(AnnotationConstants.ANNOTATION_SET_ENTITIES);
+					.getAnnotations(AnnotationConstants.ANNOTATION_SET_ENTITIES);
 			AnnotationSet annotsSent = idoc
 					.getAnnotations(AnnotationConstants.ANNOTATION_SET_SENTENCES);
 			List<Annotation> sents = annotsSent.getAllSortedAsArrayList();
@@ -343,10 +342,11 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 				}
 
 				if (getUseTreebankFmt(ctx)) {
-					Set<String> ptbAnnots = (Set<String>) sent
-							.getFeatures()
-							.get(
-									AnnotationConstants.SENTENCE_PENNTREEBANK_FMT_ANNOT_PARSES);
+					Set<String> ptbAnnots = FeatureValueEncoderDecoder
+							.decodeToSet(sent
+									.getFeatures()
+									.get(
+											AnnotationConstants.SENTENCE_PENNTREEBANK_FMT_ANNOT_PARSES_SET));
 					if (ptbAnnots == null) {
 						_logger
 								.info("Sentence has no Penn Treebank format parse data.");
@@ -392,8 +392,9 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 					sent
 							.getFeatures()
 							.put(
-									AnnotationConstants.SENTENCE_PENNTREEBANK_FMT_ANNOT_PARSES,
-									newSet);
+									AnnotationConstants.SENTENCE_PENNTREEBANK_FMT_ANNOT_PARSES_SET,
+									FeatureValueEncoderDecoder
+											.encodeSet(newSet));
 				}
 				List<Annotation> sentToksList = sentToks
 						.getAllSortedAsArrayList();

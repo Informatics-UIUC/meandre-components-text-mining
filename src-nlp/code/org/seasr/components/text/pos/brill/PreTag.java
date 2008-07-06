@@ -279,7 +279,7 @@ public class PreTag implements ExecutableComponent {
 										.getFeatures()
 										.put(
 												AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-												tags[0]);
+												tags[0].toString());
 								if (this.getIncludeDescription(ctx)) {
 									tok
 											.getFeatures()
@@ -292,15 +292,15 @@ public class PreTag implements ExecutableComponent {
 								tok
 										.getFeatures()
 										.put(
-												AnnotationConstants.TOKEN_ANNOT_FEAT_PRETAGGED,
-												Boolean.TRUE);
+												AnnotationConstants.TOKEN_ANNOT_FEAT_PRETAGGED_BOOL,
+												Boolean.TRUE.toString());
 								tagsFoundInLex++;
 							} else if (Character.isDigit(img.charAt(0))) {
 								tok
 										.getFeatures()
 										.put(
 												AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-												PoSTag.PoS_CD);
+												PoSTag.PoS_CD.toString());
 								if (getIncludeDescription(ctx)) {
 									tok
 											.getFeatures()
@@ -314,7 +314,7 @@ public class PreTag implements ExecutableComponent {
 										.getFeatures()
 										.put(
 												AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-												PoSTag.PoS_SYM);
+												PoSTag.PoS_SYM.toString());
 								if (getIncludeDescription(ctx)) {
 									tok
 											.getFeatures()
@@ -328,7 +328,7 @@ public class PreTag implements ExecutableComponent {
 										.getFeatures()
 										.put(
 												AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-												PoSTag.PoS_NNP);
+												PoSTag.PoS_NNP.toString());
 								if (getIncludeDescription(ctx)) {
 									tok
 											.getFeatures()
@@ -342,7 +342,7 @@ public class PreTag implements ExecutableComponent {
 										.getFeatures()
 										.put(
 												AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
-												PoSTag.PoS_NN);
+												PoSTag.PoS_NN.toString());
 								if (getIncludeDescription(ctx)) {
 									tok
 											.getFeatures()

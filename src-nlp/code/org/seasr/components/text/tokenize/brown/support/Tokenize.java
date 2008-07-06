@@ -141,8 +141,8 @@ public class Tokenize {
 					continue;
 				}
 				FeatureMap fm = Factory.newFeatureMap();
-				fm.put(AnnotationConstants.TOKEN_ANNOT_FEAT_INTITLE,
-						new Boolean(true));
+				fm.put(AnnotationConstants.TOKEN_ANNOT_FEAT_INTITLE_BOOL,
+						Boolean.TRUE.toString());
 				transfer_flags(fm, tok);
 				annots.add(pos1, pos1 + img.length(), AnnotationConstants.TOKEN_ANNOT_TYPE, fm);
 				cnt++;
@@ -186,8 +186,8 @@ public class Tokenize {
 			return idoc;
 		}
 		if (tok_cnt) {
-			idoc.getFeatures().put(DocumentConstants.TOKENIZER_NUM_TOKS,
-					new Integer(cnt));
+			idoc.getFeatures().put(DocumentConstants.TOKENIZER_NUM_TOKS_INT,
+					Integer.toString(cnt));
 		}
 		return idoc;
 	}
@@ -196,11 +196,11 @@ public class Tokenize {
 		for (Iterator<TokenFlag> iter = tok.getFlags(); iter.hasNext();) {
 			TokenFlag flag = iter.next();
 			if (flag == TokenFlag.START_OF_LINE) {
-				fm.put(AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE,
-						Boolean.TRUE);
+				fm.put(AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL,
+						Boolean.TRUE.toString());
 			} else if (flag == TokenFlag.END_OF_LINE) {
-				fm.put(AnnotationConstants.TOKEN_ANNOT_FEAT_END_OF_LINE,
-						Boolean.TRUE);
+				fm.put(AnnotationConstants.TOKEN_ANNOT_FEAT_END_OF_LINE_BOOL,
+						Boolean.TRUE.toString());
 			}
 		}
 	}

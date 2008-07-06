@@ -276,16 +276,16 @@ public class OpenNLP_Tokenizer implements ExecutableComponent {
 						FeatureMap fm = Factory.newFeatureMap();
 						fm
 								.put(
-										AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE,
-										Boolean.TRUE);
+										AnnotationConstants.TOKEN_ANNOT_FEAT_START_OF_LINE_BOOL,
+										Boolean.TRUE.toString());
 						annotsP.add(posB, posE,
 								AnnotationConstants.TOKEN_ANNOT_TYPE, fm);
 					} else {
 						FeatureMap fm = Factory.newFeatureMap();
 						fm
 								.put(
-										AnnotationConstants.TOKEN_ANNOT_FEAT_END_OF_LINE,
-										Boolean.TRUE);
+										AnnotationConstants.TOKEN_ANNOT_FEAT_END_OF_LINE_BOOL,
+										Boolean.TRUE.toString());
 						annotsP.add(posB, posE,
 								AnnotationConstants.TOKEN_ANNOT_TYPE, fm);
 					}
@@ -299,8 +299,8 @@ public class OpenNLP_Tokenizer implements ExecutableComponent {
 				for (int i = 0, n = spans.length; i < n; i++) {
 					Span spn = spans[i];
 					FeatureMap fm = Factory.newFeatureMap();
-					fm.put(AnnotationConstants.TOKEN_ANNOT_FEAT_INTITLE,
-							new Boolean(true));
+					fm.put(AnnotationConstants.TOKEN_ANNOT_FEAT_INTITLE_BOOL,
+							Boolean.TRUE.toString());
 					annotsP.add(spn.getStart(), spn.getEnd(),
 							AnnotationConstants.TOKEN_ANNOT_TYPE, fm);
 				}
