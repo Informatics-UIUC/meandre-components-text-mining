@@ -59,9 +59,9 @@ import org.seasr.components.text.datatype.corpora.Annotation;
 import org.seasr.components.text.datatype.corpora.AnnotationConstants;
 import org.seasr.components.text.datatype.corpora.AnnotationSet;
 import org.seasr.components.text.datatype.corpora.Document;
-import org.seasr.components.text.datatype.pos.PoSTag;
 import org.meandre.core.*;
 import org.meandre.annotations.*;
+import org.seasr.components.text.util.feature_maps.FeatureValueEncoderDecoder;
 
 /**
  * <p>
@@ -248,7 +248,7 @@ public class FilterByPOS implements ExecutableComponent {
 			for (Iterator<Annotation> iter = annots.iterator(); iter.hasNext();) {
 				Annotation tok = iter.next();
 				if (tok.getType().equals(AnnotationConstants.TOKEN_ANNOT_TYPE)) {
-					PoSTag postag = (PoSTag) tok.getFeatures().get(
+					String postag = tok.getFeatures().get(
 							AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
 					String tokimg = tok.getContent(doc);
 					if ((hasTag(postag))
@@ -271,12 +271,15 @@ public class FilterByPOS implements ExecutableComponent {
 			for (Iterator<Annotation> iter = annots.iterator(); iter.hasNext();) {
 				Annotation tok = (Annotation) iter.next();
 				if (tok.getType().equals(AnnotationConstants.NGRAM_ANNOT_TYPE)) {
-					ArrayList<?> list = (ArrayList<?>) tok.getFeatures().get(
-							AnnotationConstants.NGRAM_ANNOT_FEAT_TOKEN_LIST);
+					ArrayList<Annotation> list = FeatureValueEncoderDecoder
+							.decodeToListofAnnotations(tok
+									.getFeatures()
+									.get(
+											AnnotationConstants.NGRAM_ANNOT_FEAT_TOKEN_LIST));
 					boolean keep = false;
 					for (int i = 0, n = list.size(); i < n; i++) {
-						Annotation tok2 = (Annotation) list.get(i);
-						PoSTag postag = (PoSTag) tok2.getFeatures().get(
+						Annotation tok2 = list.get(i);
+						String postag = tok2.getFeatures().get(
 								AnnotationConstants.TOKEN_ANNOT_FEAT_POS);
 						String tokimg = tok2.getContent(doc);
 						if ((hasTag(postag))
@@ -317,8 +320,8 @@ public class FilterByPOS implements ExecutableComponent {
 	// Private Methods
 	// =================
 
-	private boolean hasTag(PoSTag tag) {
-		return _tags.contains(tag.toString());
+	private boolean hasTag(String tag) {
+		return _tags.contains(tag);
 	}
 
 }
