@@ -104,42 +104,52 @@ public class Tokenizer implements ExecutableComponent {
 
 	private long m_start = 0;
 
+	private static Logger _logger = Logger.getLogger("Tokenizer");
+
 	// ============
 	// Properties
 	// ============
 
 	// props
 	
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	@ComponentProperty(description = "Verbose output?", 
+			name = "verbose", 
+			defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	@ComponentProperty(description = "Exclude tokenization of the title?", name = "exclude_title", defaultValue = "true")
+	@ComponentProperty(description = "Exclude tokenization of the title?", 
+			name = "exclude_title", 
+			defaultValue = "true")
 	final static String DATA_PROPERTY_EXCLUDE_TITLE = "exclude_title";
 
 	@ComponentProperty(description = "If set to true then the raw text is cleared once " + 
 			"tokens have been formed.  This can be used to help manage the heap size" + 
 			" so long as the original document text is no longer needed.", 
-			name = "clear_text", defaultValue = "false")
+			name = "clear_text", 
+			defaultValue = "false")
 	final static String DATA_PROPERTY_CLEAR_TEXT = "clear_text";
 
-	@ComponentProperty(description = "Show progress?", name = "show_progress", defaultValue = "false")
+	@ComponentProperty(description = "Show progress?", 
+			name = "show_progress", 
+			defaultValue = "false")
 	final static String DATA_PROPERTY_SHOW_PROGRESS = "show_progress";
 
 	@ComponentProperty(description = "If set to true then the number of tokens created" +
 		" is written into the document's feature map.?", 
-		name = "include_token", defaultValue = "false")		
+		name = "include_token", 
+		defaultValue = "false")		
 	final static String DATA_PROPERTY_TOKEN_COUNT = "include_token";
 
 	// io
 	
-	@ComponentInput(description = "Input document.", name = "document_in")
+	@ComponentInput(description = "Input document.", 
+			name = "document_in")
 	public final static String DATA_INPUT_DOC_IN = "document_in";
 
-	@ComponentOutput(description = "Output document.", name = "document_out")
+	@ComponentOutput(description = "Output document.", 
+			name = "document_out")
 	public final static String DATA_OUTPUT_DOC_OUT = "document_out";
 	
-	private static Logger _logger = Logger.getLogger("Tokenizer");
-
 	// ================
 	// Constructor(s)
 	// ================
