@@ -233,6 +233,7 @@ public class Tokenizer implements ExecutableComponent {
 	}
 
 	public void dispose(ComponentContextProperties ccp) {
+		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
 		if (getShowProgress(ccp)) {
 			_logger.info("\nEND EXEC -- Tokenizer -- Docs Processed: "
