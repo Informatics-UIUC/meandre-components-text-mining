@@ -166,6 +166,7 @@ public class DocumentToGATEDocument implements ExecutableComponent
 	}
 
 	public void dispose(ComponentContextProperties ccp) {
+		_logger.fine("dispose() called");
         long end = System.currentTimeMillis();
 
         if (this.getVerbose(ccp)) {
