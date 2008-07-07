@@ -63,7 +63,7 @@ public class GATEInitialiser implements Serializable {
     public GATEInitialiser() {
     }
 
-    {
+    static public void init(){
         synchronized (_lock) {
 
             try {
