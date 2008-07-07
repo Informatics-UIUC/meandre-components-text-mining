@@ -121,8 +121,6 @@ public class GATE_UrlDocumentReader extends GATE_DocumentReader {
 	@ComponentInput(description = "URL.", name = "url_name")
 	public final static String DATA_INPUT_FILE_NAME = "url_name";
 
-	GATEInitialiser gi = new GATEInitialiser();
-
 	private static Logger _logger = Logger.getLogger("GATE_UrlDocumentReader");
 
 	// ================

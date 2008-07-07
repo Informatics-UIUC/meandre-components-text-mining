@@ -122,8 +122,6 @@ public class GATE_DocumentReader implements ExecutableComponent {
 	protected int m_docsProcessed = 0;
 	protected long m_start = 0;
 
-	GATEInitialiser gi = new GATEInitialiser();
-
 	private static Logger _logger = Logger.getLogger("GATE_DocumentReader");
 
 	// props
@@ -165,6 +163,7 @@ public class GATE_DocumentReader implements ExecutableComponent {
 
 	public void initialize(ComponentContextProperties ccp) {
 		_logger.fine("initialize() called");
+		GATEInitialiser.init();
 		m_docsProcessed = 0;
 		m_start = System.currentTimeMillis();
 	}
