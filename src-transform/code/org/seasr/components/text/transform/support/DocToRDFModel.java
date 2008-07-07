@@ -241,13 +241,7 @@ public class DocToRDFModel {
 
 						for (String sKey : annot.getFeatures().keySet()) {
 							String sValue = features.get(sKey).toString();
-							annR
-									.addProperty(
-											DocumentVocabulary.feature_set,
-											model
-													.createResource(
-															resID + "/feature/"
-																	+ sKey)
+							annR.addProperty(DocumentVocabulary.feature_set, model.createResource(resID + "/feature/" + sKey)
 													.addProperty(
 															RDF.type,
 															DocumentVocabulary.feature)

@@ -378,7 +378,7 @@ public class TermListLite implements TermList, java.io.Serializable {
 	 * 
 	 * @return
 	 */
-	public Iterator<PoSToken> getTerms() {
+	public Iterator<String> getTerms() {
 		
 		return null;
 	}

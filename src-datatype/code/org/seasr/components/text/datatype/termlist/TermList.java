@@ -124,7 +124,7 @@ public interface TermList extends java.io.Serializable
 	 * @return
 	 */
 
-	public Iterator<PoSToken> getTerms();
+	public Iterator<? extends Object> getTerms();
 
 	/**
 	 * put your documentation comment here
