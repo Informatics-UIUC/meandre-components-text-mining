@@ -240,7 +240,7 @@ public class GATE_SentenceSplitter implements ExecutableComponent {
 					"gate.creole.splitter.SentenceSplitter", params);
 		} catch (Exception e) {
 			System.out
-					.println("GATE_SentenceSplitter.beginExecution() -- " + e);
+					.println("GATE_SentenceSplitter.initialise() -- " + e);
 			e.printStackTrace();
 			throw new ComponentExecutionException(e);
 		}
