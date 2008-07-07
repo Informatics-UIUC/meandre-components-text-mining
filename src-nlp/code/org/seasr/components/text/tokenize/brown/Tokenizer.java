@@ -226,7 +226,7 @@ public class Tokenizer implements ExecutableComponent {
 		return Boolean.parseBoolean(s.toLowerCase());
 	}
 
-	public void initialize(ComponentContextProperties ccp) {
+	public void initialize (ComponentContextProperties ccp) {
 		_logger.fine("initialize() called");
 		m_docsProcessed = 0;
 		m_start = System.currentTimeMillis();
