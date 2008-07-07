@@ -134,7 +134,7 @@ public class Tokenizer implements ExecutableComponent {
 	@ComponentOutput(description = "Output document.", name = "document_out")
 	public final static String DATA_OUTPUT_DOC_OUT = "document_out";
 	
-	private static Logger _logger = Logger.getLogger("Tokenizer_Comp");
+	private static Logger _logger = Logger.getLogger("Tokenizer");
 
 	// ================
 	// Constructor(s)
