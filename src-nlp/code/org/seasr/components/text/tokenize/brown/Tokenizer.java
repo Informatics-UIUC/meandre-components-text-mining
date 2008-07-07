@@ -108,6 +108,8 @@ public class Tokenizer implements ExecutableComponent {
 	// Properties
 	// ============
 
+	// props
+	
 	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
@@ -128,6 +130,8 @@ public class Tokenizer implements ExecutableComponent {
 		name = "include_token", defaultValue = "false")		
 	final static String DATA_PROPERTY_TOKEN_COUNT = "include_token";
 
+	// io
+	
 	@ComponentInput(description = "Input document.", name = "document_in")
 	public final static String DATA_INPUT_DOC_IN = "document_in";
 
