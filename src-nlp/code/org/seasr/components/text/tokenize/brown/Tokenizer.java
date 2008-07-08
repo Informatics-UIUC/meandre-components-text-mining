@@ -111,30 +111,30 @@ public class Tokenizer implements ExecutableComponent {
 
 	// props
 	
-	@ComponentProperty(description = "Verbose output?", 
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", 
 			name = "verbose", 
 			defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	@ComponentProperty(description = "Exclude tokenization of the title?", 
+	@ComponentProperty(description = "Exclude tokenization of the title? A boolean value (true or false).", 
 			name = "exclude_title", 
 			defaultValue = "true")
 	final static String DATA_PROPERTY_EXCLUDE_TITLE = "exclude_title";
 
 	@ComponentProperty(description = "If set to true then the raw text is cleared once " + 
 			"tokens have been formed.  This can be used to help manage the heap size" + 
-			" so long as the original document text is no longer needed.", 
+			" so long as the original document text is no longer needed. A boolean value (true or false).", 
 			name = "clear_text", 
 			defaultValue = "false")
 	final static String DATA_PROPERTY_CLEAR_TEXT = "clear_text";
 
-	@ComponentProperty(description = "Show progress?", 
+	@ComponentProperty(description = "Show progress? A boolean value (true or false).", 
 			name = "show_progress", 
 			defaultValue = "false")
 	final static String DATA_PROPERTY_SHOW_PROGRESS = "show_progress";
 
 	@ComponentProperty(description = "If set to true then the number of tokens created" +
-		" is written into the document's feature map.?", 
+		" is written into the document's feature map. A boolean value (true or false).", 
 		name = "include_token", 
 		defaultValue = "false")		
 	final static String DATA_PROPERTY_TOKEN_COUNT = "include_token";
