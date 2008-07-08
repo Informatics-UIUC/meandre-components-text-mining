@@ -131,16 +131,16 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 
 	// Props
 
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	public final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	@ComponentProperty(description = "Use tag dictionary?", name = "use_tag_dict", defaultValue = "false")
+	@ComponentProperty(description = "Use tag dictionary? A boolean value (true or false).", name = "use_tag_dict", defaultValue = "false")
 	public final static String DATA_PROPERT_USE_TAG_DICTIONARY = "use_tag_dict";
 
-	@ComponentProperty(description = "Parse in sentence order?", name = "parse_in_order", defaultValue = "false")
+	@ComponentProperty(description = "Parse in sentence order? A boolean value (true or false).", name = "parse_in_order", defaultValue = "false")
 	public final static String DATA_PROPERT_PARSE_IN_ORDER = "parse_in_order";
 
-	@ComponentProperty(description = "Use case insensitive tag dictionary?", name = "use_case_insensitive_tag_dict", defaultValue = "false")
+	@ComponentProperty(description = "Use case insensitive tag dictionary? A boolean value (true or false).", name = "use_case_insensitive_tag_dict", defaultValue = "false")
 	public final static String DATA_PROPERT_USE_CASE_INSENSITIVE_TAG_DICTIONARY = "use_case_insensitive_tag_dict";
 
 	@ComponentProperty(description = "Beam size (int).", name = "beam_size", defaultValue = "20")
@@ -152,7 +152,7 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 	@ComponentProperty(description = "Advance outcomes in with at least X% of the probability mass.", name = "advance_percentage", defaultValue = "0.95")
 	public final static String DATA_PROPERT_ADVANCE_PERCENTAGE = "advance_percentage";
 
-	@ComponentProperty(description = "Also output in treebank fmt?", name = "treebank_fmt", defaultValue = "false")
+	@ComponentProperty(description = "Also output in treebank fmt? A boolean value (true or false).", name = "treebank_fmt", defaultValue = "false")
 	public final static String DATA_PROPERTY_TREEBANK_FMT = "treebank_fmt";
 
 	@ComponentProperty(description = "Build model resource file name.", name = "build_model_resource_name", defaultValue = "models/English/parser/build.bin.gz")
