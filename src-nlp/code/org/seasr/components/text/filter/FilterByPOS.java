@@ -155,10 +155,10 @@ public class FilterByPOS implements ExecutableComponent {
 
 	// props
 
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	@ComponentProperty(description = "Show progress?", name = "show_progress", defaultValue = "false")
+	@ComponentProperty(description = "Show progress? A boolean value (true or false).", name = "show_progress", defaultValue = "false")
 	final static String DATA_PROPERTY_SHOW_PROGRESS = "show_progress";
 
 	@ComponentProperty(description = "Comma delimited of tags to allow.?", name = "tag_list", defaultValue = "NN,NNP,NNPS,NNS,NP,NPS")
