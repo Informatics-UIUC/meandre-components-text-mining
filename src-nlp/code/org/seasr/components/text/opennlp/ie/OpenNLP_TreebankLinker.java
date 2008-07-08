@@ -117,11 +117,9 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 
 	private String _version = "1.0";
 
-	// ============
-	// Properties
-	// ============
-
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	// props
+	
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	@ComponentProperty(description = "Model files for v1.3.0.", 
@@ -149,6 +147,8 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 			"tmodel.bin.gz," +
 			"acronyms")
 	final static String DATA_PROPERTY_MODEL_FILES_VER_1_3_0 = "mod_files";
+
+	// io
 	
 	@ComponentInput(description = "Input document.", name = "document_in")
 	public final static String DATA_INPUT_DOC_IN = "document_in";

@@ -113,15 +113,19 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 	// Properties
 	// ============
 
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	// props
+	
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	@ComponentProperty(description = "Use treebank parse format for input?", name = "use_treebank", defaultValue = "false")
+	@ComponentProperty(description = "Use treebank parse format for input? A boolean value (true or false).", name = "use_treebank", defaultValue = "false")
 	final static String DATA_PROPERTY_USE_TREEBANK = "use_treebank";
 
 	@ComponentProperty(description = "Entity types (comma delimited list).", name = "entities", defaultValue = "person,organization,location,time,money,percentage,date")
 	final static String DATA_PROPERTY_ENTITIES = "entities";
 
+	// io
+	
 	@ComponentInput(description = "Input document.", name = "document_in")
 	public final static String DATA_INPUT_DOC_IN = "document_in";
 
