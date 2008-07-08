@@ -69,7 +69,6 @@ import org.meandre.annotations.*;
  * 
  * TODO: Testing, Unit Tests
  */
-
 @Component(creator = "Duane Searsmith", 
 		description = "<p>Overview: <br>" +
 		"This module takes an input Document object, parses the raw text into " +
