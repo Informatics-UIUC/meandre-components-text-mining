@@ -70,7 +70,7 @@ import org.seasr.components.text.gate.util.GATEInitialiser;
  * Annotates individual sentences.</p>
  * <p><b>Detailed Description</b>: <br>
  * Given a document object in the GATE framework, 
- * this module will annotate sentences using the given rules. 
+ * this component will annotate sentences using the given rules. 
  * The found annotations will be stored in an annotation set 
  * associated with the document.</p>
  * <p>The sentence splitter requires that the document 
@@ -80,7 +80,7 @@ import org.seasr.components.text.gate.util.GATEInitialiser;
  * the Output Annotation Set, also blank by default. 
  * Note that by leaving the Annotation Sets blank 
  * uses the default annotation set, which is probably 
- * easier to manage within an itinerary.</p>
+ * easier to manage within a flow.</p>
  * 
  * @author D. Searsmith
  * 
@@ -93,9 +93,11 @@ description = "<p><b>Overview</b>: <br>"
 		+ "Annotates individual sentences.</p>"
 		+ "<p><b>Detailed Description</b>: <br>"
 		+ "Given a document object in the GATE framework, "
-		+ "this module will annotate sentences " + "using the given rules. "
+		+ "this component will annotate sentences " 
+		+ "using the given rules. "
 		+ "The found annotations will be "
-		+ "stored in an annotation set associated with the " + "document.</p>"
+		+ "stored in an annotation set associated with the " 
+		+ "document.</p>"
 		+ "<p>The sentence splitter requires that the document "
 		+ "be tokenized already.  These tokens should be stored "
 		+ "in the Input Annotation Set, which is left to blank "
@@ -103,7 +105,7 @@ description = "<p><b>Overview</b>: <br>"
 		+ "the Output Annotation Set, also blank by default. "
 		+ "Note that by leaving the Annotation Sets blank "
 		+ "uses the default annotation set, which is probably "
-		+ "easier to manage within an itinerary.</p>",
+		+ "easier to manage within a flow.</p>",
 
 name = "GATE_SentenceSplitter", tags = "text gate sentence splitter document")
 public class GATE_SentenceSplitter implements ExecutableComponent {
