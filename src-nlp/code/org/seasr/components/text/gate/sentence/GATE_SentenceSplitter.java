@@ -122,7 +122,7 @@ public class GATE_SentenceSplitter implements ExecutableComponent {
 
 	// props
 
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	@ComponentProperty(description = "Encoding type of the document.", name = "document_encoding", defaultValue = "UTF-8")
