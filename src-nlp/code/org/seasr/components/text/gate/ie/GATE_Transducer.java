@@ -106,7 +106,7 @@ description = "<p><b>Overview</b>: <br>"
  + "uses the default annotation set, which is probably "
  + "easier to manage within a flow.</p>",
 
-name = "GATE_Transducer", tags = "text gate sentence splitter document")
+name = "GATE_Transducer", tags = "text gate transducer document")
 public class GATE_Transducer implements ExecutableComponent {
 	// ==============
 	// Data Members
