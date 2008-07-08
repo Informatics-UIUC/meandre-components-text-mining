@@ -87,7 +87,7 @@ public class ReadStopListFromJar implements ExecutableComponent {
 
 	// props
 
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	public final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	@ComponentProperty(description = "Stop list resource file name.", name = "resource_name", defaultValue = "brill/common_words")
@@ -96,7 +96,7 @@ public class ReadStopListFromJar implements ExecutableComponent {
 	@ComponentProperty(description = "Stop list file name.", name = "filename", defaultValue = "/seasr/text/stops/common_words")
 	final static String DATA_PROPERTY_FILENAME = "filename";
 
-	// IO
+	// io
 
 	@ComponentOutput(description = "Set of strings.", name = "set_of_strings")
 	public final static String DATA_OUTPUT_SET_OF_STRINGS = "set_of_strings";
