@@ -72,16 +72,15 @@ import org.seasr.components.text.gate.util.GATEInitialiser;
  * of the document.</p>
  * <p><b>Detailed Description</b>: <br>
  * Given a document object in the GATE framework, 
- * this module will perform tokenization using the 
+ * this component will perform tokenization using the 
  * given tokenizer and grammar rules. 
  * The computed tokens (ie, annotations) will be 
  * stored in an annotation set associated with the 
  * document.</p>
  * <p>The particular annotation set to use can be 
- * named by the user. 
- * If the computed tokens are to be used by other 
- * GATE modules, either use a name the other 
- * modules will recognize, or leave it blank 
+ * named by the user. If the computed tokens are to 
+ * be used by other GATE components, either use a 
+ * name the other modules will recognize, or leave it blank 
  * so the always-present default annotation set 
  * is used.</p>
  * 
