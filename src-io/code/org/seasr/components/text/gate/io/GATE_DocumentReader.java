@@ -129,10 +129,10 @@ public class GATE_DocumentReader implements ExecutableComponent {
 	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	public final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	@ComponentProperty(description = "File encoding?", name = "encoding", defaultValue = "UTF-8")
+	@ComponentProperty(description = "File encoding? A boolean value (true or false).", name = "encoding", defaultValue = "UTF-8")
 	public final static String DATA_PROPERTY_FILE_ENCODING = "encoding";
 
-	// IO
+	// io
 
 	@ComponentInput(description = "File name.", name = "file_name")
 	public final static String DATA_INPUT_FILE_NAME = "file_name";
