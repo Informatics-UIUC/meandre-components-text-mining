@@ -123,7 +123,7 @@ description = "<p><b>Overview</b>: <br>"
 + "preceding this one in the itinerary, the annotation "
 + "set name must agree with theirs.</p>",
 
-name = "GATE_Gazetteer", tags = "text gate sentence gazetteer document")
+name = "GATE_Gazetteer", tags = "text gate gazetteer document")
 public class GATE_Gazetteer implements ExecutableComponent {
 	// ==============
 	// Data Members
