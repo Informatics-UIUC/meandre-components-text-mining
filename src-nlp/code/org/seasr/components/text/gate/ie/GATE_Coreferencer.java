@@ -81,12 +81,12 @@ import org.seasr.components.text.gate.util.GATEInitialiser;
  * <p>The particular annotation set to use can be 
  * named by the user. 
  * If the computed tokens are to be used by other 
- * GATE modules, either use a name the other components
+ * GATE components, either use a name the other components
  * will recognize, or leave it blank 
  * so the always-present default annotation set is used.</p>
  * <p><b>Dependency</b>: <br>
- * The main coreference module can operate sucessfully 
- * only if the following modules are executed: 
+ * The main coreference component can operate sucessfully 
+ * only if the following components are executed: 
  * Gazetteer, Tokenizer, SentenceSplitter, Transducer, OrthoMatcher</p>
  */
 
@@ -109,14 +109,14 @@ description = "<p><b>Overview</b>: <br>"
 + "named by the user.  "
 + "If the computed tokens are to be used by other "
 + "GATE components, either use a name the other "
-+ "modules will recognize, or leave it blank "
++ "components will recognize, or leave it blank "
 + "so the always-present default annotation set "
 + "is used.</p>"
 
 
 + "<p><b>Dependency</b>: <br>"
-+ "The main coreference module can operate sucessfully "
-+ "only if the following modules are executed: "
++ "The main coreference component can operate sucessfully "
++ "only if the following components are executed: "
 + "Gazetteer, Tokenizer, SentenceSplitter, Transducer, OrthoMatcher</p>",
 
 name = "GATE_Coreferencer", tags = "text gate coreference document")
