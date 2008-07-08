@@ -116,7 +116,7 @@ public class GATEDocumentToDocument implements ExecutableComponent {
 
 	// props
 
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	@ComponentProperty(description = "Convert over GATE tokens?  If true (defualt) then "

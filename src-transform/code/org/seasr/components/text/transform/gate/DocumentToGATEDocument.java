@@ -116,7 +116,7 @@ public class DocumentToGATEDocument implements ExecutableComponent
 
 	// props
 	
-	@ComponentProperty(description = "Verbose output?", 
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", 
 			name = "verbose", 
 			defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
