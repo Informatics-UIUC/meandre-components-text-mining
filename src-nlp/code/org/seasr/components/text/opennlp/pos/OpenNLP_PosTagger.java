@@ -100,11 +100,11 @@ public class OpenNLP_PosTagger implements ExecutableComponent {
 
 	private PosTagger _tagger = null;
 	
-	private static Logger _logger = Logger.getLogger("TextFileToDoc");
+	private static Logger _logger = Logger.getLogger("OpenNLP_PoSTagger");
 	
-	// Properties
+	// props
 
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	@ComponentProperty(description = "Resource model file name.", name = "model_resource_name", defaultValue = "models/English/parser/tag.bin.gz")
@@ -125,7 +125,7 @@ public class OpenNLP_PosTagger implements ExecutableComponent {
 	@ComponentProperty(description = "Tag dictionary file name.", name = "tag_dict_filename", defaultValue = "/opennlp/models/English/parser/tagdict")
 	final static String DATA_PROPERTY_TAG_DICTIONARY_FILENAME = "tag_dict_filename";
 
-	// I/O
+	// io
 	
 	@ComponentInput(description = "Input document.", name = "document_in")
 	public final static String DATA_INPUT_DOC_IN = "document_in";
