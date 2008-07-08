@@ -115,6 +115,8 @@ public class GATE_SentenceSplitter implements ExecutableComponent {
 
 	private static Logger _logger = Logger.getLogger("GATE_SentenceSplitter");
 
+	private SentenceSplitter _splitter = null;
+
 	private int m_docsProcessed = 0;
 	private long m_start = 0;
 
@@ -148,7 +150,6 @@ public class GATE_SentenceSplitter implements ExecutableComponent {
 	@ComponentOutput(description = "Output GATE document.", name = "document_out")
 	public final static String DATA_OUTPUT_DOC_OUT = "gate_document_out";
 
-	private SentenceSplitter _splitter = null;
 
 	// ================
 	// Constructor(s)
