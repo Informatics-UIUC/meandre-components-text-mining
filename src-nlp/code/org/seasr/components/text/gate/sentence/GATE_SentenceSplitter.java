@@ -239,8 +239,7 @@ public class GATE_SentenceSplitter implements ExecutableComponent {
 			_splitter = (SentenceSplitter) Factory.createResource(
 					"gate.creole.splitter.SentenceSplitter", params);
 		} catch (Exception e) {
-			System.out
-					.println("GATE_SentenceSplitter.initialise() -- " + e);
+			_logger.info("GATE_SentenceSplitter.initialise() -- " + e);
 			e.printStackTrace();
 			throw new ComponentExecutionException(e);
 		}
