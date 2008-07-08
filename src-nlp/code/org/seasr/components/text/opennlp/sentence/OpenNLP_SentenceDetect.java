@@ -96,9 +96,9 @@ public class OpenNLP_SentenceDetect implements ExecutableComponent {
 
 	private static Logger _logger = Logger.getLogger("OpenNLP_SentenceDetect");
 
-	// Properties
+	// props
 	
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	public final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	@ComponentProperty(description = "Resource model file name.", name = "resource_name", defaultValue = "models/English/sentdetect/EnglishSD.bin.gz")
@@ -107,7 +107,7 @@ public class OpenNLP_SentenceDetect implements ExecutableComponent {
 	@ComponentProperty(description = "Model file name.", name = "filename", defaultValue = "/opennlp/models/English/sentdetect/EnglishSD.bin.gz")
 	public final static String DATA_PROPERTY_FILENAME = "filename";
 
-	// I/O
+	// io
 	
 	@ComponentInput(description = "Input document.", name = "document_in")
 	public final static String DATA_INPUT_DOC_IN = "document_in";
