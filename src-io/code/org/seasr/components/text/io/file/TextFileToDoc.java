@@ -108,19 +108,19 @@ public class TextFileToDoc implements ExecutableComponent {
 
 	// props
 	
-	@ComponentProperty(description = "Store the dir name in the feature map under 'label'.", name = "store_dir_name", defaultValue = "false")
+	@ComponentProperty(description = "Store the dir name in the feature map under 'label'. A boolean value (true or false).", name = "store_dir_name", defaultValue = "false")
 	public final static String DATA_PROPERTY_STORE_DIR_NAME = "store_dir_name";
 
-	@ComponentProperty(description = "Retain newline characters?", name = "retain_new_lines", defaultValue = "false")
+	@ComponentProperty(description = "Retain newline characters? A boolean value (true or false).", name = "retain_new_lines", defaultValue = "false")
 	public final static String DATA_PROPERTY_RETAIN_NEW_LINES = "retain_new_lines";
 
-	@ComponentProperty(description = "Add space at new lines?", name = "add_space_at_new_lines", defaultValue = "false")
+	@ComponentProperty(description = "Add space at new lines? A boolean value (true or false).", name = "add_space_at_new_lines", defaultValue = "false")
 	public final static String DATA_PROPERTY_ADD_SPACE_AT_NEW_LINES = "add_space_at_new_lines";
 
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	public final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	// IO
+	// io
 	
 	@ComponentInput(description = "File name.", name = "file_name")
 	public final static String DATA_INPUT_FILE_NAME = "file_name";
