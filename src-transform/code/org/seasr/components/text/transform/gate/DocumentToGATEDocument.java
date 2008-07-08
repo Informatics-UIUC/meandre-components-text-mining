@@ -123,7 +123,7 @@ public class DocumentToGATEDocument implements ExecutableComponent
 
 	@ComponentProperty(description = "Include title in content? Appends the title to the "
 		+ "front of the document content so that GATE will process it.", 
-		name = "include_title_in_content", 
+		name = "include_title_in_content A boolean value (true or false).", 
 		defaultValue = "false")
 	final static String DATA_PROPERTY_INCLUDE_TITLE_IN_CONTENT = "include_title_in_content";
 

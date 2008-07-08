@@ -153,16 +153,16 @@ public class TermListsToTable implements ExecutableComponent {
 
 	// props
 
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	@ComponentProperty(description = "Allow empty term lists?", name = "allow_empty_term_lists", defaultValue = "false")
+	@ComponentProperty(description = "Allow empty term lists? A boolean value (true or false).", name = "allow_empty_term_lists", defaultValue = "false")
 	final static String DATA_PROPERTY_ALLOW_EMPTY_TERMLISTS = "allow_empty_term_lists";
 
-	@ComponentProperty(description = "Save a map with additional data for each term encountered?", name = "save_term_map", defaultValue = "true")
+	@ComponentProperty(description = "Save a map with additional data for each term encountered? A boolean value (true or false).", name = "save_term_map", defaultValue = "true")
 	final static String DATA_PROPERTY_SAVE_TERM_MAP = "save_term_map";
 
-	@ComponentProperty(description = "Add extra column for term counts per document?", name = "add_term_count_column", defaultValue = "false")
+	@ComponentProperty(description = "Add extra column for term counts per document? A boolean value (true or false).", name = "add_term_count_column", defaultValue = "false")
 	final static String DATA_PROPERTY_ADD_TERM_COUNT_COLUMN = "add_term_count_column";
 
 	// io

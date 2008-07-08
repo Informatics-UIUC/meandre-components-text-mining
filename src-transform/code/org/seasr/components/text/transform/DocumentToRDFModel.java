@@ -93,20 +93,20 @@ public class DocumentToRDFModel implements ExecutableComponent {
 
 	private int m_docsProcessed = 0;
 
-	private static Logger _logger = Logger.getLogger("DocumentToRDFModel_Comp");
+	private static Logger _logger = Logger.getLogger("DocumentToRDFModel");
 
 	// props
 	
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	@ComponentProperty(description = "Debug?", name = "debug", defaultValue = "false")
+	@ComponentProperty(description = "Debug? A boolean value (true or false).", name = "debug", defaultValue = "false")
 	final static String DATA_PROPERTY_DEBUG = "debug";
 
-	@ComponentProperty(description = "Clear the document object?", name = "free_doc", defaultValue = "true")
+	@ComponentProperty(description = "Clear the document object? A boolean value (true or false).", name = "free_doc", defaultValue = "true")
 	final static String DATA_PROPERTY_FREE_DOC = "free_doc";
 
-	// IO
+	// io
 	
 	@ComponentInput(description = "Document object.", name = "document")
 	public final static String DATA_INPUT_DOCUMENT = "document";

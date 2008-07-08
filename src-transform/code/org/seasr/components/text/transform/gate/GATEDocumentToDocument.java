@@ -119,10 +119,12 @@ public class GATEDocumentToDocument implements ExecutableComponent {
 	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	@ComponentProperty(description = "Convert over GATE tokens?  If true (defualt) then "
+	@ComponentProperty(description = "Convert over GATE tokens?  If true (default) then "
 			+ "convert the gate Token annotations "
 			+ "into T2K token annotations.  Otherwise, simply copy the GATE "
-			+ "annotations exaclty as they appear in the GATE document.", name = "convert_tokens", defaultValue = "true")
+			+ "annotations exaclty as they appear in the GATE document. A boolean value (true or false).", 
+			name = "convert_tokens", 
+			defaultValue = "true")
 	final static String DATA_PROPERTY_CONVERT_OVER_TOKENS = "convert_tokens";
 
 	// io
