@@ -109,7 +109,7 @@ public class LexRuleJarReader implements ExecutableComponent {
 
 	//props
 	
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	@ComponentProperty(description = "Lexical rule resource file name.", name = "resource_name", defaultValue = "brill/LEXICALRULEFILE")
@@ -118,7 +118,7 @@ public class LexRuleJarReader implements ExecutableComponent {
 	@ComponentProperty(description = "Lexical rule file name.", name = "filename", defaultValue = "/seasr/text/pos/brill/LEXICALRULEFILE")
 	final static String DATA_PROPERTY_FILENAME = "filename";
 	
-	// IO
+	// io
 	
 	@ComponentOutput(description = "Array of rule objects.", name = "lexical_rules")
 	public final static String DATA_OUTPUT_LEXICAL_RULES = "lexical_rules";

@@ -106,7 +106,7 @@ public class ContextRuleJarReader implements ExecutableComponent {
 
 	// props
 	
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	@ComponentProperty(description = "Contextual rule resource file name.", name = "resource_name", defaultValue = "brill/CONTEXTUALRULEFILE")

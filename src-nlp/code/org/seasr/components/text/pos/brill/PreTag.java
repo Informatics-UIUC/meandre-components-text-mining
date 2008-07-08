@@ -155,19 +155,19 @@ public class PreTag implements ExecutableComponent {
 
 	// props
 
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	@ComponentProperty(description = "Show progress?", name = "show_progress", defaultValue = "false")
+	@ComponentProperty(description = "Show progress? A boolean value (true or false).", name = "show_progress", defaultValue = "false")
 	final static String DATA_PROPERTY_SHOW_PROGRESS = "show_progress";
 
 	@ComponentProperty(description = "Print increment.", name = "print_increment", defaultValue = "250")
 	final static String DATA_PROPERTY_PRINT_INCREMENT = "print_increment";
 
-	@ComponentProperty(description = "Include tag description?", name = "include_description", defaultValue = "false")
+	@ComponentProperty(description = "Include tag description? A boolean value (true or false).", name = "include_description", defaultValue = "false")
 	final static String DATA_PROPERTY_INCLUDE_DESC = "include_description";
 
-	// IO
+	// io
 	
 	@ComponentInput(description = "Lexicon object.", name = "lexicon")
 	public final static String DATA_INPUT_LEXICON = "lexicon";

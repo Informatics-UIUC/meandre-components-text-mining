@@ -156,7 +156,15 @@ public class LexTag implements ExecutableComponent {
 
 	private static Logger _logger = Logger.getLogger("LexTag");
 
-	// IO
+	// props
+	
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
+	final static String DATA_PROPERTY_VERBOSE = "verbose";
+
+	@ComponentProperty(description = "Include tag description? A boolean value (true or false).", name = "include_description", defaultValue = "false")
+	final static String DATA_PROPERTY_INCLUDE_DESC = "include_description";
+
+	// io
 	
 	@ComponentInput(description = "Lexicon object.", name = "lexicon")
 	public final static String DATA_INPUT_LEXICON = "lexicon";
@@ -169,14 +177,6 @@ public class LexTag implements ExecutableComponent {
 
 	@ComponentOutput(description = "Document object.", name = "document")
 	public final static String DATA_OUTPUT_DOCUMENT = "document";
-
-	// props
-	
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
-	final static String DATA_PROPERTY_VERBOSE = "verbose";
-
-	@ComponentProperty(description = "Include tag description?", name = "include_description", defaultValue = "false")
-	final static String DATA_PROPERTY_INCLUDE_DESC = "include_description";
 
 	// ============
 	// Properties
