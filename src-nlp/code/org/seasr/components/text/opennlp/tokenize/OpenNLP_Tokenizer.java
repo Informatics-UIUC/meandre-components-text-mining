@@ -103,12 +103,12 @@ public class OpenNLP_Tokenizer implements ExecutableComponent {
 
 	private static Logger _logger = Logger.getLogger("OpenNLP_Tokenizer");
 
-	// Properties
+	// props
 
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	@ComponentProperty(description = "Exclude tokenization of the title?", name = "exclude_title", defaultValue = "true")
+	@ComponentProperty(description = "Exclude tokenization of the title? A boolean value (true or false).", name = "exclude_title", defaultValue = "true")
 	final static String DATA_PROPERTY_EXCLUDE_TITLE = "exclude_title";
 
 	@ComponentProperty(description = "Resource model file name.", name = "resource_name", defaultValue = "models/English/tokenize/EnglishTok.bin.gz")
@@ -117,7 +117,7 @@ public class OpenNLP_Tokenizer implements ExecutableComponent {
 	@ComponentProperty(description = "Model file name.", name = "filename", defaultValue = "/opennlp/models/English/tokenize/EnglishTok.bin.gz")
 	final static String DATA_PROPERTY_FILENAME = "filename";
 
-	// I/O
+	// io
 	
 	@ComponentInput(description = "Input document.", name = "document_in")
 	public final static String DATA_INPUT_DOC_IN = "document_in";
