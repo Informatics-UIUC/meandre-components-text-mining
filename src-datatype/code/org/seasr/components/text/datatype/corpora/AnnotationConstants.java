@@ -60,6 +60,8 @@ public interface AnnotationConstants {
 
 	public static final String NGRAM_ANNOT_TYPE = "$@ngram";
 	
+	public static final String SEGMENTATION_ANNOT_TYPE = "$@segment";
+
 	// === TOKEN ATTRIBUTES =================================================
 	
 	/**
@@ -174,7 +176,9 @@ public interface AnnotationConstants {
 	public static final String ANNOTATION_SET_ENTITIES = "$@entities";
 
 	public static final String ANNOTATION_SET_PARSES = "$@parses";
-	
+
+	public static final String ANNOTATION_SET_SEGMENTATION = "$@segments";
+
 	// === PARSER CONSTANTS =========================================================
 
 	public static final String ANNOTATION_PARSER_IMPL_OpenNLP_TreebankParser = "OpenNLP_TreebankParser";

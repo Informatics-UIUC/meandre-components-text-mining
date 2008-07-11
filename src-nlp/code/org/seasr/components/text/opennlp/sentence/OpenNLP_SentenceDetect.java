@@ -61,8 +61,8 @@ import org.seasr.components.text.datatype.corpora.Annotation;
 import org.seasr.components.text.datatype.corpora.AnnotationConstants;
 import org.seasr.components.text.datatype.corpora.AnnotationSet;
 import org.seasr.components.text.datatype.corpora.Document;
-import org.meandre.components.util.MeandreJarFileReaderUtil;
 import org.meandre.core.*;
+import org.meandre.components.util.MeandreJarFileReaderUtil;
 import org.meandre.annotations.*;
 
 import opennlp.tools.lang.english.*;

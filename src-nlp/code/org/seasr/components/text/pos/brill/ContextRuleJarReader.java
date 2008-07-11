@@ -59,8 +59,8 @@ import java.util.logging.*;
 //import org.meandre.tools.components.*;
 //import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
 
-import org.meandre.components.util.MeandreJarFileReaderUtil;
 import org.meandre.core.*;
+import org.meandre.components.util.MeandreJarFileReaderUtil;
 import org.meandre.annotations.*;
 import org.seasr.components.text.pos.brill.support.ContextRule;
 
