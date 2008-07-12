@@ -273,6 +273,11 @@ public class OpenNLP_Tokenizer implements ExecutableComponent {
 						annotsP.add(posB, posE,
 								AnnotationConstants.TOKEN_ANNOT_TYPE, null);
 					} else if (i == 0) {
+						/**
+						 * So this feature is added for cross compatibility issues with 
+						 * SEASR POS tagger.  But also it is general information that is
+						 * useful to know about a token. 
+						 */
 						FeatureMap fm = Factory.newFeatureMap();
 						fm
 								.put(
@@ -281,6 +286,11 @@ public class OpenNLP_Tokenizer implements ExecutableComponent {
 						annotsP.add(posB, posE,
 								AnnotationConstants.TOKEN_ANNOT_TYPE, fm);
 					} else {
+						/**
+						 * So this feature is added for cross compatibility issues with 
+						 * SEASR POS tagger.  But also it is general information that is
+						 * useful to know about a token. 
+						 */
 						FeatureMap fm = Factory.newFeatureMap();
 						fm
 								.put(
