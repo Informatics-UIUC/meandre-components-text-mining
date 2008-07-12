@@ -53,9 +53,13 @@ import java.util.logging.*;
 // Other Imports
 // ===============
 
- import org.meandre.tools.components.*;
- import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
+// import org.meandre.tools.components.*;
+// import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
 
+//import org.meandre.components.io.*;
+//import org.seasr.components.text.io.file.TextFileToDoc;
+//import org.seasr.components.text.opennlp.sentence.OpenNLP_SentenceDetect;
+//import org.seasr.components.text.opennlp.tokenize.OpenNLP_Tokenizer;
 
 import org.meandre.core.*;
 import org.meandre.annotations.*;
@@ -63,11 +67,7 @@ import org.seasr.components.text.datatype.corpora.Annotation;
 import org.seasr.components.text.datatype.corpora.AnnotationConstants;
 import org.seasr.components.text.datatype.corpora.AnnotationSet;
 import org.seasr.components.text.datatype.corpora.Document;
-import org.seasr.components.text.io.file.TextFileToDoc;
-import org.seasr.components.text.opennlp.sentence.OpenNLP_SentenceDetect;
-import org.seasr.components.text.opennlp.tokenize.OpenNLP_Tokenizer;
 import org.seasr.components.text.util.Factory;
-import org.meandre.components.io.*;
 
 
 /**
@@ -157,58 +157,58 @@ public class TextSegmentation implements ExecutableComponent {
 	 * Test
 	 */
 	static public void main(String[] args) {
-		// get a flow builder instance
-		FlowBuilderAPI flowBuilder = new FlowBuilderAPI();
-		// get a flow object
-		WorkingFlow wflow = flowBuilder.newWorkingFlow("test");
-		// add a component
-		String pushString = wflow
-				.addComponent("org.meandre.components.io.PushString");
-		// set a component property
-		wflow.setComponentInstanceProp(pushString, "string",
-				"c:/tmp/ThreeLives.txt");
-		// add another component
-		String reader = wflow
-				.addComponent("org.seasr.components.text.io.file.TextFileToDoc");
-
-		// make a connection between two components
-		wflow.connectComponents(pushString, PushString.DATA_OUTPUT_OUTPUT_STRING, reader,
-				TextFileToDoc.DATA_INPUT_FILE_NAME);
-
-		// add another component
-		String sentdetector = wflow
-				.addComponent("org.seasr.components.text.opennlp.sentence.OpenNLP_SentenceDetect");
-
-		// make a connection between two components
-		wflow.connectComponents(reader, TextFileToDoc.DATA_OUTPUT_FILE_DOC,
-				sentdetector, OpenNLP_SentenceDetect.DATA_INPUT_DOC_IN);
-
-		// add another component
-		String tokenizer = wflow
-				.addComponent("org.seasr.components.text.opennlp.tokenize.OpenNLP_Tokenizer");
-
-		// make a connection between two components
-		wflow.connectComponents(sentdetector,
-				OpenNLP_SentenceDetect.DATA_OUTPUT_DOC_OUT, tokenizer,
-				OpenNLP_Tokenizer.DATA_INPUT_DOC_IN);
-
-		// add another component
-		String segmenter = wflow
-				.addComponent("org.seasr.components.text.transform.TextSegmentation");
-
-		// make a connection between two components
-		wflow.connectComponents(tokenizer,
-				OpenNLP_Tokenizer.DATA_OUTPUT_DOC_OUT, segmenter,
-				TextSegmentation.DATA_INPUT_DOC_IN);
-
-		// set a component property
-		wflow.setComponentInstanceProp(segmenter, "verbose", "true");
-
-		// execute the flow specifying that we want a web UI displayed
-		flowBuilder.execute(wflow, false);
-
-		// For some reason the process does not end without a forced exit.
-		System.exit(0);
+//		// get a flow builder instance
+//		FlowBuilderAPI flowBuilder = new FlowBuilderAPI();
+//		// get a flow object
+//		WorkingFlow wflow = flowBuilder.newWorkingFlow("test");
+//		// add a component
+//		String pushString = wflow
+//				.addComponent("org.meandre.components.io.PushString");
+//		// set a component property
+//		wflow.setComponentInstanceProp(pushString, "string",
+//				"c:/tmp/ThreeLives.txt");
+//		// add another component
+//		String reader = wflow
+//				.addComponent("org.seasr.components.text.io.file.TextFileToDoc");
+//
+//		// make a connection between two components
+//		wflow.connectComponents(pushString, PushString.DATA_OUTPUT_OUTPUT_STRING, reader,
+//				TextFileToDoc.DATA_INPUT_FILE_NAME);
+//
+//		// add another component
+//		String sentdetector = wflow
+//				.addComponent("org.seasr.components.text.opennlp.sentence.OpenNLP_SentenceDetect");
+//
+//		// make a connection between two components
+//		wflow.connectComponents(reader, TextFileToDoc.DATA_OUTPUT_FILE_DOC,
+//				sentdetector, OpenNLP_SentenceDetect.DATA_INPUT_DOC_IN);
+//
+//		// add another component
+//		String tokenizer = wflow
+//				.addComponent("org.seasr.components.text.opennlp.tokenize.OpenNLP_Tokenizer");
+//
+//		// make a connection between two components
+//		wflow.connectComponents(sentdetector,
+//				OpenNLP_SentenceDetect.DATA_OUTPUT_DOC_OUT, tokenizer,
+//				OpenNLP_Tokenizer.DATA_INPUT_DOC_IN);
+//
+//		// add another component
+//		String segmenter = wflow
+//				.addComponent("org.seasr.components.text.transform.TextSegmentation");
+//
+//		// make a connection between two components
+//		wflow.connectComponents(tokenizer,
+//				OpenNLP_Tokenizer.DATA_OUTPUT_DOC_OUT, segmenter,
+//				TextSegmentation.DATA_INPUT_DOC_IN);
+//
+//		// set a component property
+//		wflow.setComponentInstanceProp(segmenter, "verbose", "true");
+//
+//		// execute the flow specifying that we want a web UI displayed
+//		flowBuilder.execute(wflow, false);
+//
+//		// For some reason the process does not end without a forced exit.
+//		System.exit(0);
 
 	}
 
