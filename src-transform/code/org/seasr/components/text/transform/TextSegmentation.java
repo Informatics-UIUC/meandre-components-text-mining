@@ -274,7 +274,7 @@ public class TextSegmentation implements ExecutableComponent {
 			odoc.setContent(idoc.getContent());
 			odoc.setDate(idoc.getDate());
 			odoc.setDocID(idoc.getDocID());
-			odoc.setTitle(idoc.getTitle());
+			odoc.setTitle(idoc.getTitle() + " [Segment 1]");
 			long segStart = -1;
 			int loopcnt = 1;
 			int segcnt = 0;
@@ -295,8 +295,19 @@ public class TextSegmentation implements ExecutableComponent {
 				if (tokenCnt >= segSz){
 					annotsOSeg.add(segStart, sent.getEndNodeOffset(), AnnotationConstants.SEGMENTATION_ANNOT_TYPE, null);
 					
+//					System.out.println("Segment: " + segcnt);
+//					System.out.println("Num Tokens: " + annotsOTok.size());
+//					System.out.println("Num Sents: " + annotsOSent.size());
+//					System.out.println("\n\n");
+							
+					
 					ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, odoc);
 					ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_SEGMENT_CNT, loopcnt);
+
+					segcnt++;
+					loopcnt = 1;
+					tokenCnt = 0;
+					segStart = -1;
 
 					odoc = Factory.newDocument();
 					annotsOTok = odoc
@@ -308,10 +319,7 @@ public class TextSegmentation implements ExecutableComponent {
 					odoc.setContent(idoc.getContent());
 					odoc.setDate(idoc.getDate());
 					odoc.setDocID(idoc.getDocID());
-					odoc.setTitle(idoc.getTitle());
-					segcnt++;
-					loopcnt = 1;
-					segStart = -1;
+					odoc.setTitle(idoc.getTitle() + " [Segment " + (segcnt + 1) + "]");
 
 					if (this.getVerbose(ctx)) {
 						if (Math.IEEEremainder(segcnt, 100) == 0) {
@@ -329,6 +337,7 @@ public class TextSegmentation implements ExecutableComponent {
 					+ " created " + segcnt
 					+ " segments.");
 			}
+			idoc.free();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
