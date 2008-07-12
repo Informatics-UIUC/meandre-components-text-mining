@@ -215,7 +215,8 @@ public class FilterStopWords implements ExecutableComponent {
 				for (int i = 0, n = _docs.size(); i < n; i++) {
 
 					Document doc = _docs.get(i);
-					AnnotationSet annots = doc.getAnnotations();
+					AnnotationSet annots = doc
+					.getAnnotations(AnnotationConstants.ANNOTATION_SET_TOKENS);
 					int cnt = 0;
 
 					ArrayList<Annotation> removes = new ArrayList<Annotation>();
@@ -237,7 +238,7 @@ public class FilterStopWords implements ExecutableComponent {
 
 					if (getVerbose(ctx)) {
 						System.out.println("Number of stop words removed for "
-								+ doc.getDocID() + ": " + cnt);
+								+ doc.getTitle() + ": " + cnt);
 					}
 
 					ctx.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
