@@ -169,7 +169,7 @@ public class TextSegmentation implements ExecutableComponent {
 				"c:/tmp/ThreeLives.txt");
 		// add another component
 		String reader = wflow
-				.addComponent("org.seasr.meandre.components.t2k.io.file.TextFileToDoc");
+				.addComponent("org.seasr.components.text.io.file.TextFileToDoc");
 
 		// make a connection between two components
 		wflow.connectComponents(pushString, PushString.DATA_OUTPUT_OUTPUT_STRING, reader,
@@ -279,7 +279,7 @@ public class TextSegmentation implements ExecutableComponent {
 			int loopcnt = 1;
 			int segcnt = 0;
 			for (Iterator<Annotation> annotsIT = annotsSentC.iterator(); annotsIT
-					.hasNext(); loopcnt++, segcnt++) {
+					.hasNext(); loopcnt++) {
 				Annotation sent = annotsIT.next();
 				if (segStart == -1){
 					segStart = sent.getStartNodeOffset();
@@ -309,14 +309,14 @@ public class TextSegmentation implements ExecutableComponent {
 					odoc.setDate(idoc.getDate());
 					odoc.setDocID(idoc.getDocID());
 					odoc.setTitle(idoc.getTitle());
-
+					segcnt++;
 					loopcnt = 1;
 					segStart = -1;
 
 					if (this.getVerbose(ctx)) {
-						if (Math.IEEEremainder(_docsProcessed, 100) == 0) {
-							System.out.println("GATE_Coreferencer -- Docs Processed: "
-									+ _docsProcessed);
+						if (Math.IEEEremainder(segcnt, 100) == 0) {
+							System.out.println("TextSegmentation -- Docs Processed: "
+									+ segcnt);
 						}
 					}
 
