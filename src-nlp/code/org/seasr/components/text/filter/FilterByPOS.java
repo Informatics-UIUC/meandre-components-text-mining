@@ -218,7 +218,7 @@ public class FilterByPOS implements ExecutableComponent {
 		_logger.fine("dispose() called");
 
 		if (getShowProgress(ccp) || getVerbose(ccp)) {
-			System.out.println("\nEND EXEC -- FilterByPOS -- Docs Processed: "
+			_logger.info("\nEND EXEC -- FilterByPOS -- Docs Processed: "
 					+ m_docsProcessed + "\n");
 		}
 		m_docsProcessed = 0;
@@ -239,12 +239,13 @@ public class FilterByPOS implements ExecutableComponent {
 						+ ": Document: "
 						+ doc.getDocID()
 						+ " has "
-						+ doc.getAnnotations().get(
-								AnnotationConstants.TOKEN_ANNOT_TYPE).size()
+						+ doc.getAnnotations(AnnotationConstants.ANNOTATION_SET_TOKENS).size()
 						+ " num tokens -- " + doc.getTitle());
 			}
 			ArrayList<Annotation> removes = new ArrayList<Annotation>();
-			AnnotationSet annots = doc.getAnnotations();
+			AnnotationSet annots = doc
+			.getAnnotations(AnnotationConstants.ANNOTATION_SET_TOKENS);
+			int origSz = annots.size();
 			for (Iterator<Annotation> iter = annots.iterator(); iter.hasNext();) {
 				Annotation tok = iter.next();
 				if (tok.getType().equals(AnnotationConstants.TOKEN_ANNOT_TYPE)) {
@@ -302,7 +303,7 @@ public class FilterByPOS implements ExecutableComponent {
 			if (getVerbose(ctx)) {
 				System.out.println("FilterByPOS: " + toks_selected
 						+ " tokens were selected for this document -- "
-						+ doc.getTitle());
+						+ doc.getTitle() + ", out of " + origSz);
 			}
 
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
