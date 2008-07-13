@@ -89,7 +89,7 @@ import org.seasr.components.text.util.Factory;
  *  However, the original document's feature map is not included.  This can be modified 
  *  in future releases.</p>
  * 
- * @author D. Dsearsmith
+ * @author D. Searsmith
  * 
  * TODO: Unit Tests
  */
@@ -302,7 +302,6 @@ public class TextSegmentation implements ExecutableComponent {
 							
 					
 					ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, odoc);
-					ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_SEGMENT_CNT, loopcnt);
 
 					segcnt++;
 					loopcnt = 1;
@@ -331,6 +330,7 @@ public class TextSegmentation implements ExecutableComponent {
 				
 				}
 			}
+			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_SEGMENT_CNT, segcnt);
 			_docsProcessed++;
 			if (getVerbose(ctx)){
 			_logger.info("TextSegmentation :: Doc: " + idoc.getTitle()
