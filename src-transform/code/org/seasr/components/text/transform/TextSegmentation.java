@@ -127,10 +127,10 @@ public class TextSegmentation implements ExecutableComponent {
 	// props
 
 	@ComponentProperty(description = "Aproximate segment size in tokens?", name = "segment_size", defaultValue = "500")
-	final static String DATA_PROPERTY_SEGMENT_SIZE = "segment_size";
+	public final static String DATA_PROPERTY_SEGMENT_SIZE = "segment_size";
 
 	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
-	final static String DATA_PROPERTY_VERBOSE = "verbose";
+	public final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	// io
 
