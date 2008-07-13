@@ -322,7 +322,7 @@ public class TextSegmentation implements ExecutableComponent {
 
 					if (this.getVerbose(ctx)) {
 						if (Math.IEEEremainder(segcnt, 100) == 0) {
-							System.out.println("TextSegmentation -- Docs Processed: "
+							_logger.info("TextSegmentation -- Docs Processed: "
 									+ segcnt);
 						}
 					}

@@ -269,8 +269,7 @@ public class TermListsToTable implements ExecutableComponent {
 						.getDataComponentFromInput(DATA_INPUT_NUMBER_OF_TERMLIST))
 						.intValue();
 				if (getVerbose(ctx)) {
-					System.out
-							.println("TermListsToTable: Number of records was told to expect: "
+					_logger.info("TermListsToTable: Number of records was told to expect: "
 									+ m_numRecs);
 				}
 			}
