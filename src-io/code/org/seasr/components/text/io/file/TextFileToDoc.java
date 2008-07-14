@@ -38,7 +38,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * WITH THE SOFTWARE.
- */ 
+ */
 
 package org.seasr.components.text.io.file;
 
@@ -47,23 +47,26 @@ package org.seasr.components.text.io.file;
 // ==============
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.logging.*;
 
 // ===============
 // Other Imports
 // ===============
 
-//import org.meandre.tools.components.*;
-//import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
+// import org.meandre.tools.components.*;
+// import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
 
 import org.seasr.components.text.datatype.corpora.Document;
 import org.seasr.components.text.datatype.corpora.FeatureMap;
 import org.seasr.components.text.util.Factory;
 import org.meandre.core.*;
 import org.meandre.annotations.*;
+import org.meandre.tools.webdav.*;
 
 /**
  * Takes the input text file name and reads the file to create a document object
@@ -71,12 +74,12 @@ import org.meandre.annotations.*;
  * 
  * @author D. Searsmith
  * 
- * TODO: WebDav Support, Testing, Unit Tests
- * TODO: Add option to save file date as document date.
+ * TODO: WebDav Support, Testing, Unit Tests TODO: Add option to save file date
+ * as document date.
  */
-@Component(creator = "Duane Searsmith", 
-		
-		description = "<p>Overview:<br>"
+@Component(creator = "Duane Searsmith",
+
+description = "<p>Overview:<br>"
 		+ "Takes the input text file location and reads the file to create a document "
 		+ "object which is output for later processing. </p>"
 		+ "<p>If retain 'new line' property is true then 'new line' characters are not "
@@ -84,11 +87,11 @@ import org.meandre.annotations.*;
 		+ "<p> Set 'Add Space at Newline' to true if line termination characters are all "
 		+ "that may separate the last word on one line from the first word on the next line.</p>"
 		+ "<p>There is also an option to have the parent directory name stored in the document's "
-		+ "feature map under the key 'Label'.</p>" 
+		+ "feature map under the key 'Label'.</p>"
 		+ "<p>Writes the file name to the document title and ID.  No date information is "
-		+ "recorded.</p>", 
-		
-		name = "TextFileToDoc", tags = "io read file text")
+		+ "recorded.</p>",
+
+name = "TextFileToDoc", tags = "io read file text")
 public class TextFileToDoc implements ExecutableComponent {
 	// ==============
 	// Data Members
@@ -107,7 +110,7 @@ public class TextFileToDoc implements ExecutableComponent {
 	private static Logger _logger = Logger.getLogger("TextFileToDoc");
 
 	// props
-	
+
 	@ComponentProperty(description = "Store the dir name in the feature map under 'label'. A boolean value (true or false).", name = "store_dir_name", defaultValue = "false")
 	public final static String DATA_PROPERTY_STORE_DIR_NAME = "store_dir_name";
 
@@ -120,8 +123,11 @@ public class TextFileToDoc implements ExecutableComponent {
 	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	public final static String DATA_PROPERTY_VERBOSE = "verbose";
 
+	@ComponentProperty(description = "Treat source as webdav?", name = "webdav", defaultValue = "false")
+	public final static String DATA_PROPERTY_WEBDAV = "webdav";
+
 	// io
-	
+
 	@ComponentInput(description = "File name.", name = "file_name")
 	public final static String DATA_INPUT_FILE_NAME = "file_name";
 
@@ -166,6 +172,11 @@ public class TextFileToDoc implements ExecutableComponent {
 		m_reader = null;
 	}
 
+	public boolean getWebdav(ComponentContextProperties ccp) {
+		String s = ccp.getProperty(DATA_PROPERTY_WEBDAV);
+		return Boolean.parseBoolean(s.toLowerCase());
+	}
+
 	public void dispose(ComponentContextProperties ccp) {
 		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
@@ -182,16 +193,42 @@ public class TextFileToDoc implements ExecutableComponent {
 			StringBuffer body = new StringBuffer();
 			m_fileName = (String) ctx
 					.getDataComponentFromInput(DATA_INPUT_FILE_NAME);
-			File fvar = new File(m_fileName);
-			if (!fvar.exists()) {
+
+			File fvar = null;
+			byte[] barr = null;
+			if (getWebdav(ctx)) {
+				barr = new WebdavClient(m_fileName)
+						.getResourceAsByteArray(m_fileName);
+			} else {
+				fvar = new File(m_fileName);
+			}
+			if ((fvar != null) && (!fvar.exists())) {
 				throw new Exception("Input file does not exist: "
 						+ fvar.getPath());
 			}
-			String m_dirName = fvar.getPath().substring(0,
+			if (barr == null) {
+				throw new Exception("Webdav file does not exist: "
+						+ m_fileName);
+			}
+			String dirName = null;
+			String label = null;
+			if (!getWebdav(ctx)){
+			dirName = fvar.getPath().substring(0,
 					fvar.getPath().lastIndexOf(File.separator));
-			String label = m_dirName.substring(m_dirName
-					.lastIndexOf(File.separator) + 1, m_dirName.length());
-			m_reader = new BufferedReader(new FileReader(fvar));
+			label = dirName.substring(dirName
+					.lastIndexOf(File.separator) + 1, dirName.length());
+			} else {
+				dirName = m_fileName.substring(0,
+						m_fileName.lastIndexOf("/"));
+				label = dirName.substring(dirName
+						.lastIndexOf("/") + 1, dirName.length());
+			}
+			if (fvar != null) {
+				m_reader = new BufferedReader(new FileReader(fvar));
+			} else {
+				m_reader = new BufferedReader(new InputStreamReader(
+						new ByteArrayInputStream(barr)));
+			}
 			String s = m_reader.readLine();
 			body.append(s);
 			if (getRetainNewlineChars(ctx)) {
@@ -208,8 +245,9 @@ public class TextFileToDoc implements ExecutableComponent {
 			}
 			Document doc = Factory.newDocument();
 			doc.setContent(body.toString());
-			doc.setTitle(fvar.getName());
-			doc.setDocID(fvar.getName());
+			String name = (getWebdav(ctx))?m_fileName:fvar.getName();
+			doc.setTitle(name);
+			doc.setDocID(name);
 			if (getVerbose(ctx)) {
 				_logger.info("TFTD: " + doc.getDocID());
 				_logger.info("TFTD: " + doc.getTitle());
