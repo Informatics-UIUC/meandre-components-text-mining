@@ -152,6 +152,9 @@ public class FeatureValueEncoderDecoder {
 	
 	static public HashMap<String, String> decodeToMap(String val)
 			throws FeatureValueEncoderDecoderException {
+		if (val == null){
+			return null;
+		}
 		if (!val.startsWith("^map{")) {
 			throw new FeatureValueEncoderDecoderException(
 					"String submitted to method 'decodeToMap' does not represent an encoded map: "
@@ -188,6 +191,9 @@ public class FeatureValueEncoderDecoder {
 
 	static public ArrayList<String> decodeToList(String val)
 			throws FeatureValueEncoderDecoderException {
+		if (val == null){
+			return null;
+		}
 		if (!val.startsWith("^list{")) {
 			throw new FeatureValueEncoderDecoderException(
 					"String submitted to method 'decodeToList' does not represent an encoded list: "
@@ -198,6 +204,9 @@ public class FeatureValueEncoderDecoder {
 
 	static public HashSet<String> decodeToSet(String val)
 			throws FeatureValueEncoderDecoderException {
+		if (val == null){
+			return null;
+		}
 		if (!val.startsWith("^set{")) {
 			throw new FeatureValueEncoderDecoderException(
 					"String submitted to method 'decodeToSet' does not represent an encoded set: "
@@ -210,6 +219,9 @@ public class FeatureValueEncoderDecoder {
 	
 	static public HashMap<String, Annotation> decodeToMapofStringstoAnnotations(
 			String val) throws FeatureValueEncoderDecoderException {
+		if (val == null){
+			return null;
+		}
 		if (!val.startsWith("^map{")) {
 			throw new FeatureValueEncoderDecoderException(
 					"String submitted to method 'decodeToMapofStringstoAnnotations' does not represent an encoded map: "
@@ -246,6 +258,9 @@ public class FeatureValueEncoderDecoder {
 
 	static public ArrayList<Annotation> decodeToListofAnnotations(String val)
 			throws FeatureValueEncoderDecoderException {
+		if (val == null){
+			return null;
+		}
 		if (!val.startsWith("^list{")) {
 			throw new FeatureValueEncoderDecoderException(
 					"String submitted to method 'decodeToList' does not represent an encoded list: "
@@ -257,6 +272,9 @@ public class FeatureValueEncoderDecoder {
 
 	static public HashSet<Annotation> decodeToSetofAnnotations(String val)
 			throws FeatureValueEncoderDecoderException {
+		if (val == null){
+			return null;
+		}
 		if (!val.startsWith("^set{")) {
 			throw new FeatureValueEncoderDecoderException(
 					"String submitted to method 'decodeToSet' does not represent an encoded set: "
