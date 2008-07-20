@@ -251,7 +251,7 @@ public class GATE_Tokenizer implements ExecutableComponent {
 		long end = System.currentTimeMillis();
 
 		if (getVerbose(ccp) > 0) {
-			System.out.println("\nEND EXEC -- GATE_Tokenizer -- Docs Ouput: "
+			_logger.info("\nEND EXEC -- GATE_Tokenizer -- Docs Ouput: "
 					+ m_docsProcessed + " in " + (end - m_start) / 1000
 					+ " seconds\n");
 		}
