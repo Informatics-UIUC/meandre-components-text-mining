@@ -51,9 +51,9 @@ import java.util.logging.Logger;
 // Other Imports
 // ===============
 
-import gate.*;
-
 import org.seasr.components.text.gate.util.GATEInitialiser;
+import org.seasr.components.text.util.*;
+import org.seasr.components.text.datatype.corpora.*;
 
 import org.meandre.core.*;
 import org.meandre.annotations.*;
@@ -111,7 +111,9 @@ description = "<p>Overview: <br>"
 
 		+ "<p>Trigger Criteria: <br>" + "Standard." + "</p>",
 
-name = "GATE_DocumentReader", tags = "io read file text gate document")
+name = "GATE_DocumentReader", 
+tags = "io read file text gate document",
+dependency = { "GATE-Home-And-ANNIE-plugin.jar,gate.jar, nekohtml-0.9.5.jar, PDFBox-0.7.2.jar"})
 public class GATE_DocumentReader implements ExecutableComponent {
 	// ==============
 	// Data Members
@@ -123,6 +125,8 @@ public class GATE_DocumentReader implements ExecutableComponent {
 	protected long m_start = 0;
 
 	private static Logger _logger = Logger.getLogger("GATE_DocumentReader");
+
+	private final String _resName = "GATE-Home-And-ANNIE-plugin_001";
 
 	// props
 
@@ -137,8 +141,8 @@ public class GATE_DocumentReader implements ExecutableComponent {
 	@ComponentInput(description = "File name.", name = "file_name")
 	public final static String DATA_INPUT_FILE_NAME = "file_name";
 
-	@ComponentOutput(description = "Document object.", name = "gate_document")
-	public final static String DATA_OUTPUT_FILE_GATE_DOC = "gate_document";
+	@ComponentOutput(description = "Document object.", name = "document")
+	public final static String DATA_OUTPUT_DOC = "document";
 
 	// ================
 	// Constructor(s)
@@ -161,9 +165,22 @@ public class GATE_DocumentReader implements ExecutableComponent {
 		return Boolean.parseBoolean(s.toLowerCase());
 	}
 
-	public void initialize(ComponentContextProperties ccp) {
+	public void initialize(ComponentContextProperties ccp)
+			throws ComponentExecutionException {
 		_logger.fine("initialize() called");
-		GATEInitialiser.init();
+
+		try {
+			String fname = ((ComponentContext) ccp)
+					.getPublicResourcesDirectory();
+			if ((!(fname.endsWith("/"))) && (!(fname.endsWith("\\")))) {
+				fname += "/";
+			}
+			GATEInitialiser.init(fname, _resName, fname + _resName,
+					(ComponentContext) ccp);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ComponentExecutionException(e.getMessage(), e);
+		}
 		m_docsProcessed = 0;
 		m_start = System.currentTimeMillis();
 	}
@@ -172,8 +189,7 @@ public class GATE_DocumentReader implements ExecutableComponent {
 		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
 		if (getVerbose(ccp)) {
-			System.out
-					.println("\nEND EXEC -- GATE_DocumentReader -- Docs Ouput: "
+			_logger.info("\nEND EXEC -- GATE_DocumentReader -- Docs Ouput: "
 							+ m_docsProcessed
 							+ " in "
 							+ (end - m_start)
@@ -192,12 +208,19 @@ public class GATE_DocumentReader implements ExecutableComponent {
 					.getDataComponentFromInput(DATA_INPUT_FILE_NAME);
 
 			java.net.URL u = new java.io.File(m_fileName).toURL();
-			gate.Document doc = readDoc(u, getEncoding(ctx));
-			if (doc == null)
-				return;
+			gate.Document gdoc = readDoc(u, getEncoding(ctx));
+			if (gdoc == null)
+				throw new ComponentExecutionException("Unable to read file into GATE document.");
+
+			Document doc = Factory.newDocument();
+			doc.setContent((String)gdoc.getFeatures().get(gate.GateConstants.ORIGINAL_DOCUMENT_CONTENT_FEATURE_NAME));
+			doc.setTitle(m_fileName);
+			doc.setDocID(m_fileName);
 			
-			ctx.pushDataComponentToOutput(DATA_OUTPUT_FILE_GATE_DOC, doc);
+			doc.getAuxMap().put(DocumentConstants.GATE_DOCUMENT, gdoc);
 			
+			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC, doc);
+
 			m_docsProcessed++;
 			if (getVerbose(ctx)) {
 				if (Math.IEEEremainder(m_docsProcessed, 10) == 0) {
@@ -223,14 +246,15 @@ public class GATE_DocumentReader implements ExecutableComponent {
 	 * @return Document GATE Document containing the content that
 	 *         <codE>url</code> refers to.
 	 */
-	public static Document readDoc(java.net.URL url, String _encoding) {
+	public static gate.Document readDoc(java.net.URL url, String _encoding) {
 		try {
-			FeatureMap params = Factory.newFeatureMap();
-			params.put("sourceUrl", url);
-			params.put("preserveOriginalContent", new Boolean(true));
-			params.put("collectRepositioningInfo", new Boolean(true));
-			params.put(Document.DOCUMENT_ENCODING_PARAMETER_NAME, _encoding);
-			gate.Document doc = (gate.Document) Factory.createResource(
+			gate.FeatureMap params = gate.Factory.newFeatureMap();
+			params.put(gate.Document.DOCUMENT_URL_PARAMETER_NAME, url);
+			params.put(gate.Document.DOCUMENT_PRESERVE_CONTENT_PARAMETER_NAME, Boolean.TRUE);
+			params.put(gate.Document.DOCUMENT_REPOSITIONING_PARAMETER_NAME, Boolean.TRUE);
+			params.put(gate.Document.DOCUMENT_MARKUP_AWARE_PARAMETER_NAME, Boolean.TRUE);
+			params.put(gate.Document.DOCUMENT_ENCODING_PARAMETER_NAME, _encoding);
+			gate.Document doc = (gate.Document) gate.Factory.createResource(
 					"gate.corpora.DocumentImpl", params);
 			return doc;
 		} catch (Exception e) {
