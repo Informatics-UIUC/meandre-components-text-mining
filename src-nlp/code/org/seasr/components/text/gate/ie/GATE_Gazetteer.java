@@ -45,6 +45,8 @@ package org.seasr.components.text.gate.ie;
 // ==============
 // Java Imports
 // ==============
+import java.io.File;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.meandre.annotations.Component;
@@ -66,31 +68,24 @@ import org.meandre.core.ExecutableComponent;
 import org.seasr.components.text.gate.util.GATEInitialiser;
 
 /**
- * <p><b>Overview</b>: <br>
- * Runs the GATE Default Gazetteer on a given GATE document. 
- * Annotates items such as people, cities, organzations, 
- * dates, etc.
- * </p>
- * <p><b>Detailed Description</b>: <br>
- * Given a document object in the GATE framework, 
- * this component will annotate proper items such 
- * as people, cities, organzations, money, date, etc. 
- * using the given rules in the list file. 
- * The found annotations will be 
- * stored in an annotation set associated with the 
- * document.
+ * <p>
+ * <b>Overview</b>: <br>
+ * Runs the GATE Default Gazetteer on a given GATE document. Annotates items
+ * such as people, cities, organzations, dates, etc.
  * </p>
  * <p>
- * The particular annotation set to use can be 
- * named by the user. 
- * If they are to be used by other 
- * GATE modules, either use a name the other 
- * modules will recognize, or leave it blank 
- * so the always-present default annotation set 
- * is used. 
- * Furthermore, if there are other GATE modules 
- * preceding this one in the itinerary, the annotation 
- * set name must agree with theirs.
+ * <b>Detailed Description</b>: <br>
+ * Given a document object in the GATE framework, this component will annotate
+ * proper items such as people, cities, organzations, money, date, etc. using
+ * the given rules in the list file. The found annotations will be stored in an
+ * annotation set associated with the document.
+ * </p>
+ * <p>
+ * The particular annotation set to use can be named by the user. If they are to
+ * be used by other GATE modules, either use a name the other modules will
+ * recognize, or leave it blank so the always-present default annotation set is
+ * used. Furthermore, if there are other GATE modules preceding this one in the
+ * itinerary, the annotation set name must agree with theirs.
  * </p>
  * 
  * @author D. Searsmith
@@ -100,30 +95,27 @@ import org.seasr.components.text.gate.util.GATEInitialiser;
 @Component(creator = "Duane Searsmith",
 
 description = "<p><b>Overview</b>: <br>"
-+ "Runs the GATE Default Gazetteer on a given GATE document.  "
-+ "Annotates items such as people, cities, organzations, "
-+ "dates, etc.</p>"
+		+ "Runs the GATE Default Gazetteer on a given GATE document.  "
+		+ "Annotates items such as people, cities, organzations, "
+		+ "dates, etc.</p>"
 
-+ "<p><b>Detailed Description</b>: <br>"
-+ "Given a document object in the GATE framework, "
-+ "this component will annotate proper items such "
-+ "as people, cities, organzations, money, date, etc.  "
-+ "using the given rules in the list file. "
-+ "The found annotations will be "
-+ "stored in an annotation set associated with the "
-+ "document.</p>"
-+ "<p>The particular annotation set to use can be "
-+ "named by the user.  "
-+ "If they are to be used by other "
-+ "GATE modules, either use a name the other "
-+ "modules will recognize, or leave it blank "
-+ "so the always-present default annotation set "
-+ "is used.  "
-+ "Furthermore, if there are other GATE modules "
-+ "preceding this one in the itinerary, the annotation "
-+ "set name must agree with theirs.</p>",
+		+ "<p><b>Detailed Description</b>: <br>"
+		+ "Given a document object in the GATE framework, "
+		+ "this component will annotate proper items such "
+		+ "as people, cities, organzations, money, date, etc.  "
+		+ "using the given rules in the list file. "
+		+ "The found annotations will be "
+		+ "stored in an annotation set associated with the " + "document.</p>"
+		+ "<p>The particular annotation set to use can be "
+		+ "named by the user.  " + "If they are to be used by other "
+		+ "GATE modules, either use a name the other "
+		+ "modules will recognize, or leave it blank "
+		+ "so the always-present default annotation set " + "is used.  "
+		+ "Furthermore, if there are other GATE modules "
+		+ "preceding this one in the itinerary, the annotation "
+		+ "set name must agree with theirs.</p>",
 
-name = "GATE_Gazetteer", tags = "text gate gazetteer document")
+name = "GATE_Gazetteer", tags = "text gate gazetteer document", dependency = { "GATE-Home-And-ANNIE-plugin.jar,gate.jar" })
 public class GATE_Gazetteer implements ExecutableComponent {
 	// ==============
 	// Data Members
@@ -136,31 +128,33 @@ public class GATE_Gazetteer implements ExecutableComponent {
 
 	private DefaultGazetteer _gaz = null;
 
+	private final String _resName = "GATE-Home-And-ANNIE-plugin_001";
+
 	// props
 
-	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
-	final static String DATA_PROPERTY_VERBOSE = "verbose";
+	@ComponentProperty(description = "Verbose output? An int value (0 = none, 1 = fine, 2 = finer).", name = "verbose", defaultValue = "0")
+	public final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	@ComponentProperty(description = "Encoding type of the document.", name = "document_encoding", defaultValue = "UTF-8")
-	final static String DATA_PROPERTY_DOCUMENT_ENCODING = "document_encoding";
+	public final static String DATA_PROPERTY_DOCUMENT_ENCODING = "document_encoding";
 
-	@ComponentProperty(description = "URL of the gazetteer lists definition file in GATE.", name = "gazetteer_defintion_list_url", defaultValue = "gate:/creole/gazeteer/lists.def")
-	final static String DATA_PROPERTY_GAZETTEER_DEFINITION_LIST_URL = "gazetteer_defintion_list_url";
+	@ComponentProperty(description = "URL of the gazetteer lists definition file in GATE.", name = "gazetteer_defintion_list_url", defaultValue = "/plugins/ANNIE/resources/gazetteer/lists.def")
+	public final static String DATA_PROPERTY_GAZETTEER_DEFINITION_LIST_URL = "gazetteer_defintion_list_url";
 
 	@ComponentProperty(description = "Whether the gazetteer should be case sensitive. A boolean value (true or false).", name = "case_sensitive", defaultValue = "true")
-	final static String DATA_PROPERTY_CASE_SENSITIVE = "case_sensitive";
+	public final static String DATA_PROPERTY_CASE_SENSITIVE = "case_sensitive";
 
 	@ComponentProperty(description = "Name of the annotation set to store the new annotations. "
 			+ "Leave blank for default., ", name = "annotation_set_name", defaultValue = "")
-	final static String DATA_PROPERTY_ANNOTATION_SET_NAME = "annotation_set_name";
+	public final static String DATA_PROPERTY_ANNOTATION_SET_NAME = "annotation_set_name";
 
 	// io
 
-	@ComponentInput(description = "Input GATE document.", name = "document_in")
-	public final static String DATA_INPUT_DOC_IN = "gate_document_in";
+	@ComponentInput(description = "Input document.", name = "document_in")
+	public final static String DATA_INPUT_DOC_IN = "document_in";
 
-	@ComponentOutput(description = "Output GATE document.", name = "document_out")
-	public final static String DATA_OUTPUT_DOC_OUT = "gate_document_out";
+	@ComponentOutput(description = "Output document.", name = "document_out")
+	public final static String DATA_OUTPUT_DOC_OUT = "document_out";
 
 	// ================
 	// Constructor(s)
@@ -172,9 +166,9 @@ public class GATE_Gazetteer implements ExecutableComponent {
 	// Public Methods
 	// ================
 
-	public boolean getVerbose(ComponentContextProperties ccp) {
+	public int getVerbose(ComponentContextProperties ccp) {
 		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
-		return Boolean.parseBoolean(s.toLowerCase());
+		return Integer.parseInt(s);
 	}
 
 	public boolean getCaseSensitive(ComponentContextProperties ccp) {
@@ -200,29 +194,27 @@ public class GATE_Gazetteer implements ExecutableComponent {
 	public void initialize(ComponentContextProperties ccp)
 			throws ComponentExecutionException {
 		_logger.fine("initialize() called");
-		GATEInitialiser.init();
 
 		m_docsProcessed = 0;
 		m_start = System.currentTimeMillis();
 
 		try {
+			String fname = ((ComponentContext) ccp)
+					.getPublicResourcesDirectory();
+			if ((!(fname.endsWith("/"))) && (!(fname.endsWith("\\")))) {
+				fname += "/";
+			}
+			GATEInitialiser.init(fname, _resName, fname + _resName,
+					(ComponentContext) ccp);
+			File prfile = new File(fname);
+
 			FeatureMap params = Factory.newFeatureMap();
 
-			String newListUrl = null;
-			String currGazDefnList = this.getGazetteerDefnListURL(ccp);
-			if (currGazDefnList.startsWith(GATEInitialiser.GATE_PREFIX)) {
-				newListUrl = GATEInitialiser.getResourceURL(currGazDefnList);
-			}
-			if (newListUrl != null) {
-				System.out
-						.println("GATE_Gazetteer: gate: URLs are deprecated.  Converting "
-								+ currGazDefnList + " to " + newListUrl);
-				params.put(DefaultGazetteer.DEF_GAZ_LISTS_URL_PARAMETER_NAME,
-						newListUrl);
-			} else {
-				params.put(DefaultGazetteer.DEF_GAZ_LISTS_URL_PARAMETER_NAME,
-						currGazDefnList);
-			}
+			String currGazDefnList = GATEInitialiser.normalizePathForSEASR(
+					prfile.getCanonicalPath(), getGazetteerDefnListURL(ccp),
+					_resName);
+			params.put(DefaultGazetteer.DEF_GAZ_LISTS_URL_PARAMETER_NAME,
+					currGazDefnList);
 
 			params.put(DefaultGazetteer.DEF_GAZ_ENCODING_PARAMETER_NAME, this
 					.getDocumentEncoding(ccp));
@@ -242,8 +234,8 @@ public class GATE_Gazetteer implements ExecutableComponent {
 		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
 
-		if (this.getVerbose(ccp)) {
-			System.out.println("\nEND EXEC -- GATE_Gazetteer -- Docs Ouput: "
+		if (this.getVerbose(ccp) > 0) {
+			_logger.info("\nEND EXEC -- GATE_Gazetteer -- Docs Ouput: "
 					+ m_docsProcessed + " in " + (end - m_start) / 1000
 					+ " seconds\n");
 		}
@@ -255,19 +247,37 @@ public class GATE_Gazetteer implements ExecutableComponent {
 	public void execute(ComponentContext ctx)
 			throws ComponentExecutionException, ComponentContextException {
 		try {
-			gate.Document doc = (gate.Document) ctx
+			org.seasr.components.text.datatype.corpora.Document sdoc = (org.seasr.components.text.datatype.corpora.Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
+			if (!GATEInitialiser.checkIfGATEDocumentExists(sdoc)) {
+				GATEInitialiser.addNewGATEDocToSEASRDoc(sdoc);
+			}
+			gate.Document doc = (gate.Document) sdoc
+					.getAuxMap()
+					.get(
+							org.seasr.components.text.datatype.corpora.DocumentConstants.GATE_DOCUMENT);
 
 			_gaz.setDocument(doc);
-			if (getAnnotationSetName(ctx).trim().length() > 0){
-				_gaz.setAnnotationSetName(this.getAnnotationSetName(ctx));
+			if (getAnnotationSetName(ctx).trim().length() > 0) {
+				_gaz.setAnnotationSetName(getAnnotationSetName(ctx));
 			}
 			_gaz.execute();
 
-			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, doc);
+			if (getVerbose(ctx) > 1) {
+				AnnotationSet annset = doc.getAnnotations().get("Lookup");
+				_logger.info("Annotation set 'DEFAULT' contains "
+						+ annset.size() + " annotations.");
+				for (Annotation ann : annset) {
+					_logger.info(doc.getContent().getContent(
+							ann.getStartNode().getOffset(),
+							ann.getEndNode().getOffset()).toString());
+				}
+			}
+
+			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, sdoc);
 			m_docsProcessed++;
 
-			if (this.getVerbose(ctx)) {
+			if (this.getVerbose(ctx) > 0) {
 				if (Math.IEEEremainder(m_docsProcessed, 250) == 0) {
 					System.out.println("GATE_Gazetteer -- Docs Processed: "
 							+ m_docsProcessed);

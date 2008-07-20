@@ -46,6 +46,7 @@ package org.seasr.components.text.gate.ie;
 // Java Imports
 // ==============
 
+import java.io.File;
 import java.util.logging.Logger;
 
 // ==============
@@ -67,57 +68,59 @@ import org.meandre.core.ExecutableComponent;
 import org.seasr.components.text.gate.util.GATEInitialiser;
 
 /**
- * <p><b>Overview</b>: <br> 
- * Performs pronominal coreference on a GATE document. 
- * Stores the found co-references as new features in 
- * existing annotations.</p>
- * <p><b>Detailed Description</b>: <br>
- * Given a document object in the GATE framework, 
- * this component will perform pronominal coreference. 
- * For example, 'I' can refer to 'Jack' and 
- * 'it' can refer to 'car'. 
- * The found co-references will be stored as new 
- * features in the existing annotations.</p>
- * <p>The particular annotation set to use can be 
- * named by the user. 
- * If the computed tokens are to be used by other 
- * GATE components, either use a name the other components
- * will recognize, or leave it blank 
- * so the always-present default annotation set is used.</p>
- * <p><b>Dependency</b>: <br>
- * The main coreference component can operate sucessfully 
- * only if the following components are executed: 
- * Gazetteer, Tokenizer, SentenceSplitter, Transducer, OrthoMatcher</p>
+ * <p>
+ * <b>Overview</b>: <br>
+ * Performs pronominal coreference on a GATE document. Stores the found
+ * co-references as new features in existing annotations.
+ * </p>
+ * <p>
+ * <b>Detailed Description</b>: <br>
+ * Given a document object in the GATE framework, this component will perform
+ * pronominal coreference. For example, 'I' can refer to 'Jack' and 'it' can
+ * refer to 'car'. The found co-references will be stored as new features in the
+ * existing annotations.
+ * </p>
+ * <p>
+ * The particular annotation set to use can be named by the user. If the
+ * computed tokens are to be used by other GATE components, either use a name
+ * the other components will recognize, or leave it blank so the always-present
+ * default annotation set is used.
+ * </p>
+ * <p>
+ * <b>Dependency</b>: <br>
+ * The main coreference component can operate sucessfully only if the following
+ * components are executed: Gazetteer, Tokenizer, SentenceSplitter, Transducer,
+ * OrthoMatcher
+ * </p>
  */
 
 @Component(creator = "Duane Searsmith",
 
 description = "<p><b>Overview</b>: <br>"
-+ "Performs pronominal coreference on a GATE document. "
-+ "Stores the found co-references as new features in "
-+ "existing annotations.</p>"
+		+ "Performs pronominal coreference on a GATE document. "
+		+ "Stores the found co-references as new features in "
+		+ "existing annotations.</p>"
 
-+ "<p><b>Detailed Description</b>: <br>"
-+ "Given a document object in the GATE framework, "
-+ "this component will perform pronominal coreference. "
-+ "For example, 'I' can refer to 'Jack' and "
-+ "'it' can refer to 'car'."
-+ "The found co-references will be stored as new "
-+ "features in the existing annotations.</p>"
+		+ "<p><b>Detailed Description</b>: <br>"
+		+ "Given a document object in the GATE framework, "
+		+ "this component will perform pronominal coreference. "
+		+ "For example, 'I' can refer to 'Jack' and "
+		+ "'it' can refer to 'car'."
+		+ "The found co-references will be stored as new "
+		+ "features in the existing annotations.</p>"
 
-+ "<p>The particular annotation set to use can be "
-+ "named by the user.  "
-+ "If the computed tokens are to be used by other "
-+ "GATE components, either use a name the other "
-+ "components will recognize, or leave it blank "
-+ "so the always-present default annotation set "
-+ "is used.</p>"
+		+ "<p>The particular annotation set to use can be "
+		+ "named by the user.  "
+		+ "If the computed tokens are to be used by other "
+		+ "GATE components, either use a name the other "
+		+ "components will recognize, or leave it blank "
+		+ "so the always-present default annotation set "
+		+ "is used.</p>"
 
-
-+ "<p><b>Dependency</b>: <br>"
-+ "The main coreference component can operate sucessfully "
-+ "only if the following components are executed: "
-+ "Gazetteer, Tokenizer, SentenceSplitter, Transducer, OrthoMatcher</p>",
+		+ "<p><b>Dependency</b>: <br>"
+		+ "The main coreference component can operate sucessfully "
+		+ "only if the following components are executed: "
+		+ "Gazetteer, Tokenizer, SentenceSplitter, Transducer, OrthoMatcher</p>",
 
 name = "GATE_Coreferencer", tags = "text gate coreference document")
 public class GATE_Coreferencer implements ExecutableComponent {
@@ -131,27 +134,29 @@ public class GATE_Coreferencer implements ExecutableComponent {
 	private int m_docsProcessed = 0;
 	private long m_start = 0;
 
-	Coreferencer m_coref = null;
+	private Coreferencer m_coref = null;
+
+	private final String _resName = "GATE-Home-And-ANNIE-plugin_001";
 
 	// props
 
-	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
-	final static String DATA_PROPERTY_VERBOSE = "verbose";
+	@ComponentProperty(description = "Verbose output? An int value (0 = none, 1 = fine, 2 = finer).", name = "verbose", defaultValue = "0")
+	public final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	@ComponentProperty(description = "Resolve Pleonastic 'It'? A boolean value (true or false).", name = "resolve_it", defaultValue = "true")
-	final static String DATA_PROPERTY_RESOLVE_IT = "resolve_it";
+	public final static String DATA_PROPERTY_RESOLVE_IT = "resolve_it";
 
 	@ComponentProperty(description = "Name of the Annotation Set to find the tokens "
 			+ "in. Leave blank for default.", name = "token_annotation_set_name", defaultValue = "")
-	final static String DATA_PROPERTY_TOKEN_ANNOTATION_SET_NAME = "token_annotation_set_name";
+	public final static String DATA_PROPERTY_TOKEN_ANNOTATION_SET_NAME = "token_annotation_set_name";
 
 	// io
 
-	@ComponentInput(description = "Input GATE document.", name = "document_in")
-	public final static String DATA_INPUT_DOC_IN = "gate_document_in";
+	@ComponentInput(description = "Input document.", name = "document_in")
+	public final static String DATA_INPUT_DOC_IN = "document_in";
 
-	@ComponentOutput(description = "Output GATE document.", name = "document_out")
-	public final static String DATA_OUTPUT_DOC_OUT = "gate_document_out";
+	@ComponentOutput(description = "Output document.", name = "document_out")
+	public final static String DATA_OUTPUT_DOC_OUT = "document_out";
 
 	// ================
 	// Constructor(s)
@@ -163,9 +168,9 @@ public class GATE_Coreferencer implements ExecutableComponent {
 	// Public Methods
 	// ================
 
-	public boolean getVerbose(ComponentContextProperties ccp) {
+	public int getVerbose(ComponentContextProperties ccp) {
 		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
-		return Boolean.parseBoolean(s.toLowerCase());
+		return Integer.parseInt(s);
 	}
 
 	public boolean getResolveIt(ComponentContextProperties ccp) {
@@ -181,12 +186,19 @@ public class GATE_Coreferencer implements ExecutableComponent {
 	public void initialize(ComponentContextProperties ccp)
 			throws ComponentExecutionException {
 		_logger.fine("initialize() called");
-		GATEInitialiser.init();
 
 		m_docsProcessed = 0;
 		m_start = System.currentTimeMillis();
 
 		try {
+			String fname = ((ComponentContext) ccp)
+					.getPublicResourcesDirectory();
+			if ((!(fname.endsWith("/"))) && (!(fname.endsWith("\\")))) {
+				fname += "/";
+			}
+			GATEInitialiser.init(fname, _resName, fname + _resName,
+					(ComponentContext) ccp);
+
 			FeatureMap params = Factory.newFeatureMap();
 
 			params.put(Coreferencer.COREF_ANN_SET_PARAMETER_NAME,
@@ -206,8 +218,8 @@ public class GATE_Coreferencer implements ExecutableComponent {
 		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
 
-		if (this.getVerbose(ccp)) {
-			System.out.println("\nEND EXEC -- GATE_Coreferencer-- Docs Ouput: "
+		if (getVerbose(ccp) > 0) {
+			_logger.info("\nEND EXEC -- GATE_Coreferencer-- Docs Ouput: "
 					+ m_docsProcessed + " in " + (end - m_start) / 1000
 					+ " seconds\n");
 		}
@@ -219,16 +231,23 @@ public class GATE_Coreferencer implements ExecutableComponent {
 	public void execute(ComponentContext ctx)
 			throws ComponentExecutionException, ComponentContextException {
 		try {
-			gate.Document doc = (gate.Document) ctx
+			org.seasr.components.text.datatype.corpora.Document sdoc = (org.seasr.components.text.datatype.corpora.Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
+			if (!GATEInitialiser.checkIfGATEDocumentExists(sdoc)) {
+				GATEInitialiser.addNewGATEDocToSEASRDoc(sdoc);
+			}
+			gate.Document doc = (gate.Document) sdoc
+					.getAuxMap()
+					.get(
+							org.seasr.components.text.datatype.corpora.DocumentConstants.GATE_DOCUMENT);
 
 			m_coref.setDocument(doc);
 			m_coref.execute();
 
-			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, doc);
+			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, sdoc);
 			m_docsProcessed++;
 
-			if (this.getVerbose(ctx)) {
+			if (getVerbose(ctx) > 0) {
 				if (Math.IEEEremainder(m_docsProcessed, 10) == 0) {
 					System.out.println("GATE_Coreferencer -- Docs Processed: "
 							+ m_docsProcessed);

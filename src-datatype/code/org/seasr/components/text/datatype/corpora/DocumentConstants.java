@@ -56,4 +56,9 @@ public interface DocumentConstants {
 	 */	
 	public static final String TOKENIZER_NUM_TOKS_INT = "$@tokenizer_num_tokens";
 
+	/**
+	 * gate.Gate.Document
+	 */	
+	public static final String GATE_DOCUMENT = "$@gate_document";
+
 }

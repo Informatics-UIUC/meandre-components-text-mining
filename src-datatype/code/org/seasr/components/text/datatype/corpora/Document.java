@@ -133,5 +133,9 @@ public interface Document extends FeatureBearer, Serializable {
 	 */
 	public void free();
 	
+	/**
+	 * Get an auxiliary feature map for storing temporary data structures
+	 * used during flow execution but not intended for meta-data storage.
+	 */
 	public Map<String, Object> getAuxMap();
 }

@@ -56,11 +56,15 @@ import java.net.URL;
 
 import org.meandre.annotations.Component;
 import org.meandre.annotations.ComponentInput;
+import org.meandre.annotations.ComponentOutput;
+import org.meandre.annotations.ComponentProperty;
 import org.meandre.core.ComponentContext;
 import org.meandre.core.ComponentContextException;
 import org.meandre.core.ComponentContextProperties;
 import org.meandre.core.ComponentExecutionException;
-import org.seasr.components.text.gate.util.GATEInitialiser;
+import org.seasr.components.text.datatype.corpora.Document;
+import org.seasr.components.text.datatype.corpora.DocumentConstants;
+import org.seasr.components.text.util.Factory;
 
 /**
  * <p>
@@ -115,11 +119,24 @@ description = "<p>Overview: <br>"
 
 		+ "<p>Trigger Criteria: <br>" + "Standard." + "</p>",
 
-name = "GATE_UrlDocumentReader", tags = "io read file text gate document")
+name = "GATE_UrlDocumentReader", tags = "io read file text gate document", dependency = { "GATE-Home-And-ANNIE-plugin.jar,gate.jar, nekohtml-0.9.5.jar, PDFBox-0.7.2.jar"})
 public class GATE_UrlDocumentReader extends GATE_DocumentReader {
 
+	// props
+
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
+	public final static String DATA_PROPERTY_VERBOSE = "verbose";
+
+	@ComponentProperty(description = "File encoding? A boolean value (true or false).", name = "encoding", defaultValue = "UTF-8")
+	public final static String DATA_PROPERTY_FILE_ENCODING = "encoding";
+
+	// io
+	
 	@ComponentInput(description = "URL.", name = "url_name")
 	public final static String DATA_INPUT_FILE_NAME = "url_name";
+
+	@ComponentOutput(description = "Document object.", name = "document")
+	public final static String DATA_OUTPUT_DOC = "document";
 
 	private static Logger _logger = Logger.getLogger("GATE_UrlDocumentReader");
 
@@ -130,7 +147,21 @@ public class GATE_UrlDocumentReader extends GATE_DocumentReader {
 		super();
 	}
 
-	public void initialize(ComponentContextProperties ccp) {
+	// ============
+	// Properties
+	// ============
+
+	public String getEncoding(ComponentContextProperties ccp) {
+		String s = ccp.getProperty(DATA_PROPERTY_FILE_ENCODING);
+		return s;
+	}
+
+	public boolean getVerbose(ComponentContextProperties ccp) {
+		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
+		return Boolean.parseBoolean(s.toLowerCase());
+	}
+
+	public void initialize(ComponentContextProperties ccp) throws ComponentExecutionException {
 		super.initialize(ccp);
 	}
 
@@ -138,8 +169,7 @@ public class GATE_UrlDocumentReader extends GATE_DocumentReader {
 		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
 		if (getVerbose(ccp)) {
-			System.out
-					.println("\nEND EXEC -- GATE_UrlDocumentReader -- Docs Ouput: "
+			_logger.info("\nEND EXEC -- GATE_UrlDocumentReader -- Docs Ouput: "
 							+ m_docsProcessed
 							+ " in "
 							+ (end - m_start)
@@ -154,15 +184,26 @@ public class GATE_UrlDocumentReader extends GATE_DocumentReader {
 		_logger.fine("execute() called");
 		try {
 
-			URL url = (URL) ctx.getDataComponentFromInput(DATA_INPUT_FILE_NAME);
+			String urlS = (String)ctx.getDataComponentFromInput(DATA_INPUT_FILE_NAME);
 
-			gate.Document doc = readDoc(url, getEncoding(ctx));
-			if (doc == null)
-				return;
-			if (doc == null)
-				return;
+			URL url = new URL(urlS);
+			
+			gate.Document gdoc = readDoc(url, getEncoding(ctx));
+			if (getVerbose(ctx)){
+				_logger.info("Loading from URL: " + url);
+			}
+			
+			if (gdoc == null)
+				throw new ComponentExecutionException("Unable to read file into GATE document.");
 
-			ctx.pushDataComponentToOutput(DATA_OUTPUT_FILE_GATE_DOC, doc);
+			Document doc = Factory.newDocument();
+			doc.setContent((String)gdoc.getFeatures().get(gate.GateConstants.ORIGINAL_DOCUMENT_CONTENT_FEATURE_NAME));
+			doc.setTitle(urlS);
+			doc.setDocID(urlS);
+			
+			doc.getAuxMap().put(DocumentConstants.GATE_DOCUMENT, gdoc);
+			
+			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC, doc);
 
 			m_docsProcessed++;
 			if (getVerbose(ctx)) {

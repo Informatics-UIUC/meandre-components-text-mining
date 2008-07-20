@@ -45,6 +45,7 @@ package org.seasr.components.text.gate.sentence;
 // ==============
 // Java Imports
 // ==============
+import java.io.File;
 import java.util.logging.Logger;
 
 // ===============
@@ -65,22 +66,25 @@ import org.meandre.core.ExecutableComponent;
 import org.seasr.components.text.gate.util.GATEInitialiser;
 
 /**
- * <p><b>Overview</b>: <br>
- * Runs the GATE Sentence Splitter on a given GATE document. 
- * Annotates individual sentences.</p>
- * <p><b>Detailed Description</b>: <br>
- * Given a document object in the GATE framework, 
- * this component will annotate sentences using the given rules. 
- * The found annotations will be stored in an annotation set 
- * associated with the document.</p>
- * <p>The sentence splitter requires that the document 
- * be tokenized already.  These tokens should be stored 
- * in the Input Annotation Set, which is left to blank 
- * by default. The newly found annotations will be stored in 
- * the Output Annotation Set, also blank by default. 
- * Note that by leaving the Annotation Sets blank 
- * uses the default annotation set, which is probably 
- * easier to manage within a flow.</p>
+ * <p>
+ * <b>Overview</b>: <br>
+ * Runs the GATE Sentence Splitter on a given GATE document. Annotates
+ * individual sentences.
+ * </p>
+ * <p>
+ * <b>Detailed Description</b>: <br>
+ * Given a document object in the GATE framework, this component will annotate
+ * sentences using the given rules. The found annotations will be stored in an
+ * annotation set associated with the document.
+ * </p>
+ * <p>
+ * The sentence splitter requires that the document be tokenized already. These
+ * tokens should be stored in the Input Annotation Set, which is left to blank
+ * by default. The newly found annotations will be stored in the Output
+ * Annotation Set, also blank by default. Note that by leaving the Annotation
+ * Sets blank uses the default annotation set, which is probably easier to
+ * manage within a flow.
+ * </p>
  * 
  * @author D. Searsmith
  * 
@@ -93,11 +97,9 @@ description = "<p><b>Overview</b>: <br>"
 		+ "Annotates individual sentences.</p>"
 		+ "<p><b>Detailed Description</b>: <br>"
 		+ "Given a document object in the GATE framework, "
-		+ "this component will annotate sentences " 
-		+ "using the given rules. "
+		+ "this component will annotate sentences " + "using the given rules. "
 		+ "The found annotations will be "
-		+ "stored in an annotation set associated with the " 
-		+ "document.</p>"
+		+ "stored in an annotation set associated with the " + "document.</p>"
 		+ "<p>The sentence splitter requires that the document "
 		+ "be tokenized already.  These tokens should be stored "
 		+ "in the Input Annotation Set, which is left to blank "
@@ -107,7 +109,9 @@ description = "<p><b>Overview</b>: <br>"
 		+ "uses the default annotation set, which is probably "
 		+ "easier to manage within a flow.</p>",
 
-name = "GATE_SentenceSplitter", tags = "text gate sentence splitter document")
+name = "GATE_SentenceSplitter", 
+tags = "text gate sentence splitter document",
+dependency = { "GATE-Home-And-ANNIE-plugin.jar, gate.jar" })
 public class GATE_SentenceSplitter implements ExecutableComponent {
 	// ==============
 	// Data Members
@@ -120,36 +124,37 @@ public class GATE_SentenceSplitter implements ExecutableComponent {
 	private int m_docsProcessed = 0;
 	private long m_start = 0;
 
+	private final String _resName = "GATE-Home-And-ANNIE-plugin_001";
+
 	// props
 
-	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
-	final static String DATA_PROPERTY_VERBOSE = "verbose";
+	@ComponentProperty(description = "Verbose output? An int value (0 = none, 1 = fine, 2 = finer).", name = "verbose", defaultValue = "0")
+	public final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	@ComponentProperty(description = "Encoding type of the document.", name = "document_encoding", defaultValue = "UTF-8")
-	final static String DATA_PROPERTY_DOCUMENT_ENCODING = "document_encoding";
+	public final static String DATA_PROPERTY_DOCUMENT_ENCODING = "document_encoding";
 
-	@ComponentProperty(description = "URL of the gazetteer rules list file in GATE.", name = "gazetteer_list_url", defaultValue = "gate:/creole/splitter/gazetteer/lists.def")
-	final static String DATA_PROPERTY_GAZETTEER_LIST_URL = "gazetteer_list_url";
+	@ComponentProperty(description = "URL of the gazetteer rules list file in GATE.", name = "gazetteer_list_url", defaultValue = "/plugins/ANNIE/resources/sentenceSplitter/gazetteer/lists.def")
+	public final static String DATA_PROPERTY_GAZETTEER_LIST_URL = "gazetteer_list_url";
 
-	@ComponentProperty(description = "URL of the transducer rules file in GATE.", name = "transducer_rules_url", defaultValue = "gate:/creole/splitter/grammar/main.jape")
-	final static String DATA_PROPERTY_TRANSDUCER_RULES_URL = "transducer_rules_url";
+	@ComponentProperty(description = "URL of the transducer rules file in GATE.", name = "transducer_rules_url", defaultValue = "/plugins/ANNIE/resources/sentenceSplitter/grammar/main.jape")
+	public final static String DATA_PROPERTY_TRANSDUCER_RULES_URL = "transducer_rules_url";
 
 	@ComponentProperty(description = "Name of the input Annotation Set to find the tokens "
 			+ "in. Leave blank for default.", name = "input_annotation_set_name", defaultValue = "")
-	final static String DATA_PROPERTY_INPUT_ANNOTATION_SET_NAME = "input_annotation_set_name";
+	public final static String DATA_PROPERTY_INPUT_ANNOTATION_SET_NAME = "input_annotation_set_name";
 
 	@ComponentProperty(description = "Name of the output Annotation Set to find the tokens "
 			+ "in. Leave blank for default.", name = "output_annotation_set_name", defaultValue = "")
-	final static String DATA_PROPERTY_OUTPUT_ANNOTATION_SET_NAME = "output_annotation_set_name";
+	public final static String DATA_PROPERTY_OUTPUT_ANNOTATION_SET_NAME = "output_annotation_set_name";
 
 	// io
 
-	@ComponentInput(description = "Input GATE document.", name = "document_in")
-	public final static String DATA_INPUT_DOC_IN = "gate_document_in";
+	@ComponentInput(description = "Input document.", name = "document_in")
+	public final static String DATA_INPUT_DOC_IN = "document_in";
 
-	@ComponentOutput(description = "Output GATE document.", name = "document_out")
-	public final static String DATA_OUTPUT_DOC_OUT = "gate_document_out";
-
+	@ComponentOutput(description = "Output document.", name = "document_out")
+	public final static String DATA_OUTPUT_DOC_OUT = "document_out";
 
 	// ================
 	// Constructor(s)
@@ -157,9 +162,9 @@ public class GATE_SentenceSplitter implements ExecutableComponent {
 	public GATE_SentenceSplitter() {
 	}
 
-	public boolean getVerbose(ComponentContextProperties ccp) {
+	public int getVerbose(ComponentContextProperties ccp) {
 		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
-		return Boolean.parseBoolean(s.toLowerCase());
+		return Integer.parseInt(s);
 	}
 
 	public String getDocumentEncoding(ComponentContextProperties ccp) {
@@ -190,48 +195,34 @@ public class GATE_SentenceSplitter implements ExecutableComponent {
 	public void initialize(ComponentContextProperties ccp)
 			throws ComponentExecutionException {
 		_logger.fine("initialize() called");
-		GATEInitialiser.init();
 
 		m_docsProcessed = 0;
 		m_start = System.currentTimeMillis();
 
 		try {
+			String fname = ((ComponentContext) ccp)
+					.getPublicResourcesDirectory();
+			if ((!(fname.endsWith("/"))) && (!(fname.endsWith("\\")))) {
+				fname += "/";
+			}
+			GATEInitialiser.init(fname, _resName, fname + _resName,
+					(ComponentContext) ccp);
+
 			FeatureMap params = Factory.newFeatureMap();
 			params.put(SentenceSplitter.SPLIT_ENCODING_PARAMETER_NAME,
 					getDocumentEncoding(ccp));
 
 			// try to convert a gate: url
-			String newGazUrl = null;
-			String currGazURL = getGazetteerListURL(ccp);
-			if (currGazURL.startsWith(GATEInitialiser.GATE_PREFIX))
-				newGazUrl = GATEInitialiser.getResourceURL(currGazURL);
+			File prfile = new File(fname);
+			String currGazURL = GATEInitialiser.normalizePathForSEASR(prfile
+					.getCanonicalPath(), getGazetteerListURL(ccp), _resName);
+			params.put(SentenceSplitter.SPLIT_GAZ_URL_PARAMETER_NAME,
+					currGazURL);
 
-			if (newGazUrl != null) {
-				_logger
-						.info("GATE_SentenceSplitter: gate: URLs are deprecated.  Converting "
-								+ currGazURL + " to " + newGazUrl);
-				params.put(SentenceSplitter.SPLIT_GAZ_URL_PARAMETER_NAME,
-						newGazUrl);
-			} else {
-				params.put(SentenceSplitter.SPLIT_GAZ_URL_PARAMETER_NAME,
-						currGazURL);
-			}
-
-			String newTransUrl = null;
-			String currTransURL = getTransducerRulesURL(ccp);
-			if (currTransURL.startsWith(GATEInitialiser.GATE_PREFIX)) {
-				newTransUrl = GATEInitialiser.getResourceURL(currTransURL);
-			}
-			if (newTransUrl != null) {
-				System.out
-						.println("GATE_SentenceSplitter(): gate: URLs are deprecated.  Converting "
-								+ currTransURL + " to " + newTransUrl);
-				params.put(SentenceSplitter.SPLIT_TRANSD_URL_PARAMETER_NAME,
-						newTransUrl);
-			} else {
-				params.put(SentenceSplitter.SPLIT_TRANSD_URL_PARAMETER_NAME,
-						currTransURL);
-			}
+			String currTransURL = GATEInitialiser.normalizePathForSEASR(prfile
+					.getCanonicalPath(), getTransducerRulesURL(ccp), _resName);
+			params.put(SentenceSplitter.SPLIT_TRANSD_URL_PARAMETER_NAME,
+					currTransURL);
 
 			params.put(SentenceSplitter.SPLIT_INPUT_AS_PARAMETER_NAME,
 					getInputAnnotationSetName(ccp));
@@ -252,7 +243,7 @@ public class GATE_SentenceSplitter implements ExecutableComponent {
 		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
 
-		if (getVerbose(ccp)) {
+		if (getVerbose(ccp) > 0) {
 			_logger.info("\nEND EXEC -- GATE_SentenceSplitter -- Docs Ouput: "
 					+ m_docsProcessed + " in " + (end - m_start) / 1000
 					+ " seconds\n");
@@ -265,19 +256,37 @@ public class GATE_SentenceSplitter implements ExecutableComponent {
 	public void execute(ComponentContext ctx)
 			throws ComponentExecutionException, ComponentContextException {
 		try {
-			gate.Document doc = (gate.Document) ctx
+			org.seasr.components.text.datatype.corpora.Document sdoc = (org.seasr.components.text.datatype.corpora.Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
+			if (!GATEInitialiser.checkIfGATEDocumentExists(sdoc)) {
+				GATEInitialiser.addNewGATEDocToSEASRDoc(sdoc);
+			}
+			gate.Document doc = (gate.Document) sdoc
+					.getAuxMap()
+					.get(
+							org.seasr.components.text.datatype.corpora.DocumentConstants.GATE_DOCUMENT);
 
 			_splitter.setDocument(doc);
 			_splitter.execute();
 
-			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, doc);
+			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, sdoc);
 			m_docsProcessed++;
 
-			if (getVerbose(ctx)) {
+			if (getVerbose(ctx) > 1) {
+				AnnotationSet annset = doc.getAnnotations().get("Sentence");
+				_logger.info("Annotation set 'DEFAULT' contains "
+						+ annset.size() + " annotations.");
+				for (Annotation ann : annset) {
+					_logger.info(doc.getContent().getContent(
+							ann.getStartNode().getOffset(),
+							ann.getEndNode().getOffset()).toString());
+				}
+			}
+
+			if (getVerbose(ctx) > 0) {
 				if (Math.IEEEremainder(m_docsProcessed, 10) == 0) {
 					_logger.info("GATE_SentenceSplitter -- Docs Processed: "
-									+ m_docsProcessed);
+							+ m_docsProcessed);
 				}
 			}
 		} catch (Exception ex) {

@@ -46,6 +46,7 @@ package org.seasr.components.text.gate.pos;
 // Java Imports
 // ==============
 
+import java.io.File;
 import java.util.logging.Logger;
 
 // ===============
@@ -114,7 +115,9 @@ description = "<p><b>Overview</b>: <br>"
 		+ "uses the default annotation set, which is probably "
 		+ "easier to manage within a flow.</p>",
 
-name = "GATE_POSTagger", tags = "text gate pos tagger document")
+name = "GATE_POSTagger", 
+tags = "text gate pos tagger document",
+dependency = { "GATE-Home-And-ANNIE-plugin.jar, gate.jar" })
 public class GATE_POSTagger implements ExecutableComponent {
 
 	// ==============
@@ -128,34 +131,36 @@ public class GATE_POSTagger implements ExecutableComponent {
 	private int m_docsProcessed = 0;
 	private long m_start = 0;
 
+	private final String _resName = "GATE-Home-And-ANNIE-plugin_001";
+
 	// props
 
-	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
-	final static String DATA_PROPERTY_VERBOSE = "verbose";
+	@ComponentProperty(description = "Verbose output? An int value (0 = none, 1 = fine, 2 = finer).", name = "verbose", defaultValue = "0")
+	public final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	@ComponentProperty(description = "URL of lexicon file in GATE.", name = "lexicon_url", defaultValue = "gate:/creole/heptag/lexicon")
-	final static String DATA_PROPERTY_LEXICON_URL = "lexicon_url";
+	@ComponentProperty(description = "URL of lexicon file in GATE.", name = "lexicon_url", defaultValue = "/plugins/ANNIE/resources/heptag/lexicon")
+	public final static String DATA_PROPERTY_LEXICON_URL = "lexicon_url";
 
-	@ComponentProperty(description = "URL for the parts-of-speech rules file in GATE.", name = "pos_rules_url", defaultValue = "gate:/creole/heptag/ruleset")
-	final static String DATA_PROPERTY_POS_RULES_URL = "pos_rules_url";
+	@ComponentProperty(description = "URL for the parts-of-speech rules file in GATE.", name = "pos_rules_url", defaultValue = "/plugins/ANNIE/resources/heptag/ruleset")
+	public final static String DATA_PROPERTY_POS_RULES_URL = "pos_rules_url";
 
 	@ComponentProperty(description = "Name of the Annotation Set to find the tokens in.  "
 			+ "Leave blank for default set. The new feature (the POS tag) is added to Token "
 			+ "type annotations found in this set.", name = "token_annotation_set_name", defaultValue = "")
-	final static String DATA_PROPERTY_TOKEN_ANNOTATION_SET_NAME = "token_annotation_set_name";
+	public final static String DATA_PROPERTY_TOKEN_ANNOTATION_SET_NAME = "token_annotation_set_name";
 
 	@ComponentProperty(description = "Name of the Annotation Set that contains the Sentence "
 			+ "type annotations. The tokens cannot be tagged if the Document was not processed "
 			+ "with a Sentence Splitter.", name = "sentence_annotation_set_name", defaultValue = "")
-	final static String DATA_PROPERTY_SENTENCE_ANNOTATION_SET_NAME = "sentence_annotation_set_name";
+	public final static String DATA_PROPERTY_SENTENCE_ANNOTATION_SET_NAME = "sentence_annotation_set_name";
 
 	// io
 
-	@ComponentInput(description = "Input GATE document.", name = "document_in")
-	public final static String DATA_INPUT_DOC_IN = "gate_document_in";
+	@ComponentInput(description = "Input document.", name = "document_in")
+	public final static String DATA_INPUT_DOC_IN = "document_in";
 
-	@ComponentOutput(description = "Output GATE document.", name = "document_out")
-	public final static String DATA_OUTPUT_DOC_OUT = "gate_document_out";
+	@ComponentOutput(description = "Output document.", name = "document_out")
+	public final static String DATA_OUTPUT_DOC_OUT = "document_out";
 
 	// ===============
 	// Constructor(s)
@@ -168,9 +173,9 @@ public class GATE_POSTagger implements ExecutableComponent {
 	// Public Methods
 	// ================
 
-	public boolean getVerbose(ComponentContextProperties ccp) {
+	public int getVerbose(ComponentContextProperties ccp) {
 		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
-		return Boolean.parseBoolean(s.toLowerCase());
+		return Integer.parseInt(s);
 	}
 
 	public String getLexiconURL(ComponentContextProperties ccp) {
@@ -189,52 +194,36 @@ public class GATE_POSTagger implements ExecutableComponent {
 	}
 
 	public String getSentenceAnnotationSetName(ComponentContextProperties ccp) {
-		String s = ccp.getProperty(getSentenceAnnotationSetName(ccp));
+		String s = ccp.getProperty(DATA_PROPERTY_SENTENCE_ANNOTATION_SET_NAME);
 		return s;
 	}
 
 	public void initialize(ComponentContextProperties ccp)
 			throws ComponentExecutionException {
 		_logger.fine("initialize() called");
-		GATEInitialiser.init();
 
 		m_docsProcessed = 0;
 		m_start = System.currentTimeMillis();
 
 		try {
+			String fname = ((ComponentContext) ccp)
+					.getPublicResourcesDirectory();
+			if ((!(fname.endsWith("/"))) && (!(fname.endsWith("\\")))) {
+				fname += "/";
+			}
+			GATEInitialiser.init(fname, _resName, fname + _resName,
+					(ComponentContext) ccp);
+			File prfile = new File(fname);
+
 			FeatureMap params = Factory.newFeatureMap();
 
-			// if the m_lexURL is a gate: url, convert it
-			String newLexUrl = null;
-			String currLexURL = this.getLexiconURL(ccp);
-			if (currLexURL.startsWith(GATEInitialiser.GATE_PREFIX)) {
-				newLexUrl = GATEInitialiser.getResourceURL(currLexURL);
-			}
-			if (newLexUrl != null) {
-				_logger
-						.info("GATE_POSTagger: gate: URLs are deprecated.  Converting "
-								+ currLexURL + " to " + newLexUrl);
-				params.put(POSTagger.TAG_LEXICON_URL_PARAMETER_NAME, newLexUrl);
-			} else {
-				params
-						.put(POSTagger.TAG_LEXICON_URL_PARAMETER_NAME,
-								currLexURL);
-			}
+			String currLexURL = GATEInitialiser.normalizePathForSEASR(prfile
+					.getCanonicalPath(), getLexiconURL(ccp), _resName);
+			params.put(POSTagger.TAG_LEXICON_URL_PARAMETER_NAME, currLexURL);
 
-			// if the m_ruleURL is a gate: url, convert it
-			String newRuleUrl = null;
-			String currRuleURL = this.getPoSRulesURL(ccp);
-			if (currRuleURL.startsWith(GATEInitialiser.GATE_PREFIX)) {
-				newRuleUrl = GATEInitialiser.getResourceURL(currRuleURL);
-			}
-			if (newRuleUrl != null) {
-				System.out
-						.println("GATE_POSTagger: gate: URLs are deprecated.  Converting "
-								+ currRuleURL + " to " + newRuleUrl);
-				params.put(POSTagger.TAG_RULES_URL_PARAMETER_NAME, newRuleUrl);
-			} else {
-				params.put(POSTagger.TAG_RULES_URL_PARAMETER_NAME, currRuleURL);
-			}
+			String currRuleURL = GATEInitialiser.normalizePathForSEASR(prfile
+					.getCanonicalPath(), getPoSRulesURL(ccp), _resName);
+			params.put(POSTagger.TAG_RULES_URL_PARAMETER_NAME, currRuleURL);
 
 			params.put(POSTagger.TAG_INPUT_AS_PARAMETER_NAME, "");
 
@@ -253,8 +242,8 @@ public class GATE_POSTagger implements ExecutableComponent {
 		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
 
-		if (this.getVerbose(ccp)) {
-			System.out.println("\nEND EXEC -- GATE_POSTagger -- Docs Ouput: "
+		if (getVerbose(ccp) > 0) {
+			_logger.info("\nEND EXEC -- GATE_POSTagger -- Docs Ouput: "
 					+ m_docsProcessed + " in " + (end - m_start) / 1000
 					+ " seconds\n");
 		}
@@ -266,14 +255,20 @@ public class GATE_POSTagger implements ExecutableComponent {
 	public void execute(ComponentContext ctx)
 			throws ComponentExecutionException, ComponentContextException {
 		try {
-			gate.Document doc = (gate.Document) ctx
+			org.seasr.components.text.datatype.corpora.Document sdoc = (org.seasr.components.text.datatype.corpora.Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
+			if (!GATEInitialiser.checkIfGATEDocumentExists(sdoc)) {
+				GATEInitialiser.addNewGATEDocToSEASRDoc(sdoc);
+			}
+			gate.Document doc = (gate.Document) sdoc
+					.getAuxMap()
+					.get(
+							org.seasr.components.text.datatype.corpora.DocumentConstants.GATE_DOCUMENT);
 
 			// making sure that there are tokens to tag
 			AnnotationSet tokens;
 			String tasName = this.getTokenAnnotationSetName(ctx);
-			if (tasName == null
-					|| tasName.trim().length() == 0) {
+			if (tasName == null || tasName.trim().length() == 0) {
 				tokens = doc.getAnnotations().get(
 						ANNIEConstants.TOKEN_ANNOTATION_TYPE);
 			} else
@@ -284,8 +279,7 @@ public class GATE_POSTagger implements ExecutableComponent {
 			// sentence split then pos tagging fails
 			AnnotationSet sentences;
 			String sasName = this.getSentenceAnnotationSetName(ctx);
-			if (sasName == null
-					|| sasName.trim().length() == 0) {
+			if (sasName == null || sasName.trim().length() == 0) {
 				sentences = doc.getAnnotations().get(
 						ANNIEConstants.SENTENCE_ANNOTATION_TYPE);
 			} else
@@ -296,26 +290,39 @@ public class GATE_POSTagger implements ExecutableComponent {
 				_tagger.setDocument(doc);
 				_tagger.execute();
 			} else {
-				if (sentences == null){
-					_logger.severe("GATE_POSTagger: Input Document must have Sentence type annotations "
+				if (sentences == null) {
+					_logger
+							.severe("GATE_POSTagger: Input Document must have Sentence type annotations "
 									+ "in order to be part of speech tagged. Process the Document "
 									+ "with a Sentence Splitter first.");
-					throw new Exception("GATE_POSTagger: Input Document must have Sentence type annotations "
+					throw new Exception(
+							"GATE_POSTagger: Input Document must have Sentence type annotations "
 									+ "in order to be part of speech tagged. Process the Document "
 									+ "with a Sentence Splitter first.");
 				}
-				if (tokens == null){
-					_logger.info("GATE_POSTagger: Input Document has no Token type annotations - "
+				if (tokens == null) {
+					_logger
+							.info("GATE_POSTagger: Input Document has no Token type annotations - "
 									+ "nothing to do.");
-					throw new Exception("GATE_POSTagger: Input Document has no Token type annotations - "
-							+ "nothing to do.");
+					throw new Exception(
+							"GATE_POSTagger: Input Document has no Token type annotations - "
+									+ "nothing to do.");
 				}
 			}
 
-			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, doc);
+			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, sdoc);
 			m_docsProcessed++;
 
-			if (this.getVerbose(ctx)) {
+			if (getVerbose(ctx) > 1) {
+				AnnotationSet annset = doc.getAnnotations().get("Token");
+				_logger.info("Annotation set 'DEFAULT' contains "
+						+ annset.size() + " annotations.");
+				for (Annotation ann : annset) {
+					_logger.info(ann.toString());
+				}
+			}
+
+			if (this.getVerbose(ctx) > 0) {
 				if (Math.IEEEremainder(m_docsProcessed, 250) == 0) {
 					System.out.println("GATE_POSTagger -- Docs Processed: "
 							+ m_docsProcessed);

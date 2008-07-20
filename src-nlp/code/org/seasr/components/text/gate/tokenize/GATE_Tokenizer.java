@@ -45,6 +45,9 @@ package org.seasr.components.text.gate.tokenize;
 // ==============
 // Java Imports
 // ==============
+import java.io.File;
+import java.io.IOException;
+import java.util.Set;
 import java.util.logging.Logger;
 
 // ===============
@@ -66,23 +69,24 @@ import org.meandre.core.ExecutableComponent;
 import org.seasr.components.text.gate.util.GATEInitialiser;
 
 /**
- * <p><b>Overview</b>: <br>
- * Performs tokenization on a given GATE document. 
- * Stores the token annotations in a annotation set 
- * of the document.</p>
- * <p><b>Detailed Description</b>: <br>
- * Given a document object in the GATE framework, 
- * this component will perform tokenization using the 
- * given tokenizer and grammar rules. 
- * The computed tokens (ie, annotations) will be 
- * stored in an annotation set associated with the 
- * document.</p>
- * <p>The particular annotation set to use can be 
- * named by the user. If the computed tokens are to 
- * be used by other GATE components, either use a 
- * name the other modules will recognize, or leave it blank 
- * so the always-present default annotation set 
- * is used.</p>
+ * <p>
+ * <b>Overview</b>: <br>
+ * Performs tokenization on a given GATE document. Stores the token annotations
+ * in a annotation set of the document.
+ * </p>
+ * <p>
+ * <b>Detailed Description</b>: <br>
+ * Given a document object in the GATE framework, this component will perform
+ * tokenization using the given tokenizer and grammar rules. The computed tokens
+ * (ie, annotations) will be stored in an annotation set associated with the
+ * document.
+ * </p>
+ * <p>
+ * The particular annotation set to use can be named by the user. If the
+ * computed tokens are to be used by other GATE components, either use a name
+ * the other modules will recognize, or leave it blank so the always-present
+ * default annotation set is used.
+ * </p>
  * 
  * @author D. Searsmith
  * 
@@ -93,23 +97,22 @@ import org.seasr.components.text.gate.util.GATEInitialiser;
 description = "<p><b>Overview</b>: <br>"
 		+ "Performs tokenization on a given GATE document. "
 		+ "Stores the token annotations in a annotation set "
-		+ "of the document.</p>" 
-		+ "<p><b>Detailed Description</b>: <br>"
+		+ "of the document.</p>" + "<p><b>Detailed Description</b>: <br>"
 		+ "Given a document object in the GATE framework, "
 		+ "this module will perform tokenization using the "
 		+ "given tokenizer and grammar rules. "
 		+ "The computed tokens (ie, annotations) will be "
-		+ "stored in an annotation set associated with the " 
-		+ "document.</p>"
+		+ "stored in an annotation set associated with the " + "document.</p>"
 		+ "<p>The particular annotation set to use can be "
 		+ "named by the user. "
 		+ "If the computed tokens are to be used by other "
 		+ "GATE modules, either use a name the other "
 		+ "modules will recognize, or leave it blank "
-		+ "so the always-present default annotation set " 
-		+ "is used.</p>",
+		+ "so the always-present default annotation set " + "is used.</p>",
 
-name = "GATE_Tokenizer", tags = "text gate token tokenize document")
+name = "GATE_Tokenizer", 
+tags = "text gate token tokenize document",
+dependency = { "GATE-Home-And-ANNIE-plugin.jar, gate.jar, jasper-compiler-jdt.jar"})
 public class GATE_Tokenizer implements ExecutableComponent {
 
 	// ==============
@@ -123,39 +126,41 @@ public class GATE_Tokenizer implements ExecutableComponent {
 
 	private DefaultTokeniser _toker = null;
 
+	private final String _resName = "GATE-Home-And-ANNIE-plugin_001";
+
 	// props
 
-	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
-	final static String DATA_PROPERTY_VERBOSE = "verbose";
+	@ComponentProperty(description = "Verbose output? An int value (0 = none, 1 = fine, 2 = finer).", name = "verbose", defaultValue = "0")
+	public final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	@ComponentProperty(description = "Encoding type of the document.", name = "document_encoding", defaultValue = "UTF-8")
-	final static String DATA_PROPERTY_DOCUMENT_ENCODING = "document_encoding";
+	public final static String DATA_PROPERTY_DOCUMENT_ENCODING = "document_encoding";
 
-	@ComponentProperty(description = "URL of the tokenizer rules file in GATE.", name = "tokenizer_rules_url", defaultValue = "gate:/creole/tokeniser/DefaultTokeniser.rules")
-	final static String DATA_PROPERTY_TOKENIZER_RULES_URL = "tokenizer_rules_url";
+	@ComponentProperty(description = "URL of the tokenizer rules file in GATE.", name = "tokenizer_rules_url", defaultValue = "/plugins/ANNIE/resources/tokeniser/DefaultTokeniser.rules")
+	public final static String DATA_PROPERTY_TOKENIZER_RULES_URL = "tokenizer_rules_url";
 
-	@ComponentProperty(description = "URL of the grammar rules file in GATE.", name = "grammar_rules_url", defaultValue = "")
-	final static String DATA_PROPERTY_GRAMMAR_RULES_URL = "grammar_rules_url";
+	@ComponentProperty(description = "URL of the grammar rules file in GATE.", name = "grammar_rules_url", defaultValue = "/plugins/ANNIE/resources/tokeniser/postprocess.jape")
+	public final static String DATA_PROPERTY_GRAMMAR_RULES_URL = "grammar_rules_url";
 
 	@ComponentProperty(description = "Name of the Annotation Set to find the tokens "
 			+ "in. Leave blank for default.", name = "annotation_set_name", defaultValue = "")
-	final static String DATA_PROPERTY_ANNOTATION_SET_NAME = "annotation_set_name";
+	public final static String DATA_PROPERTY_ANNOTATION_SET_NAME = "annotation_set_name";
 
 	@ComponentProperty(description = "Show progress?", name = "show_progress", defaultValue = "false")
-	final static String DATA_PROPERTY_SHOW_PROGRESS = "show_progress";
+	public final static String DATA_PROPERTY_SHOW_PROGRESS = "show_progress";
 
 	@ComponentProperty(description = "This property sets the number of documents to process "
 			+ "before a print statement is generated to announce "
 			+ "the total number records processed to that point.", name = "print_increment", defaultValue = "250")
-	final static String DATA_PROPERTY_PRINT_INCREMENT = "show_progprint_incrementress";
+	public final static String DATA_PROPERTY_PRINT_INCREMENT = "show_progprint_incrementress";
 
 	// io
 
-	@ComponentInput(description = "Input GATE document.", name = "document_in")
-	public final static String DATA_INPUT_DOC_IN = "gate_document_in";
+	@ComponentInput(description = "Input document.", name = "document_in")
+	public final static String DATA_INPUT_DOC_IN = "document_in";
 
-	@ComponentOutput(description = "Output GATE document.", name = "document_out")
-	public final static String DATA_OUTPUT_DOC_OUT = "gate_document_out";
+	@ComponentOutput(description = "Output document.", name = "document_out")
+	public final static String DATA_OUTPUT_DOC_OUT = "document_out";
 
 	// ================
 	// Constructor(s)
@@ -167,9 +172,9 @@ public class GATE_Tokenizer implements ExecutableComponent {
 	// Public Methods
 	// ================
 
-	public boolean getVerbose(ComponentContextProperties ccp) {
+	public int getVerbose(ComponentContextProperties ccp) {
 		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
-		return Boolean.parseBoolean(s.toLowerCase());
+		return Integer.parseInt(s);
 	}
 
 	public String getDocumentEncoding(ComponentContextProperties ccp) {
@@ -178,7 +183,7 @@ public class GATE_Tokenizer implements ExecutableComponent {
 	}
 
 	public String getTokenizerRulesURL(ComponentContextProperties ccp) {
-		String s = ccp.getProperty(getTokenizerRulesURL(ccp));
+		String s = ccp.getProperty(DATA_PROPERTY_TOKENIZER_RULES_URL);
 		return s;
 	}
 
@@ -205,52 +210,33 @@ public class GATE_Tokenizer implements ExecutableComponent {
 	public void initialize(ComponentContextProperties ccp)
 			throws ComponentExecutionException {
 		_logger.fine("initialize() called");
-		GATEInitialiser.init();
 
 		m_docsProcessed = 0;
 		m_start = System.currentTimeMillis();
 
 		try {
+			String fname = ((ComponentContext) ccp)
+					.getPublicResourcesDirectory();
+			if ((!(fname.endsWith("/"))) && (!(fname.endsWith("\\")))) {
+				fname += "/";
+			}
+			GATEInitialiser.init(fname, _resName, fname + _resName,
+					(ComponentContext) ccp);
+
 			FeatureMap params = Factory.newFeatureMap();
 			params.put(SentenceSplitter.SPLIT_ENCODING_PARAMETER_NAME,
 					getDocumentEncoding(ccp));
 
-			// try to convert the tokrules if it starts with gate:
-			String newTokRules = null;
-			String currTokRules = this.getTokenizerRulesURL(ccp);
-			if (currTokRules.startsWith(GATEInitialiser.GATE_PREFIX)) {
-				newTokRules = GATEInitialiser.getResourceURL(currTokRules);
-			}
-			if (newTokRules != null) {
-				_logger
-						.info("GATE_Tokenizer: gate: URLs are deprecated.  Converting "
-								+ currTokRules + " to " + newTokRules);
-				params.put(
-						DefaultTokeniser.DEF_TOK_TOKRULES_URL_PARAMETER_NAME,
-						newTokRules);
-			} else {
-				params.put(
-						DefaultTokeniser.DEF_TOK_TOKRULES_URL_PARAMETER_NAME,
-						currTokRules);
-			}
-			// try to convert the grammar rules if it starts with gate:
-			String newGramRules = null;
-			String currGramRules = this.getGrammarRulesURL(ccp);
-			if (currGramRules.startsWith(GATEInitialiser.GATE_PREFIX)) {
-				newGramRules = GATEInitialiser.getResourceURL(currGramRules);
-			}
-			if (newGramRules != null) {
-				_logger
-						.info("GATE_Tokenizer: gate: URLs are deprecated.  Converting "
-								+ currGramRules + " to " + newGramRules);
-				params.put(
-						DefaultTokeniser.DEF_TOK_GRAMRULES_URL_PARAMETER_NAME,
-						newGramRules);
-			} else {
-				params.put(
-						DefaultTokeniser.DEF_TOK_GRAMRULES_URL_PARAMETER_NAME,
-						currGramRules);
-			}
+			File prfile = new File(fname);
+			String currTokRules = GATEInitialiser.normalizePathForSEASR(prfile
+					.getCanonicalPath(), getTokenizerRulesURL(ccp), _resName);
+			params.put(DefaultTokeniser.DEF_TOK_TOKRULES_URL_PARAMETER_NAME,
+					currTokRules);
+			_logger.info("Tokenization Rules URL: " + currTokRules);
+
+			String currGramRules = GATEInitialiser.normalizePathForSEASR(prfile.getCanonicalPath(), getGrammarRulesURL(ccp), _resName);
+			params.put(DefaultTokeniser.DEF_TOK_GRAMRULES_URL_PARAMETER_NAME,
+					currGramRules);
 			_toker = (DefaultTokeniser) Factory.createResource(
 					"gate.creole.tokeniser.DefaultTokeniser", params);
 		} catch (Exception e) {
@@ -259,12 +245,12 @@ public class GATE_Tokenizer implements ExecutableComponent {
 			throw new ComponentExecutionException(e);
 		}
 	}
-
+	
 	public void dispose(ComponentContextProperties ccp) {
 		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
 
-		if (this.getVerbose(ccp)) {
+		if (getVerbose(ccp) > 0) {
 			System.out.println("\nEND EXEC -- GATE_Tokenizer -- Docs Ouput: "
 					+ m_docsProcessed + " in " + (end - m_start) / 1000
 					+ " seconds\n");
@@ -277,16 +263,37 @@ public class GATE_Tokenizer implements ExecutableComponent {
 	public void execute(ComponentContext ctx)
 			throws ComponentExecutionException, ComponentContextException {
 		try {
-			gate.Document doc = (gate.Document) ctx
+			
+			org.seasr.components.text.datatype.corpora.Document sdoc = (org.seasr.components.text.datatype.corpora.Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
-
+			if (!GATEInitialiser.checkIfGATEDocumentExists(sdoc)){
+				GATEInitialiser.addNewGATEDocToSEASRDoc(sdoc);
+			}
+			gate.Document doc = (gate.Document)sdoc.getAuxMap().get(org.seasr.components.text.datatype.corpora.DocumentConstants.GATE_DOCUMENT);
+		
 			_toker.setDocument(doc);
 			if (!(getAnnotationSetName(ctx).trim().length() == 0)) {
 				_toker.setAnnotationSetName(getAnnotationSetName(ctx));
 			}
 			_toker.execute();
 
-			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, doc);
+			if (getVerbose(ctx) > 2){
+				AnnotationSet annset = doc.getAnnotations();
+				_logger.info("Annotation set 'DEFAULT' contains " + annset.size() + " annotations.");
+				for(Annotation ann:annset){
+					_logger.info(doc.getContent().getContent(ann.getStartNode().getOffset(), ann.getEndNode().getOffset()).toString());
+				}
+				Set<String> anames = doc.getAnnotationSetNames();
+				for (String name:anames){
+					annset = doc.getAnnotations(name);
+					_logger.info("Annotation set " + name + " contains " + annset.size() + " annotations.");
+					for(Annotation ann:annset){
+						_logger.info(doc.getContent().getContent(ann.getStartNode().getOffset(), ann.getEndNode().getOffset()).toString());
+					}
+				}
+			}
+			
+			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, sdoc);
 			m_docsProcessed++;
 
 			if (this.getShowProgress(ctx)) {

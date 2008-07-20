@@ -45,6 +45,7 @@ package org.seasr.components.text.gate.ie;
 // ==============
 // Java Imports
 // ==============
+import java.io.File;
 import java.util.logging.Logger;
 
 // ===============
@@ -65,22 +66,26 @@ import org.meandre.core.ExecutableComponent;
 import org.seasr.components.text.gate.util.GATEInitialiser;
 
 /**
- * <p><b>Overview</b>: <br>
- * Runs the GATE Transducer on a given GATE document.</p>
- * <p><b>Detailed Description</b>: <br>
- * Given a document object in the GATE framework, 
- * this component will run the GATE Transducer on it. 
- * The found annotations will be stored in an annotation 
- * set associated with the document.</p>
- * <p>The transducer requires that the document 
- * be tokenized already. These tokens should be stored 
- * in the Input Annotation Set, which is left to blank 
- * by default.</p>
- * <p>The newly found annotations will be stored in 
- * the Output Annotation Set, also blank by default. 
- * Note that by leaving the Annotation Sets blank 
- * uses the default annotation set, which is probably 
- * easier to manage within a flow.</p>
+ * <p>
+ * <b>Overview</b>: <br>
+ * Runs the GATE Transducer on a given GATE document.
+ * </p>
+ * <p>
+ * <b>Detailed Description</b>: <br>
+ * Given a document object in the GATE framework, this component will run the
+ * GATE Transducer on it. The found annotations will be stored in an annotation
+ * set associated with the document.
+ * </p>
+ * <p>
+ * The transducer requires that the document be tokenized already. These tokens
+ * should be stored in the Input Annotation Set, which is left to blank by
+ * default.
+ * </p>
+ * <p>
+ * The newly found annotations will be stored in the Output Annotation Set, also
+ * blank by default. Note that by leaving the Annotation Sets blank uses the
+ * default annotation set, which is probably easier to manage within a flow.
+ * </p>
  * 
  * @author D. Searsmith
  * 
@@ -89,25 +94,24 @@ import org.seasr.components.text.gate.util.GATEInitialiser;
 @Component(creator = "Duane Searsmith",
 
 description = "<p><b>Overview</b>: <br>"
- + "Runs the GATE Transducer on a given GATE document.</p>"
- + "<p><b>Detailed Description</b>: <br>"
- + "Given a document object in the GATE framework, "
- + "this component will run the GATE Transducer on it. "
- + "The found annotations will be "
- + "stored in an annotation set associated with the "
- + "document.</p>"
- + "<p>The transducer requires that the document "
- + "be tokenized already. These tokens should be stored "
- + "in the Input Annotation Set, which is left to blank "
- + "by default.</p>"
- + "<p>The newly found annotations will be stored in "
- + "the Output Annotation Set, also blank by default."
- + "Note that by leaving the Annotation Sets blank "
- + "uses the default annotation set, which is probably "
- + "easier to manage within a flow.</p>",
+		+ "Runs the GATE Transducer on a given GATE document.</p>"
+		+ "<p><b>Detailed Description</b>: <br>"
+		+ "Given a document object in the GATE framework, "
+		+ "this component will run the GATE Transducer on it. "
+		+ "The found annotations will be "
+		+ "stored in an annotation set associated with the " + "document.</p>"
+		+ "<p>The transducer requires that the document "
+		+ "be tokenized already. These tokens should be stored "
+		+ "in the Input Annotation Set, which is left to blank "
+		+ "by default.</p>"
+		+ "<p>The newly found annotations will be stored in "
+		+ "the Output Annotation Set, also blank by default."
+		+ "Note that by leaving the Annotation Sets blank "
+		+ "uses the default annotation set, which is probably "
+		+ "easier to manage within a flow.</p>",
 
 name = "GATE_Transducer", tags = "text gate transducer document")
-public class GATE_Transducer implements ExecutableComponent {
+public class GATE_NE_Transducer implements ExecutableComponent {
 	// ==============
 	// Data Members
 	// ==============
@@ -118,49 +122,51 @@ public class GATE_Transducer implements ExecutableComponent {
 
 	private AbstractLanguageAnalyser _trans = null;
 
+	private final String _resName = "GATE-Home-And-ANNIE-plugin_001";
+
 	// props
 
-	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
-	final static String DATA_PROPERTY_VERBOSE = "verbose";
+	@ComponentProperty(description = "Verbose output? An int value (0 = none, 1 = fine, 2 = finer).", name = "verbose", defaultValue = "0")
+	public final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	@ComponentProperty(description = "Encoding type of the document.", name = "document_encoding", defaultValue = "UTF-8")
-	final static String DATA_PROPERTY_DOCUMENT_ENCODING = "document_encoding";
+	public final static String DATA_PROPERTY_DOCUMENT_ENCODING = "document_encoding";
 
 	@ComponentProperty(description = "URL of grammar rules file in GATE.", name = "grammar_rules_url", defaultValue = "gate:/creole/transducer/NE/main.jape")
-	final static String DATA_PROPERTY_GRAMMAR_RULES_URL = "grammar_rules_url";
+	public final static String DATA_PROPERTY_GRAMMAR_RULES_URL = "grammar_rules_url";
 
 	@ComponentProperty(description = "Name of the Annotation Set to find the tokens in.  "
 			+ "Leave blank for default set.", name = "token_annotation_set_name", defaultValue = "")
-	final static String DATA_PROPERTY_TOKEN_ANNOTATION_SET_NAME = "token_annotation_set_name";
+	public final static String DATA_PROPERTY_TOKEN_ANNOTATION_SET_NAME = "token_annotation_set_name";
 
 	@ComponentProperty(description = "Name of the Transduction Annotation Set to store rsults in. "
 			+ " Leave blank for default.", name = "trans_annotation_set_name", defaultValue = "")
-	final static String DATA_PROPERTY_TRANS_ANNOTATION_SET_NAME = "trans_annotation_set_name";
+	public final static String DATA_PROPERTY_TRANS_ANNOTATION_SET_NAME = "trans_annotation_set_name";
 
 	@ComponentProperty(description = "Taransducer Java class name.", name = "trans_class_name", defaultValue = "gate.creole.Transducer")
-	final static String DATA_PROPERTY_TRANS_CLASS_NAME = "trans_class_name";
+	public final static String DATA_PROPERTY_TRANS_CLASS_NAME = "trans_class_name";
 
 	// io
 
-	@ComponentInput(description = "Input GATE document.", name = "document_in")
-	public final static String DATA_INPUT_DOC_IN = "gate_document_in";
+	@ComponentInput(description = "Input document.", name = "document_in")
+	public final static String DATA_INPUT_DOC_IN = "document_in";
 
-	@ComponentOutput(description = "Output GATE document.", name = "document_out")
-	public final static String DATA_OUTPUT_DOC_OUT = "gate_document_out";
+	@ComponentOutput(description = "Output document.", name = "document_out")
+	public final static String DATA_OUTPUT_DOC_OUT = "document_out";
 
 	// ================
 	// Constructor(s)
 	// ================
-	public GATE_Transducer() {
+	public GATE_NE_Transducer() {
 	}
 
 	// ================
 	// Public Methods
 	// ================
 
-	public boolean getVerbose(ComponentContextProperties ccp) {
+	public int getVerbose(ComponentContextProperties ccp) {
 		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
-		return Boolean.parseBoolean(s.toLowerCase());
+		return Integer.parseInt(s);
 	}
 
 	public String getDocumentEncoding(ComponentContextProperties ccp) {
@@ -191,32 +197,28 @@ public class GATE_Transducer implements ExecutableComponent {
 	public void initialize(ComponentContextProperties ccp)
 			throws ComponentExecutionException {
 		_logger.fine("initialize() called");
-		GATEInitialiser.init();
 
 		m_docsProcessed = 0;
 		m_start = System.currentTimeMillis();
 
 		try {
+			String fname = ((ComponentContext) ccp)
+					.getPublicResourcesDirectory();
+			if ((!(fname.endsWith("/"))) && (!(fname.endsWith("\\")))) {
+				fname += "/";
+			}
+			GATEInitialiser.init(fname, _resName, fname + _resName,
+					(ComponentContext) ccp);
+			File prfile = new File(fname);
+
 			FeatureMap params = Factory.newFeatureMap();
 
 			params.put(Transducer.TRANSD_ENCODING_PARAMETER_NAME, this
 					.getDocumentEncoding(ccp));
 
-			String newGrammarUrl = null;
 			String currGrammarURL = this.getGrammarRulesURL(ccp);
-			if (currGrammarURL.startsWith(GATEInitialiser.GATE_PREFIX)) {
-				newGrammarUrl = GATEInitialiser.getResourceURL(currGrammarURL);
-			}
-			if (newGrammarUrl != null) {
-				System.out
-						.println("GATE_Transducer: gate: URLs are deprecated.  Converting "
-								+ currGrammarURL + " to " + newGrammarUrl);
-				params.put(Transducer.TRANSD_GRAMMAR_URL_PARAMETER_NAME,
-						newGrammarUrl);
-			} else {
 				params.put(Transducer.TRANSD_GRAMMAR_URL_PARAMETER_NAME,
 						currGrammarURL);
-			}
 			params.put(Transducer.TRANSD_INPUT_AS_PARAMETER_NAME, this
 					.getTokenAnnotationSetName(ccp));
 			params.put(Transducer.TRANSD_OUTPUT_AS_PARAMETER_NAME, this
@@ -235,8 +237,8 @@ public class GATE_Transducer implements ExecutableComponent {
 		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
 
-		if (this.getVerbose(ccp)) {
-			System.out.println("\nEND EXEC -- GATE_Transducer -- Docs Ouput: "
+		if (this.getVerbose(ccp) > 0) {
+			_logger.info("\nEND EXEC -- GATE_Transducer -- Docs Ouput: "
 					+ m_docsProcessed + " in " + (end - m_start) / 1000
 					+ " seconds\n");
 		}
@@ -248,16 +250,23 @@ public class GATE_Transducer implements ExecutableComponent {
 	public void execute(ComponentContext ctx)
 			throws ComponentExecutionException, ComponentContextException {
 		try {
-			gate.Document doc = (gate.Document) ctx
+			org.seasr.components.text.datatype.corpora.Document sdoc = (org.seasr.components.text.datatype.corpora.Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
+			if (!GATEInitialiser.checkIfGATEDocumentExists(sdoc)) {
+				GATEInitialiser.addNewGATEDocToSEASRDoc(sdoc);
+			}
+			gate.Document doc = (gate.Document) sdoc
+					.getAuxMap()
+					.get(
+							org.seasr.components.text.datatype.corpora.DocumentConstants.GATE_DOCUMENT);
 
 			_trans.setDocument(doc);
 			_trans.execute();
 
-			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, doc);
+			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, sdoc);
 			m_docsProcessed++;
 
-			if (this.getVerbose(ctx)) {
+			if (this.getVerbose(ctx) > 0) {
 				if (Math.IEEEremainder(m_docsProcessed, 250) == 0) {
 					System.out.println("GATE_Transducer -- Docs Processed: "
 							+ m_docsProcessed);
