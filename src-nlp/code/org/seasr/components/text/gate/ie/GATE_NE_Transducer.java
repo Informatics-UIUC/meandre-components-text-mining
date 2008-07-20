@@ -110,13 +110,13 @@ description = "<p><b>Overview</b>: <br>"
 		+ "uses the default annotation set, which is probably "
 		+ "easier to manage within a flow.</p>",
 
-name = "GATE_Transducer", tags = "text gate transducer document")
+name = "GATE_NE_Transducer", tags = "text gate transducer document", dependency = { "GATE-Home-And-ANNIE-plugin.jar, gate.jar, jasper-compiler-jdt.jar" })
 public class GATE_NE_Transducer implements ExecutableComponent {
 	// ==============
 	// Data Members
 	// ==============
 
-	private static Logger _logger = Logger.getLogger("GATE_Transducer");
+	private static Logger _logger = Logger.getLogger("GATE_NE_Transducer");
 	private int m_docsProcessed = 0;
 	private long m_start = 0;
 
@@ -132,7 +132,7 @@ public class GATE_NE_Transducer implements ExecutableComponent {
 	@ComponentProperty(description = "Encoding type of the document.", name = "document_encoding", defaultValue = "UTF-8")
 	public final static String DATA_PROPERTY_DOCUMENT_ENCODING = "document_encoding";
 
-	@ComponentProperty(description = "URL of grammar rules file in GATE.", name = "grammar_rules_url", defaultValue = "gate:/creole/transducer/NE/main.jape")
+	@ComponentProperty(description = "URL of grammar rules file in GATE.", name = "grammar_rules_url", defaultValue = "/plugins/ANNIE/resources/NE/main.jape")
 	public final static String DATA_PROPERTY_GRAMMAR_RULES_URL = "grammar_rules_url";
 
 	@ComponentProperty(description = "Name of the Annotation Set to find the tokens in.  "
@@ -216,9 +216,11 @@ public class GATE_NE_Transducer implements ExecutableComponent {
 			params.put(Transducer.TRANSD_ENCODING_PARAMETER_NAME, this
 					.getDocumentEncoding(ccp));
 
-			String currGrammarURL = this.getGrammarRulesURL(ccp);
-				params.put(Transducer.TRANSD_GRAMMAR_URL_PARAMETER_NAME,
-						currGrammarURL);
+			String currGrammarURL = GATEInitialiser.normalizePathForSEASR(
+					prfile.getCanonicalPath(), getGrammarRulesURL(ccp),
+					_resName);
+			params.put(Transducer.TRANSD_GRAMMAR_URL_PARAMETER_NAME,
+					currGrammarURL);
 			params.put(Transducer.TRANSD_INPUT_AS_PARAMETER_NAME, this
 					.getTokenAnnotationSetName(ccp));
 			params.put(Transducer.TRANSD_OUTPUT_AS_PARAMETER_NAME, this
@@ -227,7 +229,7 @@ public class GATE_NE_Transducer implements ExecutableComponent {
 			_trans = (AbstractLanguageAnalyser) Factory.createResource(this
 					.getTransClassName(ccp), params);
 		} catch (Exception e) {
-			_logger.info("GATE_Transducer.initialise() -- " + e);
+			_logger.info("GATE_NE_Transducer.initialise() -- " + e);
 			e.printStackTrace();
 			throw new ComponentExecutionException(e);
 		}
@@ -238,7 +240,7 @@ public class GATE_NE_Transducer implements ExecutableComponent {
 		long end = System.currentTimeMillis();
 
 		if (this.getVerbose(ccp) > 0) {
-			_logger.info("\nEND EXEC -- GATE_Transducer -- Docs Ouput: "
+			_logger.info("\nEND EXEC -- GATE_NE_Transducer -- Docs Ouput: "
 					+ m_docsProcessed + " in " + (end - m_start) / 1000
 					+ " seconds\n");
 		}
@@ -259,23 +261,45 @@ public class GATE_NE_Transducer implements ExecutableComponent {
 					.getAuxMap()
 					.get(
 							org.seasr.components.text.datatype.corpora.DocumentConstants.GATE_DOCUMENT);
-
+			int before = doc.getAnnotations().size();
 			_trans.setDocument(doc);
 			_trans.execute();
 
+			if (getVerbose(ctx) > 1) {
+				AnnotationSet annset = doc.getAnnotations().get("Lookup");
+				_logger.info("Annotation set 'DEFAULT' contains "
+						+ annset.size() + " annotations.");
+				for (Annotation ann : annset) {
+					_logger.info(ann.toString());
+					_logger.info(doc.getContent().getContent(
+							ann.getStartNode().getOffset(),
+							ann.getEndNode().getOffset()).toString());
+				}
+
+			}
+
+			if (getVerbose(ctx) > 0) {
+				_logger.info("GATE_NE_Transducer::Before run count of annotations in DEFAULT: "
+						+ before);
+				int after = doc.getAnnotations().size();
+				_logger.info("GATE_NE_Transducer::After run count of annotations in DEFAULT: "
+						+ after);
+				_logger.info("GATE_NE_Transducer::Net addition to DEFAULT: "
+						+ (after - before));
+			}
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, sdoc);
 			m_docsProcessed++;
 
 			if (this.getVerbose(ctx) > 0) {
 				if (Math.IEEEremainder(m_docsProcessed, 250) == 0) {
-					System.out.println("GATE_Transducer -- Docs Processed: "
+					System.out.println("GATE_NE_Transducer -- Docs Processed: "
 							+ m_docsProcessed);
 				}
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: GATE_Transducer.execute()");
+			_logger.severe("ERROR: GATE_NE_Transducer.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}

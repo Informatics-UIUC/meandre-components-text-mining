@@ -122,14 +122,16 @@ description = "<p><b>Overview</b>: <br>"
 		+ "only if the following components are executed: "
 		+ "Gazetteer, Tokenizer, SentenceSplitter, Transducer, OrthoMatcher</p>",
 
-name = "GATE_Coreferencer", tags = "text gate coreference document")
-public class GATE_Coreferencer implements ExecutableComponent {
+name = "GATE_PronominalCoreferencer", 
+tags = "text gate coreference document",
+dependency = { "GATE-Home-And-ANNIE-plugin.jar, gate.jar" })
+public class GATE_PronominalCoreferencer implements ExecutableComponent {
 
 	// ==============
 	// Data Members
 	// ==============
 
-	private static Logger _logger = Logger.getLogger("GATE_Coreferencer");
+	private static Logger _logger = Logger.getLogger("GATE_PronominalCoreferencer");
 
 	private int m_docsProcessed = 0;
 	private long m_start = 0;
@@ -161,7 +163,7 @@ public class GATE_Coreferencer implements ExecutableComponent {
 	// ================
 	// Constructor(s)
 	// ================
-	public GATE_Coreferencer() {
+	public GATE_PronominalCoreferencer() {
 	}
 
 	// ================
@@ -208,7 +210,7 @@ public class GATE_Coreferencer implements ExecutableComponent {
 					"gate.creole.coref.Coreferencer", params);
 			m_coref.setResolveIt(Boolean.valueOf(getResolveIt(ccp)));
 		} catch (Exception e) {
-			_logger.info("GATE_Coreferencer.initialise() -- " + e);
+			_logger.info("GATE_PronominalCoreferencer.initialise() -- " + e);
 			e.printStackTrace();
 			throw new ComponentExecutionException(e);
 		}
@@ -219,7 +221,7 @@ public class GATE_Coreferencer implements ExecutableComponent {
 		long end = System.currentTimeMillis();
 
 		if (getVerbose(ccp) > 0) {
-			_logger.info("\nEND EXEC -- GATE_Coreferencer-- Docs Ouput: "
+			_logger.info("\nEND EXEC -- GATE_PronominalCoreferencer-- Docs Ouput: "
 					+ m_docsProcessed + " in " + (end - m_start) / 1000
 					+ " seconds\n");
 		}
@@ -241,22 +243,46 @@ public class GATE_Coreferencer implements ExecutableComponent {
 					.get(
 							org.seasr.components.text.datatype.corpora.DocumentConstants.GATE_DOCUMENT);
 
+			int before = doc.getAnnotations().size();
+
 			m_coref.setDocument(doc);
 			m_coref.execute();
+			if (getVerbose(ctx) > 1) {
+				AnnotationSet annset = doc.getAnnotations().get("Lookup");
+				_logger.info("Annotation set 'DEFAULT' contains "
+						+ annset.size() + " annotations.");
+				for (Annotation ann : annset) {
+					_logger.info(ann.toString());
+					_logger.info(doc.getContent().getContent(
+							ann.getStartNode().getOffset(),
+							ann.getEndNode().getOffset()).toString());
+				}
+
+			}
+
+			if (getVerbose(ctx) > 0) {
+				_logger.info("Before run count of annotations in DEFAULT: "
+						+ before);
+				int after = doc.getAnnotations().size();
+				_logger.info("After run count of annotations in DEFAULT: "
+						+ after);
+				_logger.info("Net addition to DEFAULT: "
+						+ (after - before));
+			}
 
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, sdoc);
 			m_docsProcessed++;
 
 			if (getVerbose(ctx) > 0) {
 				if (Math.IEEEremainder(m_docsProcessed, 10) == 0) {
-					System.out.println("GATE_Coreferencer -- Docs Processed: "
+					System.out.println("GATE_PronominalCoreferencer -- Docs Processed: "
 							+ m_docsProcessed);
 				}
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: GATE_Coreferencer.execute()");
+			_logger.severe("ERROR: GATE_PronominalCoreferencer.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}

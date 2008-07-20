@@ -115,7 +115,9 @@ description = "<p><b>Overview</b>: <br>"
 		+ "preceding this one in the itinerary, the annotation "
 		+ "set name must agree with theirs.</p>",
 
-name = "GATE_Gazetteer", tags = "text gate gazetteer document", dependency = { "GATE-Home-And-ANNIE-plugin.jar,gate.jar" })
+name = "GATE_Gazetteer", 
+tags = "text gate gazetteer document", 
+dependency = { "GATE-Home-And-ANNIE-plugin.jar, gate.jar" })
 public class GATE_Gazetteer implements ExecutableComponent {
 	// ==============
 	// Data Members
@@ -268,6 +270,7 @@ public class GATE_Gazetteer implements ExecutableComponent {
 				_logger.info("Annotation set 'DEFAULT' contains "
 						+ annset.size() + " annotations.");
 				for (Annotation ann : annset) {
+					_logger.info(ann.toString());
 					_logger.info(doc.getContent().getContent(
 							ann.getStartNode().getOffset(),
 							ann.getEndNode().getOffset()).toString());
