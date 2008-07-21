@@ -70,6 +70,7 @@ import org.meandre.core.ComponentExecutionException;
 import org.meandre.core.ExecutableComponent;
 import org.seasr.components.text.gate.util.GATEInitialiser;
 import org.seasr.components.text.gate.util.GATEUtils;
+import org.meandre.components.util.md5.ObjectSerializer_MD5_ID_Generator;
 
 /**
  * <p>
@@ -358,7 +359,9 @@ public class GATE_Tokenizer implements ExecutableComponent {
 
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, sdoc);
 			m_docsProcessed++;
-
+			
+			//==================================================================================
+			
 			if (this.getShowProgress(ctx)) {
 				if (Math.IEEEremainder(m_docsProcessed, this
 						.getPrintIncrement(ctx)) == 0) {
