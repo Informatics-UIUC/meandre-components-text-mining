@@ -114,7 +114,7 @@ description = "<p><b>Overview</b>: <br>"
 		+ "uses the default annotation set, which is probably "
 		+ "easier to manage within a flow.</p>",
 
-name = "GATE_NE_Transducer", tags = "text gate transducer document", dependency = { "GATE-Home-And-ANNIE-plugin.jar, gate.jar, jasper-compiler-jdt.jar" })
+name = "GATE_NE_Transducer", tags = "text gate transducer document", dependency = { "GATE-Home-And-ANNIE-plugin.jar", "gate.jar", "jasper-compiler-jdt.jar" })
 public class GATE_NE_Transducer implements ExecutableComponent {
 	// ==============
 	// Data Members

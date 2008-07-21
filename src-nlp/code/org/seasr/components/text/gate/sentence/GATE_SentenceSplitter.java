@@ -115,7 +115,7 @@ description = "<p><b>Overview</b>: <br>"
 
 name = "GATE_SentenceSplitter", 
 tags = "text gate sentence splitter document",
-dependency = { "GATE-Home-And-ANNIE-plugin.jar, gate.jar" })
+dependency = { "GATE-Home-And-ANNIE-plugin.jar", "gate.jar" })
 public class GATE_SentenceSplitter implements ExecutableComponent {
 	// ==============
 	// Data Members
