@@ -67,6 +67,7 @@ import org.meandre.core.ComponentContextProperties;
 import org.meandre.core.ComponentExecutionException;
 import org.meandre.core.ExecutableComponent;
 import org.seasr.components.text.gate.util.GATEInitialiser;
+import org.seasr.components.text.gate.util.GATEUtils;
 
 /**
  * <p>
@@ -219,7 +220,7 @@ public class GATE_NE_Transducer implements ExecutableComponent {
 			params.put(Transducer.TRANSD_ENCODING_PARAMETER_NAME, this
 					.getDocumentEncoding(ccp));
 
-			String currGrammarURL = GATEInitialiser.normalizePathForSEASR(
+			String currGrammarURL = GATEUtils.normalizePathForSEASR(
 					prfile.getCanonicalPath(), getGrammarRulesURL(ccp),
 					_resName);
 			params.put(Transducer.TRANSD_GRAMMAR_URL_PARAMETER_NAME,
@@ -257,8 +258,8 @@ public class GATE_NE_Transducer implements ExecutableComponent {
 		try {
 			org.seasr.components.text.datatype.corpora.Document sdoc = (org.seasr.components.text.datatype.corpora.Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
-			if (!GATEInitialiser.checkIfGATEDocumentExists(sdoc)) {
-				GATEInitialiser.addNewGATEDocToSEASRDoc(sdoc);
+			if (!GATEUtils.checkIfGATEDocumentExists(sdoc)) {
+				GATEUtils.addNewGATEDocToSEASRDoc(sdoc);
 			}
 			gate.Document doc = (gate.Document) sdoc
 					.getAuxMap()

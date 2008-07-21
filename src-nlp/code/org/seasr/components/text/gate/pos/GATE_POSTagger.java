@@ -69,6 +69,7 @@ import org.meandre.core.ComponentContextProperties;
 import org.meandre.core.ComponentExecutionException;
 import org.meandre.core.ExecutableComponent;
 import org.seasr.components.text.gate.util.GATEInitialiser;
+import org.seasr.components.text.gate.util.GATEUtils;
 
 /**
  * <p>
@@ -220,11 +221,11 @@ public class GATE_POSTagger implements ExecutableComponent {
 
 			FeatureMap params = Factory.newFeatureMap();
 
-			String currLexURL = GATEInitialiser.normalizePathForSEASR(prfile
+			String currLexURL = GATEUtils.normalizePathForSEASR(prfile
 					.getCanonicalPath(), getLexiconURL(ccp), _resName);
 			params.put(POSTagger.TAG_LEXICON_URL_PARAMETER_NAME, currLexURL);
 
-			String currRuleURL = GATEInitialiser.normalizePathForSEASR(prfile
+			String currRuleURL = GATEUtils.normalizePathForSEASR(prfile
 					.getCanonicalPath(), getPoSRulesURL(ccp), _resName);
 			params.put(POSTagger.TAG_RULES_URL_PARAMETER_NAME, currRuleURL);
 
@@ -260,8 +261,8 @@ public class GATE_POSTagger implements ExecutableComponent {
 		try {
 			org.seasr.components.text.datatype.corpora.Document sdoc = (org.seasr.components.text.datatype.corpora.Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
-			if (!GATEInitialiser.checkIfGATEDocumentExists(sdoc)) {
-				GATEInitialiser.addNewGATEDocToSEASRDoc(sdoc);
+			if (!GATEUtils.checkIfGATEDocumentExists(sdoc)) {
+				GATEUtils.addNewGATEDocToSEASRDoc(sdoc);
 			}
 			gate.Document doc = (gate.Document) sdoc
 					.getAuxMap()

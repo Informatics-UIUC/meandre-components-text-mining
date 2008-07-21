@@ -67,6 +67,7 @@ import org.meandre.core.ComponentContextProperties;
 import org.meandre.core.ComponentExecutionException;
 import org.meandre.core.ExecutableComponent;
 import org.seasr.components.text.gate.util.GATEInitialiser;
+import org.seasr.components.text.gate.util.GATEUtils;
 
 /**
  * <p>
@@ -217,12 +218,12 @@ public class GATE_SentenceSplitter implements ExecutableComponent {
 
 			// try to convert a gate: url
 			File prfile = new File(fname);
-			String currGazURL = GATEInitialiser.normalizePathForSEASR(prfile
+			String currGazURL = GATEUtils.normalizePathForSEASR(prfile
 					.getCanonicalPath(), getGazetteerListURL(ccp), _resName);
 			params.put(SentenceSplitter.SPLIT_GAZ_URL_PARAMETER_NAME,
 					currGazURL);
 
-			String currTransURL = GATEInitialiser.normalizePathForSEASR(prfile
+			String currTransURL = GATEUtils.normalizePathForSEASR(prfile
 					.getCanonicalPath(), getTransducerRulesURL(ccp), _resName);
 			params.put(SentenceSplitter.SPLIT_TRANSD_URL_PARAMETER_NAME,
 					currTransURL);
@@ -261,8 +262,8 @@ public class GATE_SentenceSplitter implements ExecutableComponent {
 		try {
 			org.seasr.components.text.datatype.corpora.Document sdoc = (org.seasr.components.text.datatype.corpora.Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
-			if (!GATEInitialiser.checkIfGATEDocumentExists(sdoc)) {
-				GATEInitialiser.addNewGATEDocToSEASRDoc(sdoc);
+			if (!GATEUtils.checkIfGATEDocumentExists(sdoc)) {
+				GATEUtils.addNewGATEDocToSEASRDoc(sdoc);
 			}
 			gate.Document doc = (gate.Document) sdoc
 					.getAuxMap()

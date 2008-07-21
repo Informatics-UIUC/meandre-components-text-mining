@@ -68,6 +68,7 @@ import org.meandre.core.ComponentContextProperties;
 import org.meandre.core.ComponentExecutionException;
 import org.meandre.core.ExecutableComponent;
 import org.seasr.components.text.gate.util.GATEInitialiser;
+import org.seasr.components.text.gate.util.GATEUtils;
 
 /**
  * <p>
@@ -214,7 +215,7 @@ public class GATE_Gazetteer implements ExecutableComponent {
 
 			FeatureMap params = Factory.newFeatureMap();
 
-			String currGazDefnList = GATEInitialiser.normalizePathForSEASR(
+			String currGazDefnList = GATEUtils.normalizePathForSEASR(
 					prfile.getCanonicalPath(), getGazetteerDefnListURL(ccp),
 					_resName);
 			params.put(DefaultGazetteer.DEF_GAZ_LISTS_URL_PARAMETER_NAME,
@@ -253,8 +254,8 @@ public class GATE_Gazetteer implements ExecutableComponent {
 		try {
 			org.seasr.components.text.datatype.corpora.Document sdoc = (org.seasr.components.text.datatype.corpora.Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
-			if (!GATEInitialiser.checkIfGATEDocumentExists(sdoc)) {
-				GATEInitialiser.addNewGATEDocToSEASRDoc(sdoc);
+			if (!GATEUtils.checkIfGATEDocumentExists(sdoc)) {
+				GATEUtils.addNewGATEDocToSEASRDoc(sdoc);
 			}
 			gate.Document doc = (gate.Document) sdoc
 					.getAuxMap()

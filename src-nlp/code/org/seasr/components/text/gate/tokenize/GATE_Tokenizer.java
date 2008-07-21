@@ -69,6 +69,7 @@ import org.meandre.core.ComponentContextProperties;
 import org.meandre.core.ComponentExecutionException;
 import org.meandre.core.ExecutableComponent;
 import org.seasr.components.text.gate.util.GATEInitialiser;
+import org.seasr.components.text.gate.util.GATEUtils;
 
 /**
  * <p>
@@ -230,13 +231,13 @@ public class GATE_Tokenizer implements ExecutableComponent {
 					getDocumentEncoding(ccp));
 
 			File prfile = new File(fname);
-			String currTokRules = GATEInitialiser.normalizePathForSEASR(prfile
+			String currTokRules = GATEUtils.normalizePathForSEASR(prfile
 					.getCanonicalPath(), getTokenizerRulesURL(ccp), _resName);
 			params.put(DefaultTokeniser.DEF_TOK_TOKRULES_URL_PARAMETER_NAME,
 					currTokRules);
 			_logger.info("Tokenization Rules URL: " + currTokRules);
 
-			String currGramRules = GATEInitialiser.normalizePathForSEASR(prfile.getCanonicalPath(), getGrammarRulesURL(ccp), _resName);
+			String currGramRules = GATEUtils.normalizePathForSEASR(prfile.getCanonicalPath(), getGrammarRulesURL(ccp), _resName);
 			params.put(DefaultTokeniser.DEF_TOK_GRAMRULES_URL_PARAMETER_NAME,
 					currGramRules);
 			_toker = (DefaultTokeniser) Factory.createResource(
@@ -268,8 +269,8 @@ public class GATE_Tokenizer implements ExecutableComponent {
 			
 			org.seasr.components.text.datatype.corpora.Document sdoc = (org.seasr.components.text.datatype.corpora.Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
-			if (!GATEInitialiser.checkIfGATEDocumentExists(sdoc)){
-				GATEInitialiser.addNewGATEDocToSEASRDoc(sdoc);
+			if (!GATEUtils.checkIfGATEDocumentExists(sdoc)){
+				GATEUtils.addNewGATEDocToSEASRDoc(sdoc);
 			}
 			gate.Document doc = (gate.Document)sdoc.getAuxMap().get(org.seasr.components.text.datatype.corpora.DocumentConstants.GATE_DOCUMENT);
 
