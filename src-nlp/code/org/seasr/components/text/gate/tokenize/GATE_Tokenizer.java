@@ -47,6 +47,8 @@ package org.seasr.components.text.gate.tokenize;
 // ==============
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -112,7 +114,7 @@ description = "<p><b>Overview</b>: <br>"
 
 name = "GATE_Tokenizer", 
 tags = "text gate token tokenize document",
-dependency = { "GATE-Home-And-ANNIE-plugin.jar, gate.jar, jasper-compiler-jdt.jar"})
+dependency = {"GATE-Home-And-ANNIE-plugin.jar, gate.jar, jasper-compiler-jdt.jar"})
 public class GATE_Tokenizer implements ExecutableComponent {
 
 	// ==============
@@ -270,14 +272,26 @@ public class GATE_Tokenizer implements ExecutableComponent {
 				GATEInitialiser.addNewGATEDocToSEASRDoc(sdoc);
 			}
 			gate.Document doc = (gate.Document)sdoc.getAuxMap().get(org.seasr.components.text.datatype.corpora.DocumentConstants.GATE_DOCUMENT);
-		
+
+			int before = -1;
+			Map <String, Integer> sMap = null;
+			if (getVerbose(ctx) > 0) {
+				before = doc.getAnnotations().size();
+				sMap = new HashMap<String, Integer>();
+				Set<String> sNames = doc.getAnnotationSetNames();
+				for (String s : sNames) {
+					AnnotationSet annset = doc.getAnnotations().get(s);
+					sMap.put(s, annset.size());
+				}
+			}
+
 			_toker.setDocument(doc);
 			if (!(getAnnotationSetName(ctx).trim().length() == 0)) {
 				_toker.setAnnotationSetName(getAnnotationSetName(ctx));
 			}
 			_toker.execute();
 
-			if (getVerbose(ctx) > 2){
+			if (getVerbose(ctx) > 1){
 				AnnotationSet annset = doc.getAnnotations();
 				_logger.info("Annotation set 'DEFAULT' contains " + annset.size() + " annotations.");
 				for(Annotation ann:annset){
@@ -292,7 +306,55 @@ public class GATE_Tokenizer implements ExecutableComponent {
 					}
 				}
 			}
-			
+
+			if (getVerbose(ctx) > 0) {
+				_logger
+						.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+				_logger.info("Annotation set 'DEFAULT'");
+				_logger.info("Before run count of annotations in DEFAULT: "
+						+ before);
+				int after = doc.getAnnotations().size();
+				_logger.info("After run count of annotations in DEFAULT: "
+						+ after);
+				_logger.info("Net addition to DEFAULT: " + (after - before));
+				_logger
+						.info("-------------------------TYPES----------------------------------------------");
+				Set<String> types = doc.getAnnotations().getAllTypes();
+				_logger.info("Number of types in 'DEFAULT': "
+						+ types.size());
+				for (String ts : types) {
+					_logger.info(ts);
+				}
+				_logger
+						.info("============================================================================");
+				Set<String> sNames = doc.getAnnotationSetNames();
+				for (String s : sNames) {
+					AnnotationSet annset = doc.getAnnotations().get(s);
+					before = sMap.get(s);
+					after = annset.size();
+					_logger.info("Annotation set '" + s + "'");
+					_logger.info("Before run count of annotations in '" + s
+							+ "': " + before);
+					_logger.info("After run count of annotations in '" + s
+							+ "': " + after);
+					_logger
+							.info("Net addition to DEFAULT: "
+									+ (after - before));
+					_logger
+							.info("-------------------------TYPES----------------------------------------------");
+					types = annset.getAllTypes();
+					_logger.info("Number of types in '" + s + "': "
+							+ types.size());
+					for (String ts : types) {
+						_logger.info(ts);
+					}
+					_logger
+							.info("============================================================================");
+				}
+				_logger
+						.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+			}
+
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, sdoc);
 			m_docsProcessed++;
 

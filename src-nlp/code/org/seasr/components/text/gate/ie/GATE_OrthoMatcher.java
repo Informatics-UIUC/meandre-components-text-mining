@@ -45,7 +45,6 @@ package org.seasr.components.text.gate.ie;
 // ==============
 // Java Imports
 // ==============
-import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -56,9 +55,7 @@ import org.meandre.annotations.Component;
 // ===============
 import gate.*;
 import gate.creole.orthomatcher.*;
-import gate.creole.splitter.SentenceSplitter;
 
-import org.meandre.annotations.Component;
 import org.meandre.annotations.ComponentInput;
 import org.meandre.annotations.ComponentOutput;
 import org.meandre.annotations.ComponentProperty;
@@ -124,7 +121,7 @@ description = "<p><b>Overview</b>: <br>"
 		+ "<p>The types of annotations to process on can also be "
 		+ "named by the user.  " + "Enter the types delimited by commas.</p>",
 
-name = "GATE_OrthoMatcher", tags = "text gate orthomatcher document")
+name = "GATE_OrthoMatcher", tags = "text gate orthomatcher document", dependency = { "GATE-Home-And-ANNIE-plugin.jar, gate.jar" })
 public class GATE_OrthoMatcher implements ExecutableComponent {
 	// ==============
 	// Data Members
@@ -232,7 +229,7 @@ public class GATE_OrthoMatcher implements ExecutableComponent {
 			GATEInitialiser.init(fname, _resName, fname + _resName,
 					(ComponentContext) ccp);
 
-			ArrayList<String> annTypes = new ArrayList();
+			ArrayList<String> annTypes = new ArrayList<String>();
 
 			StringTokenizer tok = new StringTokenizer(this
 					.getEntityAnnotationTypes(ccp), ",");
@@ -291,8 +288,82 @@ public class GATE_OrthoMatcher implements ExecutableComponent {
 					.get(
 							org.seasr.components.text.datatype.corpora.DocumentConstants.GATE_DOCUMENT);
 
+			int before = -1;
+			Map<String, Integer> sMap = null;
+			if (getVerbose(ctx) > 0) {
+				before = doc.getAnnotations().size();
+				sMap = new HashMap<String, Integer>();
+				Set<String> sNames = doc.getAnnotationSetNames();
+				for (String s : sNames) {
+					AnnotationSet annset = doc.getAnnotations().get(s);
+					sMap.put(s, annset.size());
+				}
+			}
+
 			_matcher.setDocument(doc);
 			_matcher.execute();
+
+			if (getVerbose(ctx) > 1) {
+				AnnotationSet annset = doc.getAnnotations().get("Lookup");
+				_logger
+						.info("GATE_OrthoMatcher::Annotation set 'DEFAULT' contains "
+								+ annset.size() + " annotations.");
+				for (Annotation ann : annset) {
+					_logger.info(ann.toString());
+					_logger.info(doc.getContent().getContent(
+							ann.getStartNode().getOffset(),
+							ann.getEndNode().getOffset()).toString());
+				}
+
+			}
+
+			if (getVerbose(ctx) > 0) {
+				_logger
+						.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+				_logger.info("Annotation set 'DEFAULT'");
+				_logger.info("Before run count of annotations in DEFAULT: "
+						+ before);
+				int after = doc.getAnnotations().size();
+				_logger.info("After run count of annotations in DEFAULT: "
+						+ after);
+				_logger.info("Net addition to DEFAULT: " + (after - before));
+				_logger
+						.info("-------------------------TYPES----------------------------------------------");
+				Set<String> types = doc.getAnnotations().getAllTypes();
+				_logger.info("Number of types in 'DEFAULT': "
+						+ types.size());
+				for (String ts : types) {
+					_logger.info(ts);
+				}
+				_logger
+						.info("============================================================================");
+				Set<String> sNames = doc.getAnnotationSetNames();
+				for (String s : sNames) {
+					AnnotationSet annset = doc.getAnnotations().get(s);
+					before = sMap.get(s);
+					after = annset.size();
+					_logger.info("Annotation set '" + s + "'");
+					_logger.info("Before run count of annotations in '" + s
+							+ "': " + before);
+					_logger.info("After run count of annotations in '" + s
+							+ "': " + after);
+					_logger
+							.info("Net addition to DEFAULT: "
+									+ (after - before));
+					_logger
+							.info("-------------------------TYPES----------------------------------------------");
+					types = annset.getAllTypes();
+					_logger.info("Number of types in '" + s + "': "
+							+ types.size());
+					for (String ts : types) {
+						_logger.info(ts);
+					}
+					_logger
+							.info("============================================================================");
+				}
+				_logger
+						.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+			}
 
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, sdoc);
 			m_docsProcessed++;
