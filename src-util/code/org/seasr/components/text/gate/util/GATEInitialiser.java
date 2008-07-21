@@ -42,17 +42,12 @@
 
 package org.seasr.components.text.gate.util;
 
-import gate.Factory;
-import gate.FeatureMap;
-import gate.creole.ResourceInstantiationException;
 
 import java.io.*;
-import java.util.*;
 import java.util.logging.Logger;
 
 import org.meandre.components.util.Unzipper;
 import org.meandre.core.ComponentContext;
-import org.seasr.components.text.datatype.corpora.*;
 
 @SuppressWarnings("unchecked")
 public class GATEInitialiser implements Serializable {
@@ -63,8 +58,7 @@ public class GATEInitialiser implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	static public boolean s_ready = false;
-	static private Object _lock_1 = new Object();
-	static private Object _lock_2 = new Object();
+	static private Object _lock = new Object();
 	private static Logger _logger = Logger.getLogger("GATEInitialiser");
 
 	// ================
@@ -86,10 +80,12 @@ public class GATEInitialiser implements Serializable {
 	 */
 	static public void init(String path, String resName, String installPath,
 			ComponentContext ctx) throws Exception {
-		synchronized (_lock_1) {
+		synchronized (_lock) {
 
 			if (!s_ready) {
-
+				
+				_logger.info("Initializing GATE system.");
+				
 				Unzipper.CheckIfZipFileExistsIfNotInstallFromJarThenUnzipIt(
 						path, resName, installPath, ctx);
 
@@ -135,61 +131,6 @@ public class GATEInitialiser implements Serializable {
 				_logger.info("Gate inited.");
 				s_ready = true;
 			}
-		}
-	}
-
-	/**
-	 * Create a path to the GATE resource within the SEASR context
-	 * on the machine that is executing this component.
-	 * 
-	 * @param prPath Path to the root of the SEASR resource repository.
-	 * @param resPath Path from the resource name to the target file/dir.
-	 * @param resName GATE Resource name, directly follows the prPath.
-	 * @return
-	 * @throws IOException
-	 */
-	static public String normalizePathForSEASR(String prPath, String resPath,
-			String resName) throws IOException {
-		File prFile = new File(prPath);
-		return "file:/" + prFile.getCanonicalPath() + "/" + resName + resPath;
-	}
-
-	/**
-	 * Check if a GATE document object exists in the SEASR document object's
-	 * auxiliary map.
-	 * 
-	 * @param doc SEASR document object to check.
-	 * @return A boolean value indicating that a GATE document does or doesn't
-	 * exist in the SEASR document's auxiliary map.
-	 */
-	static public boolean checkIfGATEDocumentExists(
-			org.seasr.components.text.datatype.corpora.Document doc) {
-		if (doc.getAuxMap().get(DocumentConstants.GATE_DOCUMENT) == null) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Add a newly created GATE document to the auxiliary feature map of the 
-	 * SEASR document only if it does not already exist.  This adding process
-	 * takes place within a sync block where a check of pre-existence is
-	 * performed to ensure that only one distinct GATE document object is ever
-	 * created and added in this method to the SEARS document.
-	 * 
-	 * @param doc SEASR document
-	 * @return SEASR document
-	 * @throws ResourceInstantiationException
-	 */
-	static public org.seasr.components.text.datatype.corpora.Document addNewGATEDocToSEASRDoc(
-			org.seasr.components.text.datatype.corpora.Document doc)
-			throws ResourceInstantiationException {
-		synchronized (_lock_2) {
-			if (!checkIfGATEDocumentExists(doc)) {
-				gate.Document gdoc = gate.Factory.newDocument(doc.getContent());
-				doc.getAuxMap().put(DocumentConstants.GATE_DOCUMENT, gdoc);
-			}
-			return doc;
 		}
 	}
 
