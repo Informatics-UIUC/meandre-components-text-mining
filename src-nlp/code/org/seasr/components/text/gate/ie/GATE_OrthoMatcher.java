@@ -122,7 +122,7 @@ description = "<p><b>Overview</b>: <br>"
 		+ "<p>The types of annotations to process on can also be "
 		+ "named by the user.  " + "Enter the types delimited by commas.</p>",
 
-name = "GATE_OrthoMatcher", tags = "text gate orthomatcher document", dependency = { "GATE-Home-And-ANNIE-plugin.jar", "gate.jar" })
+name = "GATE_OrthoMatcher", tags = "text gate orthomatcher document", dependency = { "GATE-Home-And-ANNIE-plugin_001.jar", "gate.jar" })
 public class GATE_OrthoMatcher implements ExecutableComponent {
 	// ==============
 	// Data Members

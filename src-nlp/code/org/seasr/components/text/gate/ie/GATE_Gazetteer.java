@@ -120,7 +120,7 @@ description = "<p><b>Overview</b>: <br>"
 
 name = "GATE_Gazetteer", 
 tags = "text gate gazetteer document", 
-dependency = { "GATE-Home-And-ANNIE-plugin.jar", "gate.jar" })
+dependency = { "GATE-Home-And-ANNIE-plugin_001.jar", "gate.jar" })
 public class GATE_Gazetteer implements ExecutableComponent {
 	// ==============
 	// Data Members

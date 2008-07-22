@@ -113,7 +113,7 @@ description = "<p>Overview: <br>"
 
 name = "GATE_DocumentReader", 
 tags = "io read file text gate document",
-dependency = { "GATE-Home-And-ANNIE-plugin.jar", "gate.jar", "nekohtml-0.9.5.jar", "PDFBox-0.7.2.jar"})
+dependency = { "GATE-Home-And-ANNIE-plugin_001.jar", "gate.jar", "nekohtml-0.9.5.jar", "PDFBox-0.7.2.jar"})
 public class GATE_DocumentReader implements ExecutableComponent {
 	// ==============
 	// Data Members

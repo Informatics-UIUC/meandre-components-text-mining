@@ -121,7 +121,7 @@ description = "<p><b>Overview</b>: <br>"
 
 name = "GATE_POSTagger", 
 tags = "text gate pos tagger document",
-dependency = { "GATE-Home-And-ANNIE-plugin.jar", "gate.jar" })
+dependency = { "GATE-Home-And-ANNIE-plugin_001.jar", "gate.jar" })
 public class GATE_POSTagger implements ExecutableComponent {
 
 	// ==============
