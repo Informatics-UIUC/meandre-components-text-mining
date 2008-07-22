@@ -119,9 +119,9 @@ tags = "text gate token tokenize document",
 dependency = { "GATE-Home-And-ANNIE-plugin_001.jar", "gate.jar", "jasper-compiler-jdt.jar"})
 public class GATE_Tokenizer implements ExecutableComponent {
 
-	// ==============
+	// =============
 	// Data Members
-	// ==============
+	// =============
 
 	private static Logger _logger = Logger.getLogger("GATE_Tokenizer");
 
