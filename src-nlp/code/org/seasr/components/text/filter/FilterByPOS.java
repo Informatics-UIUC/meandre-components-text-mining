@@ -158,9 +158,6 @@ public class FilterByPOS implements ExecutableComponent {
 	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	@ComponentProperty(description = "Show progress? A boolean value (true or false).", name = "show_progress", defaultValue = "false")
-	final static String DATA_PROPERTY_SHOW_PROGRESS = "show_progress";
-
 	@ComponentProperty(description = "Comma delimited of tags to allow.?", name = "tag_list", defaultValue = "NN,NNP,NNPS,NNS,NP,NPS")
 	final static String DATA_PROPERTY_TAG_LIST = "tag_list";
 
@@ -191,11 +188,6 @@ public class FilterByPOS implements ExecutableComponent {
 		return Boolean.parseBoolean(s.toLowerCase());
 	}
 
-	public boolean getShowProgress(ComponentContextProperties ccp) {
-		String s = ccp.getProperty(DATA_PROPERTY_SHOW_PROGRESS);
-		return Boolean.parseBoolean(s.toLowerCase());
-	}
-
 	public String getTagList(ComponentContextProperties ccp) {
 		String s = ccp.getProperty(DATA_PROPERTY_TAG_LIST);
 		return s;
@@ -217,7 +209,7 @@ public class FilterByPOS implements ExecutableComponent {
 	public void dispose(ComponentContextProperties ccp) {
 		_logger.fine("dispose() called");
 
-		if (getShowProgress(ccp) || getVerbose(ccp)) {
+		if (getVerbose(ccp)) {
 			_logger.info("\nEND EXEC -- FilterByPOS -- Docs Processed: "
 					+ m_docsProcessed + "\n");
 		}
@@ -228,13 +220,17 @@ public class FilterByPOS implements ExecutableComponent {
 			throws ComponentExecutionException, ComponentContextException {
 		_logger.fine("execute() called");
 
+		// props =====================================
+		boolean verbose = this.getVerbose(ctx);
+		//============================================
+		
 		int toks_selected = 0;
 
 		try {
 			Document doc = (Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOCUMENT);
 
-			if (getVerbose(ctx)) {
+			if (verbose) {
 				System.out.println("FilterByPOS"
 						+ ": Document: "
 						+ doc.getDocID()
@@ -300,7 +296,7 @@ public class FilterByPOS implements ExecutableComponent {
 				annots.remove(removes.get(i));
 			}
 
-			if (getVerbose(ctx)) {
+			if (verbose) {
 				System.out.println("FilterByPOS: " + toks_selected
 						+ " tokens were selected for this document -- "
 						+ doc.getTitle() + ", out of " + origSz);
