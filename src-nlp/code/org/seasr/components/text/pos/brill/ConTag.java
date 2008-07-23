@@ -448,13 +448,15 @@ public class ConTag implements ExecutableComponent {
 					 * Loop through each rule and apply it to every document
 					 * word in turn.
 					 */
+					boolean rtm = getRestrictTagMovement(ctx);
+					boolean incdesc = getIncludeDescription(ctx);
 					for (int x = 0, y = m_rules.length; x < y; x++) {
 						for (Iterator<Annotation> iter = annots.iterator(); iter
 								.hasNext();) {
 							Annotation tok = iter.next();
 							((ContextRule) m_rules[x]).applyRule(doc, tok,
-									getRestrictTagMovement(ctx), m_lex, dtmap,
-									getIncludeDescription(ctx));
+									rtm, m_lex, dtmap,
+									incdesc);
 							if ((x == (y - 1)) && (tok
 									.getFeatures()
 									.get(

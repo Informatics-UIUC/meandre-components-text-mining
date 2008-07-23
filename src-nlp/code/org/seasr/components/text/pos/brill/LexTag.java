@@ -276,6 +276,7 @@ public class LexTag implements ExecutableComponent {
 					if (getVerbose(ctx)) {
 						_logger.info("Begin LexTag");
 					}
+					boolean incdesc = getIncludeDescription(ctx);
 					for (int x = 0, y = m_rules.length; x < y; x++) {
 						for (Iterator<Annotation> iter = annots.iterator(); iter
 								.hasNext();) {
@@ -288,7 +289,7 @@ public class LexTag implements ExecutableComponent {
 												AnnotationConstants.TOKEN_ANNOT_FEAT_PRETAGGED_BOOL) == null) {
 									((LexRule) m_rules[x]).applyRule(doc, tok,
 											m_lex, dtmap,
-											getIncludeDescription(ctx));
+											incdesc);
 									if (tok
 											.getFeatures()
 											.get(

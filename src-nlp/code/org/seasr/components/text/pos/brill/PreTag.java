@@ -258,7 +258,7 @@ public class PreTag implements ExecutableComponent {
 				_docs.add((Document) ctx
 						.getDataComponentFromInput(DATA_INPUT_DOCUMENT));
 			}
-
+			boolean incdesc = getIncludeDescription(ctx);
 			if ((m_lex != null) && (!_docs.isEmpty())) {
 
 				for (int i = 0, n = _docs.size(); i < n; i++) {
@@ -280,7 +280,7 @@ public class PreTag implements ExecutableComponent {
 										.put(
 												AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
 												tags[0].toString());
-								if (this.getIncludeDescription(ctx)) {
+								if (incdesc) {
 									tok
 											.getFeatures()
 											.put(
@@ -301,7 +301,7 @@ public class PreTag implements ExecutableComponent {
 										.put(
 												AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
 												PoSTag.PoS_CD.toString());
-								if (getIncludeDescription(ctx)) {
+								if (incdesc) {
 									tok
 											.getFeatures()
 											.put(
@@ -315,7 +315,7 @@ public class PreTag implements ExecutableComponent {
 										.put(
 												AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
 												PoSTag.PoS_SYM.toString());
-								if (getIncludeDescription(ctx)) {
+								if (incdesc) {
 									tok
 											.getFeatures()
 											.put(
@@ -329,7 +329,7 @@ public class PreTag implements ExecutableComponent {
 										.put(
 												AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
 												PoSTag.PoS_NNP.toString());
-								if (getIncludeDescription(ctx)) {
+								if (incdesc) {
 									tok
 											.getFeatures()
 											.put(
@@ -343,7 +343,7 @@ public class PreTag implements ExecutableComponent {
 										.put(
 												AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
 												PoSTag.PoS_NN.toString());
-								if (getIncludeDescription(ctx)) {
+								if (incdesc) {
 									tok
 											.getFeatures()
 											.put(
