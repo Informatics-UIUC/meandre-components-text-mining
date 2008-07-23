@@ -157,15 +157,19 @@ public class PreTag implements ExecutableComponent {
 
 	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
+	private boolean _verbose = false;
 
 	@ComponentProperty(description = "Show progress? A boolean value (true or false).", name = "show_progress", defaultValue = "false")
 	final static String DATA_PROPERTY_SHOW_PROGRESS = "show_progress";
+	private boolean _showProg = false;
 
 	@ComponentProperty(description = "Print increment.", name = "print_increment", defaultValue = "250")
 	final static String DATA_PROPERTY_PRINT_INCREMENT = "print_increment";
-
+	private int _printInc = -1;
+	
 	@ComponentProperty(description = "Include tag description? A boolean value (true or false).", name = "include_description", defaultValue = "false")
 	final static String DATA_PROPERTY_INCLUDE_DESC = "include_description";
+	private boolean _incDesc = false;
 
 	// io
 	
@@ -217,6 +221,13 @@ public class PreTag implements ExecutableComponent {
 		m_docsProcessed = 0;
 		_docs = new ArrayList<Document>();
 		m_start = System.currentTimeMillis();
+		
+		// props ==============================
+		_verbose = this.getVerbose(ccp);
+		_incDesc = this.getIncludeDescription(ccp);
+		_printInc = this.getPrintIncrement(ccp);
+		_showProg = this.getShowProgress(ccp);
+		//=====================================
 	}
 
 	public void dispose(ComponentContextProperties ccp) {
@@ -242,12 +253,6 @@ public class PreTag implements ExecutableComponent {
 			throws ComponentExecutionException, ComponentContextException {
 		_logger.fine("execute() called");
 
-		// props ==============================
-		boolean verbose = this.getVerbose(ctx);
-		boolean incdesc = this.getIncludeDescription(ctx);
-		int printInc = this.getPrintIncrement(ctx);
-		boolean showProg = this.getShowProgress(ctx);
-		//=====================================
 
 		int tagsFoundInLex = 0;
 		int tagsSetNNP = 0;
@@ -286,7 +291,7 @@ public class PreTag implements ExecutableComponent {
 										.put(
 												AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
 												tags[0].toString());
-								if (incdesc) {
+								if (_incDesc) {
 									tok
 											.getFeatures()
 											.put(
@@ -307,7 +312,7 @@ public class PreTag implements ExecutableComponent {
 										.put(
 												AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
 												PoSTag.PoS_CD.toString());
-								if (incdesc) {
+								if (_incDesc) {
 									tok
 											.getFeatures()
 											.put(
@@ -321,7 +326,7 @@ public class PreTag implements ExecutableComponent {
 										.put(
 												AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
 												PoSTag.PoS_SYM.toString());
-								if (incdesc) {
+								if (_incDesc) {
 									tok
 											.getFeatures()
 											.put(
@@ -335,7 +340,7 @@ public class PreTag implements ExecutableComponent {
 										.put(
 												AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
 												PoSTag.PoS_NNP.toString());
-								if (incdesc) {
+								if (_incDesc) {
 									tok
 											.getFeatures()
 											.put(
@@ -349,7 +354,7 @@ public class PreTag implements ExecutableComponent {
 										.put(
 												AnnotationConstants.TOKEN_ANNOT_FEAT_POS,
 												PoSTag.PoS_NN.toString());
-								if (incdesc) {
+								if (_incDesc) {
 									tok
 											.getFeatures()
 											.put(
@@ -361,7 +366,7 @@ public class PreTag implements ExecutableComponent {
 						}
 					}
 
-					if (verbose) {
+					if (_verbose) {
 						_logger.info("\n\nDocument contained "
 								+ doc.getAnnotations(AnnotationConstants.ANNOTATION_SET_TOKENS).get(
 										AnnotationConstants.TOKEN_ANNOT_TYPE)
@@ -381,9 +386,9 @@ public class PreTag implements ExecutableComponent {
 					ctx.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
 					m_docsProcessed++;
 
-					if (showProg) {
+					if (_showProg) {
 						if (Math.IEEEremainder(m_docsProcessed,
-								printInc) == 0) {
+								_printInc) == 0) {
 							_logger.info("Pretag -- Docs Processed: "
 									+ m_docsProcessed);
 						}
