@@ -193,6 +193,10 @@ public class Stem implements ExecutableComponent {
 			throws ComponentExecutionException, ComponentContextException {
 		_logger.fine("execute() called");
 
+		// props ==============================
+		boolean verbose = this.getVerbose(ctx);
+		//=====================================
+
 		try {
 			if (_stemmer == null) {
 				_stemmer = new PorterStemmer();
@@ -243,7 +247,7 @@ public class Stem implements ExecutableComponent {
 
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
 			m_docsProcessed++;
-			if (getVerbose(ctx) && (m_docsProcessed % 20 == 0)) {
+			if (verbose && (m_docsProcessed % 20 == 0)) {
 				System.out.println("Stem: processed " + m_docsProcessed);
 			}
 
