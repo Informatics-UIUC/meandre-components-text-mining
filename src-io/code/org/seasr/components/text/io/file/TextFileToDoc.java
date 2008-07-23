@@ -189,6 +189,15 @@ public class TextFileToDoc implements ExecutableComponent {
 	public void execute(ComponentContext ctx)
 			throws ComponentExecutionException, ComponentContextException {
 		_logger.fine("execute() called");
+		
+		// props =================================
+		boolean verbose = this.getVerbose(ctx);
+		boolean webdav = this.getWebdav(ctx);
+		boolean addSpace = this.getAddSpaceAtNewlineChars(ctx);
+		boolean retNL = this.getRetainNewlineChars(ctx);
+		boolean saveDir = this.getSaveDirName(ctx);
+		//========================================
+		
 		try {
 			StringBuffer body = new StringBuffer();
 			m_fileName = (String) ctx
@@ -196,7 +205,7 @@ public class TextFileToDoc implements ExecutableComponent {
 
 			File fvar = null;
 			byte[] barr = null;
-			if (getWebdav(ctx)) {
+			if (webdav) {
 				barr = new WebdavClient(m_fileName)
 						.getResourceAsByteArray(m_fileName);
 			} else {
@@ -212,7 +221,7 @@ public class TextFileToDoc implements ExecutableComponent {
 			}
 			String dirName = null;
 			String label = null;
-			if (!getWebdav(ctx)){
+			if (!webdav){
 			dirName = fvar.getPath().substring(0,
 					fvar.getPath().lastIndexOf(File.separator));
 			label = dirName.substring(dirName
@@ -231,28 +240,28 @@ public class TextFileToDoc implements ExecutableComponent {
 			}
 			String s = m_reader.readLine();
 			body.append(s);
-			if (getRetainNewlineChars(ctx)) {
+			if (retNL) {
 				body.append(_newLine);
 			}
 			while ((s = m_reader.readLine()) != null) {
 				body.append(s);
-				if (getAddSpaceAtNewlineChars(ctx)) {
+				if (addSpace) {
 					body.append(" ");
 				}
-				if (getRetainNewlineChars(ctx)) {
+				if (retNL) {
 					body.append(_newLine);
 				}
 			}
 			Document doc = Factory.newDocument();
 			doc.setContent(body.toString());
-			String name = (getWebdav(ctx))?m_fileName:fvar.getName();
+			String name = (webdav)?m_fileName:fvar.getName();
 			doc.setTitle(name);
 			doc.setDocID(name);
-			if (getVerbose(ctx)) {
+			if (verbose) {
 				_logger.info("TFTD: " + doc.getDocID());
 				_logger.info("TFTD: " + doc.getTitle());
 			}
-			if (getSaveDirName(ctx)) {
+			if (saveDir) {
 				FeatureMap features = Factory.newFeatureMap();
 				String key = "Label";
 				features.put(key, label);
