@@ -244,7 +244,11 @@ public class LexTag implements ExecutableComponent {
 		_logger.fine("execute() called");
 		int lextagged = 0;
 		int tokensprocessed = 0;
+		
+		// props ==============================
 		boolean verbose = this.getVerbose(ctx);
+		boolean incdesc = this.getIncludeDescription(ctx);
+		//=====================================
 		
 		try {
 
@@ -277,7 +281,6 @@ public class LexTag implements ExecutableComponent {
 					if (verbose) {
 						_logger.info("Begin LexTag");
 					}
-					boolean incdesc = getIncludeDescription(ctx);
 					for (int x = 0, y = m_rules.length; x < y; x++) {
 						for (Iterator<Annotation> iter = annots.iterator(); iter
 								.hasNext();) {
