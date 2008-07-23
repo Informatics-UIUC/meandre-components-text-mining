@@ -242,6 +242,13 @@ public class PreTag implements ExecutableComponent {
 			throws ComponentExecutionException, ComponentContextException {
 		_logger.fine("execute() called");
 
+		// props ==============================
+		boolean verbose = this.getVerbose(ctx);
+		boolean incdesc = this.getIncludeDescription(ctx);
+		int printInc = this.getPrintIncrement(ctx);
+		boolean showProg = this.getShowProgress(ctx);
+		//=====================================
+
 		int tagsFoundInLex = 0;
 		int tagsSetNNP = 0;
 		int tagsSetNN = 0;
@@ -258,7 +265,6 @@ public class PreTag implements ExecutableComponent {
 				_docs.add((Document) ctx
 						.getDataComponentFromInput(DATA_INPUT_DOCUMENT));
 			}
-			boolean incdesc = getIncludeDescription(ctx);
 			if ((m_lex != null) && (!_docs.isEmpty())) {
 
 				for (int i = 0, n = _docs.size(); i < n; i++) {
@@ -355,7 +361,7 @@ public class PreTag implements ExecutableComponent {
 						}
 					}
 
-					if (getVerbose(ctx)) {
+					if (verbose) {
 						_logger.info("\n\nDocument contained "
 								+ doc.getAnnotations(AnnotationConstants.ANNOTATION_SET_TOKENS).get(
 										AnnotationConstants.TOKEN_ANNOT_TYPE)
@@ -375,9 +381,9 @@ public class PreTag implements ExecutableComponent {
 					ctx.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
 					m_docsProcessed++;
 
-					if (this.getShowProgress(ctx)) {
+					if (showProg) {
 						if (Math.IEEEremainder(m_docsProcessed,
-								getPrintIncrement(ctx)) == 0) {
+								printInc) == 0) {
 							_logger.info("Pretag -- Docs Processed: "
 									+ m_docsProcessed);
 						}
