@@ -407,6 +407,16 @@ public class ConTag implements ExecutableComponent {
 		_logger.fine("execute() called");
 		int contagged = 0;
 		int tokensprocessed = 0;
+		
+		//props =====================================
+		boolean verbose = this.getVerbose(ctx);
+		boolean showProg = this.getShowProgress(ctx);
+		int printInc = this.getPrintIncrement(ctx);
+		boolean incDesc = this.getIncludeDescription(ctx);
+		boolean rtm  = this.getRestrictTagMovement(ctx);
+		boolean remTokMap = this.getRemoveTokenMap(ctx);
+		//===========================================
+		
 		try {
 
 			if (ctx.isInputAvailable(DATA_INPUT_LEXICON)) {
@@ -438,7 +448,7 @@ public class ConTag implements ExecutableComponent {
 								"No DocTokMap found in document object.");
 					}
 
-					if (getVerbose(ctx)) {
+					if (verbose) {
 						_logger.info("Begin ConTag");
 					}
 
@@ -448,15 +458,13 @@ public class ConTag implements ExecutableComponent {
 					 * Loop through each rule and apply it to every document
 					 * word in turn.
 					 */
-					boolean rtm = getRestrictTagMovement(ctx);
-					boolean incdesc = getIncludeDescription(ctx);
 					for (int x = 0, y = m_rules.length; x < y; x++) {
 						for (Iterator<Annotation> iter = annots.iterator(); iter
 								.hasNext();) {
 							Annotation tok = iter.next();
 							((ContextRule) m_rules[x]).applyRule(doc, tok,
 									rtm, m_lex, dtmap,
-									incdesc);
+									incDesc);
 							if ((x == (y - 1)) && (tok
 									.getFeatures()
 									.get(
@@ -471,7 +479,7 @@ public class ConTag implements ExecutableComponent {
 						tokensprocessed = doc.getAnnotations(AnnotationConstants.ANNOTATION_SET_TOKENS).get(
 								AnnotationConstants.TOKEN_ANNOT_TYPE).size();
 					}
-					if (getVerbose(ctx)) {
+					if (verbose) {
 						_logger.info("Out of " + tokensprocessed
 								+ " words that were applied to the rule set, ");
 						_logger.info(contagged
@@ -479,7 +487,7 @@ public class ConTag implements ExecutableComponent {
 						_logger.info("End ConTag");
 					}
 
-					if (getVerbose(ctx)) {
+					if (verbose) {
 						
 						AnnotationSet toks = doc.getAnnotations(AnnotationConstants.ANNOTATION_SET_TOKENS);
 
@@ -504,15 +512,15 @@ public class ConTag implements ExecutableComponent {
 					}
 					
 					
-					if (getRemoveTokenMap(ctx)) {
+					if (remTokMap) {
 						doc.getFeatures().remove(
 								DocumentConstants.BRILL_TOK_MAP);
 					}
 					ctx.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
 					m_docsProcessed++;
 
-					if (getShowProgress(ctx)) {
-						if (Math.IEEEremainder(m_docsProcessed, getPrintIncrement(ctx)) == 0) {
+					if (showProg) {
+						if (Math.IEEEremainder(m_docsProcessed, printInc) == 0) {
 							_logger.info("Contag -- Docs Processed: "
 									+ m_docsProcessed);
 							_logger.info("Contag -- Number of Rules: "
