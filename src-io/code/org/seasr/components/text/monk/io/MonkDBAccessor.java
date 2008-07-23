@@ -94,33 +94,38 @@ public class MonkDBAccessor implements ExecutableComponent {
 	// Data Members
 	// ==============
 
-	@ComponentOutput(description = "Sparse Table", name = "sparse_table")
-	final static String DATA_OUTPUT_SPARSE_TABLE = "sparse_table";
-
-	@ComponentProperty(description = "Major Word Class tags (comma delimited).", name = "major_word_classes", defaultValue = "noun")
-	final static String DATA_PROPERTY_MAJOR_WORD_CLASSES = "major_word_classes";
-
-	@ComponentProperty(description = "Container for counts.", name = "count_container", defaultValue = "WorkPart")
-	final static String DATA_PROPERTY_COUNT_CONTAINER = "count_container";
-
-	@ComponentProperty(description = "Feature for counts.", name = "count_feature", defaultValue = "Lemma")
-	final static String DATA_PROPERTY_COUNT_FEATURE = "count_feature";
-
-	@ComponentProperty(description = "Corpus tags (comma delimited).", name = "corpus_tags", defaultValue = "cha")
-	final static String DATA_PROPERTY_CORPUS_TAGS = "corpus_tags";
-
-	@ComponentProperty(description = "Work tags (comma delimited).", name = "work_tags", defaultValue = "")
-	final static String DATA_PROPERTY_WORK_TAGS = "work_tags";
-
-	@ComponentProperty(description = "Author tags (semi-colon delimited).", name = "author_tags", defaultValue = "")
-	final static String DATA_PROPERTY_AUTHOR_TAGS = "author_tags";
-
-	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
-	final static String DATA_PROPERTY_VERBOSE = "verbose";
-
-	private static Logger _logger = Logger.getLogger("TextFileToDoc");
+	private static Logger _logger = Logger.getLogger("MonkDBAccessor");
 
 	private static String _MONK_Pkg = "edu.northwestern.at.monk.model.";
+
+	// props
+	
+	@ComponentProperty(description = "Major Word Class tags (comma delimited).", name = "major_word_classes", defaultValue = "noun")
+	public final static String DATA_PROPERTY_MAJOR_WORD_CLASSES = "major_word_classes";
+
+	@ComponentProperty(description = "Container for counts.", name = "count_container", defaultValue = "WorkPart")
+	public final static String DATA_PROPERTY_COUNT_CONTAINER = "count_container";
+
+	@ComponentProperty(description = "Feature for counts.", name = "count_feature", defaultValue = "Lemma")
+	public final static String DATA_PROPERTY_COUNT_FEATURE = "count_feature";
+
+	@ComponentProperty(description = "Corpus tags (comma delimited).", name = "corpus_tags", defaultValue = "cha")
+	public final static String DATA_PROPERTY_CORPUS_TAGS = "corpus_tags";
+
+	@ComponentProperty(description = "Work tags (comma delimited).", name = "work_tags", defaultValue = "")
+	public final static String DATA_PROPERTY_WORK_TAGS = "work_tags";
+
+	@ComponentProperty(description = "Author tags (semi-colon delimited).", name = "author_tags", defaultValue = "")
+	public final static String DATA_PROPERTY_AUTHOR_TAGS = "author_tags";
+
+	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
+	public final static String DATA_PROPERTY_VERBOSE = "verbose";
+
+	// io
+	
+	@ComponentOutput(description = "Sparse Table", name = "sparse_table")
+	public final static String DATA_OUTPUT_SPARSE_TABLE = "sparse_table";
+
 
 	// ================
 	// Public Methods
