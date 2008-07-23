@@ -244,7 +244,8 @@ public class LexTag implements ExecutableComponent {
 		_logger.fine("execute() called");
 		int lextagged = 0;
 		int tokensprocessed = 0;
-
+		boolean verbose = this.getVerbose(ctx);
+		
 		try {
 
 			if (ctx.isInputAvailable(DATA_INPUT_LEXICON)) {
@@ -261,7 +262,7 @@ public class LexTag implements ExecutableComponent {
 			if (ctx.isInputAvailable(DATA_INPUT_DOCUMENT)) {
 				_docs.add((Document)ctx.getDataComponentFromInput(DATA_INPUT_DOCUMENT));
 			}
-
+			
 			if ((m_lex != null) && (m_rules != null) && (!_docs.isEmpty())) {
 
 				for (int i = 0, n = _docs.size(); i < n; i++) {
@@ -273,7 +274,7 @@ public class LexTag implements ExecutableComponent {
 
 					AnnotationSet annots = doc.getAnnotations(AnnotationConstants.ANNOTATION_SET_TOKENS);
 
-					if (getVerbose(ctx)) {
+					if (verbose) {
 						_logger.info("Begin LexTag");
 					}
 					boolean incdesc = getIncludeDescription(ctx);
@@ -305,7 +306,7 @@ public class LexTag implements ExecutableComponent {
 						tokensprocessed = doc.getAnnotations(AnnotationConstants.ANNOTATION_SET_TOKENS).get(
 								AnnotationConstants.TOKEN_ANNOT_TYPE).size();
 					}
-					if (getVerbose(ctx)) {
+					if (verbose) {
 						_logger
 								.info("Out of "
 										+ tokensprocessed
