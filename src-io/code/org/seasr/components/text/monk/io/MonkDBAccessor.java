@@ -85,9 +85,10 @@ description = "<p>Overview: <br>"
 		+ "Major Word Classes: adjective, adv/conj/pcl/prep, adverb, conjunction, "
 		+ "determiner, foreign word, interjection, negative, noun, numeral, particle, "
 		+ "preposition, pronoun, punctuation, symbol, undetermined, verb, wh-word.  <br>"
-		+ "Corpus: Chaucer (cha), NCF (ncf), Shakespeare (sha), Spenser (spe), Stein (stein)."
-
-, tags = "monk data access io table text", name = "MonkDBAccessor")
+		+ "Corpus: Chaucer (cha), NCF (ncf), Shakespeare (sha), Spenser (spe), Stein (stein).", 
+		tags = "monk data access io table text", 
+		name = "MonkDBAccessor",
+		dependency = { "monk.jar"})
 public class MonkDBAccessor implements ExecutableComponent {
 
 	// ==============
