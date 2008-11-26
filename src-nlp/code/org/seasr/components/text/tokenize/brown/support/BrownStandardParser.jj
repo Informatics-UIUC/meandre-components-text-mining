@@ -1,0 +1,196 @@
+/**
+ * University of Illinois/NCSA
+ * Open Source License
+ * 
+ * Copyright (c) 2008, Board of Trustees-University of Illinois.  
+ * All rights reserved.
+ * 
+ * Developed by: 
+ * 
+ * Automated Learning Group
+ * National Center for Supercomputing Applications
+ * http://www.seasr.org
+ * 
+ *  
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal with the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions: 
+ * 
+ *  * Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimers. 
+ * 
+ *  * Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimers in the 
+ *    documentation and/or other materials provided with the distribution. 
+ * 
+ *  * Neither the names of Automated Learning Group, The National Center for
+ *    Supercomputing Applications, or University of Illinois, nor the names of
+ *    its contributors may be used to endorse or promote products derived from
+ *    this Software without specific prior written permission. 
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * WITH THE SOFTWARE.
+ */ 
+
+PARSER_BEGIN(BrownStandardParser)
+
+package org.seasr.meandre.components.t2k.tokenize.brown;
+
+/**
+ * Parser for tokenizing a corpus into Brown Corpus Standard Format.
+ */
+
+import org.seasr.meandre.components.t2k.datatype.*;
+
+ public class BrownStandardParser {
+
+    public static void main (String [] args) {
+        BrownStandardParser parser;
+        String filename = null;
+        long initTime = 0;
+        long parseTime = 0;
+        long startTime = 0;
+        long stopTime = 0;
+        if (args.length == 0) {
+            System.out.println("BrownStandardParser Version 1.0:  Reading from standard input . . .");
+            parser = new BrownStandardParser(System.in);
+        } else if (args.length == 1) {
+            filename = args[0];
+            System.out.println("BrownStandardParser Version 1.0 Reading from file " + filename + " . . .");
+            try {
+                startTime = System.currentTimeMillis();
+                parser = new BrownStandardParser(new java.io.FileInputStream(filename));
+                stopTime = System.currentTimeMillis();
+                initTime = stopTime - startTime;
+            } catch (java.io.FileNotFoundException e){
+                System.out.println("BrownStandardParser Version 1.0:  File " + filename + " not found.");
+                return;
+            }
+        } else {
+            System.out.println("BrownStandardParser Version 1.0:  Usage is one of:");
+            System.out.println("         java BrownStandardParser < inputfile");
+            System.out.println("OR");
+            System.out.println("         java BrownStandardParser inputfile");
+            return;
+        }
+        try
+        {
+            startTime = System.currentTimeMillis();
+            parser.corpus();
+            stopTime = System.currentTimeMillis();
+            parseTime = stopTime - startTime;
+            System.out.println("BrownStandardParser Version 1.0: ");
+            System.out.println("   Java program parsed " + filename + " successfully in " + (initTime + parseTime) + " ms.");
+            System.out.println("      parser initialization time was " + initTime + " ms.");
+            System.out.println("      parser parse time was " + parseTime + " ms.");
+        } catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("BrownStandardParser Version 1.0:  Encountered errors during parse.");
+        }
+    }
+
+}
+PARSER_END(BrownStandardParser)
+
+/* Lexical */
+
+/*
+ws	[ \t\r\n]
+eos	[.?!]{ws}+/[A-Z"\(\[\{$`]
+sym	[~`@#$%^&*\(\)=+|\[\]\{\}:;/><,"']
+dash    [-][-]+
+pos	['][A-Za-z]+
+
+%%
+
+{ws}+	{ fprintf( yyout, " " ); }
+{eos}	{ fprintf( yyout, " %c\n%c", yytext[0], yytext[ yyleng-1 ] ); }
+{sym}	{ fprintf( yyout, " %c ", yytext[0] ); }
+{dash}	{ fprintf( yyout, " -- " ); }
+{pos}	{ fprintf( yyout, " %s ", (char*)yytext ); }
+.       { fprintf( yyout,  "%c", yytext[0] ); }
+*/
+
+
+TOKEN:
+{
+	< WS: [" ","\t","\r","\n"]>
+	| < EOS: [".","?","!"](<WS>)+ >
+//	| < SYM: [".","~","`","@","#","$","%","^","&","*","(",")","=","+","|","]","[","}","{",":",";","/",">","<",",","\"","'"]>
+	| < SYM: ["!"-"/",":"-"@","["-"`","{"-"~"]>
+	| < DASH: ["-"](["-"])*>
+	| < POS1: "'"(["A"-"Z","a"-"z"])+>
+	| < POS2: ["A"-"Z","a"-"z"]>
+	| < DIGIT: ["0"-"9"]>
+}
+
+/*******************************************/
+/*************** Rules *********************/
+/*******************************************/
+
+Document corpus() :
+{
+  Document doc = null;
+}
+{
+	(<WS>
+	| <EOS> {
+                  doc.addToken(new PoSToken
+                  System.out.println(token.image.trim());
+                }
+	| <SYM> {System.out.print(" " + token.image + " ");}
+	| <DASH> {System.out.print(" -- ");}
+	| <POS1> {System.out.print(" " + token.image + " ");}
+	| <POS2> {System.out.print(token.image);}
+	| <DIGIT> {System.out.print(token.image);})*
+	<EOF>
+}
+
+/**
+ * University of Illinois/NCSA
+ * Open Source License
+ *
+ * Copyright (c) 2008, NCSA.  All rights reserved.
+ * 
+ * Developed by:
+ * The Automated Learning Group
+ * University of Illinois at Urbana-Champaign
+ * http://www.seasr.org
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal with the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject
+ * to the following conditions:
+ * 
+ * Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimers.
+ * 
+ * Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimers in
+ * the documentation and/or other materials provided with the distribution.
+ * 
+ * Neither the names of The Automated Learning Group, University of
+ * Illinois at Urbana-Champaign, nor the names of its contributors may
+ * be used to endorse or promote products derived from this Software
+ * without specific prior written permission.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS WITH THE SOFTWARE.
+ */
