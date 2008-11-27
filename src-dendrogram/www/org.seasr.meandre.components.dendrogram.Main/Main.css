@@ -1,0 +1,330 @@
+/*
+  MEANDRE WORKBENCH CSS
+  AUTHOR: D. SEARSMITH
+  COPYRIGHT: UNIV. OF ILLINOIS, URBANA-CHAMPAIGN
+             NATIONAL CENTER FOR SUPERCOMPUTING APPLICATIONS
+             AUTOMATED LEARNING GROUP
+             2007
+  */
+
+/*
+  BODY **********************************************************************
+  */
+
+body {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+/*
+MENU *****************************************************
+*/
+
+.gwt-MenuBar {
+  background: #e3963a;
+  cursor: default;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 80%;
+  font-weight: bold;
+}
+
+.gwt-MenuItem {
+  font-size: 75%;
+  font-weight: bold;
+  margin: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  cursor: default;
+}
+
+.gwt-MenuItem-selected {
+  background: #ffffff;
+}
+
+/*
+SPLIT PANELS *****************************************************
+*/
+
+.gwt-VerticalSplitPanel {
+}
+
+.gwt-HorizontalSplitPanel .hsplitter {
+  cursor: e-resize;
+  background-color: #9f9f9f;
+  margin-right: 1px;
+  margin-left: 1px;
+}
+
+.gwt-VerticalSplitPanel .vsplitter  {
+  cursor: n-resize;
+  background-color: #9f9f9f;
+}
+
+/*
+ TREE *********************************************************
+ */
+
+.gwt-Tree {
+  /*height: 100%;*/
+}
+
+.gwt-Tree .gwt-TreeItem {
+  cursor: pointer;
+  cursor: hand;
+  font-size: 70%;
+  font-weight: bold;
+  width: 100%;
+}
+
+.gwt-Tree .gwt-TreeItem-selected {
+  background: #ffffcc;
+}
+
+/*
+ COMPONENT WIDGET AND PARTS ***********************************************
+ */
+
+.comp-label{
+  font-size: 70%;
+  font-weight: bold;
+  cursor: text;
+}
+
+.comp-panel-image {
+  border-style: solid;
+  border-width: thin;
+  border-color: #000000;
+}
+
+.comp-panel-image-selected{
+  border-style: solid;
+  border-width: thin;
+  border-color: red;
+}
+
+.comp-ports {
+  cursor: pointer;
+  cursor: hand;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.port-popup {
+  background: #f5dabc;
+  font-size: 70%;
+  font-weight: bold;
+}
+
+/*
+  CANVAS LABEL PANEL ****************************************************
+  */
+
+.canvas-label-bar {
+  background: #e3963a;
+}
+
+.canvas-label-bar-flow-title {
+  padding: 4px;
+  font-size: 80%;
+  font-weight: bold;
+}
+
+/*
+  CANVAS BUTTONS *********************************************************
+  */
+
+.menu-panel {
+  background: #ffffff;
+}
+
+.menu-button {
+  cursor: pointer;
+  cursor: hand;
+  background-color: #ffffff;
+  }
+
+.menu-button-text {
+  font-weight: bold;
+  text-align: center;
+  font-size: 70%;
+}
+
+
+/*
+  APP STATUS/MSG BAR *****************************************************
+  */
+
+.status-bar {
+  border-style: solid;
+  border-width: medium;
+  border-color: #f5dabc;
+  margin: 1px;
+  background: #f5dabc;
+  font-weight: bold;
+  font-size: 80%;
+}
+
+/*
+ TOP MENU PANEL (APP BANNER) **********************************************
+ */
+
+.top-menu-panel {
+  border-style: solid;
+  border-width: medium;
+  border-color: #c3d9ff;
+  margin: 1px;
+  background: #c3d9ff;
+}
+
+/*
+  TOP MENU PANEL BUTTONS ***************************************************
+  */
+
+.top-menu-button {
+  cursor: pointer;
+  cursor: hand;
+  background-color: #ffffff;
+  margin-left: auto;
+  margin-right: auto;
+  }
+
+.top-menu-button-text {
+  font-weight: bold;
+  text-align: center;
+  font-size: 80%;
+}
+
+/*
+  COMPONENT AND FLOW DESCRIPTION TEXT IN MESSAGE WINDOW ******************
+  */
+
+div#componentshow {
+  font-size: 80%;
+}
+
+/*
+  LEFT SIDE TAB PANEL *****************************************************
+  */
+
+.gwt-TabPanel {
+}
+
+.gwt-TabPanelBottom {
+}
+
+.gwt-TabBar {
+  padding-top: 2px;
+  background-color: #f5dabc;
+}
+
+
+.gwt-TabBar .gwt-TabBarItem {
+  padding: 4px;
+  cursor: pointer;
+  cursor: hand;
+  background-color: #eab87b;
+  margin-right: 2px;
+ font-size: 60%;
+}
+
+.gwt-TabBar .gwt-TabBarItem-selected {
+  padding: 4px;
+  font-weight: bold;
+  cursor: default;
+  background-color: #ffffff;
+  margin-right: 2px;
+  font-size: 60%;
+}
+
+/*
+  DIALOG BOXES ************************************************************
+  */
+
+.gwt-DialogBox .Caption {
+  background-color: #e3963a;
+  padding: 3px;
+  margin: 2px;
+  font-weight: bold;
+  cursor: default;
+}
+
+
+.gwt-DialogBox {
+  border: 2px outset;
+  background-color: white;
+}
+
+.dialog-button {
+  margin: 4px;
+}
+
+/*
+  BUTTONS ON COMPONENT TREE VIEW ********************************************
+  */
+
+.tree-button {
+  margin: 4px;
+  font-weight: bold;
+  font-size: 70%;
+  background-color: #e8eef7;
+}
+
+
+/*
+  FILE UPLOAD DIALOG ********************************************************
+  */
+
+.fu-panel {
+  border-style: solid;
+  border-width: medium;
+  border-color: #9f9f9f;
+  margin: 4px;
+  background: #ffffff;
+}
+
+.fu-label{
+  font-size: 90%;
+  font-weight: bold;
+  cursor: text;
+}
+
+.gwt-FileUpload{
+  font-size: 90%;
+  font-weight: bold;
+  cursor: text;
+  background: #ffffff;
+}
+
+.fu-listbox{
+  font-size: 90%;
+  font-weight: bold;
+  cursor: pointer;
+  cursor: hand;
+  overflow: scroll;
+}
+
+/*
+  MISC *****************************************************************
+  */
+
+.no-scroll{
+  overflow: hidden;
+}
+
+.auto-scroll{
+  overflow: scroll;
+}
+
+.rightalign {
+  text-align:right;
+}
+
+.centeralign {
+  text-align:center;
+}
+
+.leftalign {
+  text-align:left;
+}
+
+

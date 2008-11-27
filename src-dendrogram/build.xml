@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Meandre-Workbench" basedir="." default="compile">
+    <!-- Global properties -->
+    <property name="src.dir" value="${basedir}/src" />
+    <property name="src-test.dir" value="${basedir}/src-test" />
+    <property name="build.dir" value="${basedir}/bin" />
+    <property name="lib.dir" value="${basedir}/lib" />
+    <property name="www.dir" value="${basedir}/www" />
+    <property name="classes.dir" value="${basedir}/classes" />
+    <property name="webapp.dir" value="${basedir}/webapp" />
+
+    <property name="war.dir" value="${webapp.dir}/war" />
+    <property name="war.web-inf.dir" value="${war.dir}/WEB-INF" />
+    <property name="web-inf.classes.dir" value="${war.web-inf.dir}/classes" />
+    <property name="web-inf.lib.dir" value="${war.web-inf.dir}/lib"/>
+    <property name="webapp.bootstrap.dir" value="${webapp.dir}/bootstrap" />
+    <property name="gwt.content.dir" value="${www.dir}/org.seasr.meandre.components.dendrogram.Main" />
+    <property name="gwt.dir" value="${lib.dir}/gwt" />
+    <property name="gwt.dnd.dir" value="${lib.dir}/gwt_dnd" />
+    <property name="gwt.widgets.dir" value="${lib.dir}/gwt_widgets" />
+    <property name="httpclient.dir" value="${lib.dir}/commons-httpclient" />
+    <property name="jetty.dir" value="${lib.dir}/Jetty" />
+    <property name="jena.dir" value="${lib.dir}/JENA" />
+    <property name="workbench.src.dir" value="${src.dir}/dendrogram" />
+
+    <!-- User settable -->
+    <property name="boot.class" value="org.seasr.meandre.components.dendrogram.bootstrap.jetty.Bootstrapper"/>
+    <property name="bootstrap.src.dir" value="${src.dir}/bootstrap/Jetty" />
+
+    <path id="gwt_compile.classpath">
+        <pathelement location="${classes.dir}" />
+        <pathelement location="${workbench.src.dir}" />
+        <pathelement location="${src-test.dir}" />
+
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar" />
+            <include name="**/*.zip" />
+        </fileset>
+    </path>
+
+    <path id="bootstrap_compile.classpath">
+        <fileset dir="${jetty.dir}">
+            <include name="**/*.jar" />
+            <include name="**/*.zip" />
+        </fileset>
+    </path>
+
+    <path id="client_server_compile.classpath">
+        <pathelement location="${build.dir}" />
+
+        <fileset dir="${jena.dir}">
+            <include name="**/*.jar" />
+            <include name="**/*.zip" />
+        </fileset>
+
+        <fileset dir="${gwt.dir}">
+            <include name="**/*.jar" />
+            <include name="**/*.zip" />
+        </fileset>
+
+        <fileset dir="${gwt.dnd.dir}">
+            <include name="**/*.jar" />
+            <include name="**/*.zip" />
+        </fileset>
+
+        <fileset dir="${gwt.widgets.dir}">
+            <include name="**/*.jar" />
+            <include name="**/*.zip" />
+        </fileset>
+
+        <fileset dir="${httpclient.dir}">
+            <include name="**/*.jar" />
+            <include name="**/*.zip" />
+        </fileset>
+    </path>
+
+    <path id="run.classpath">
+        <pathelement location="${webapp.bootstrap.dir}" />
+
+        <fileset dir="${jena.dir}">
+            <include name="**/*.jar" />
+            <include name="**/*.zip" />
+        </fileset>
+
+        <fileset dir="${jetty.dir}">
+            <include name="**/*.jar" />
+            <include name="**/*.zip" />
+        </fileset>
+
+        <fileset dir="${httpclient.dir}">
+            <include name="**/*.jar" />
+            <include name="**/*.zip" />
+        </fileset>
+    </path>
+
+    <!-- init -->
+    <target name="init">
+        <tstamp />
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${classes.dir}" />
+        <mkdir dir="${war.dir}" />
+        <mkdir dir="${war.web-inf.dir}"/>
+        <mkdir dir="${web-inf.classes.dir}"/>
+        <mkdir dir="${web-inf.lib.dir}"/>
+        <mkdir dir="${webapp.bootstrap.dir}"/>
+    </target>
+
+    <!-- gwt_compile -->
+    <target name="gwt_compile">
+        <java classname="com.google.gwt.dev.GWTCompiler" fork="yes" maxmemory="512m">
+            <classpath refid="gwt_compile.classpath"/>
+            <arg value="-out"/>
+            <arg value="${www.dir}"/>
+	    <arg value="-style"/>
+            <arg value="DETAILED"/>
+            <arg value="org.seasr.meandre.components.dendrogram.Main"/>
+        </java>
+    </target>
+
+    <!-- bootstrap_compile -->
+    <target name="bootstrap_compile" depends="init">
+        <javac srcdir="${bootstrap.src.dir}"
+               destdir="${build.dir}"
+               classpathref="bootstrap_compile.classpath"
+               debug="on"
+               source="1.5" />
+    </target>
+
+    <!-- server_compile -->
+    <target name="server_compile" depends="init">
+        <javac srcdir="${workbench.src.dir}"
+               destdir="${classes.dir}"
+               classpathref="client_server_compile.classpath"
+               debug="on"
+               source="1.5" />
+    </target>
+
+    <!-- compile -->
+    <target name="compile" depends="gwt_compile, bootstrap_compile, server_compile" />
+
+    <!-- dist -->
+    <target name="dist" depends="compile">
+        <copy todir="${web-inf.classes.dir}">
+            <fileset dir="${classes.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+
+        <copy file="${gwt.dir}/gwt-servlet.jar" todir="${web-inf.lib.dir}"/>
+
+        <copy todir="${war.dir}">
+            <fileset dir="${gwt.content.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${webapp.bootstrap.dir}">
+            <fileset dir="${build.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+
+        <copy file="${bootstrap.src.dir}/meandre-web.xml" todir="${webapp.bootstrap.dir}"/>
+    </target>
+
+    <!-- run -->
+    <target name="run" depends="dist">
+        <java
+            classname="${boot.class}"
+            fork="yes"
+            maxmemory="1024m">
+            <classpath refid="run.classpath"/>
+            <jvmarg value="-Duser.dir=."/>
+        </java>
+    </target>
+
+    <!-- gwt_shell -->
+    <target name="gwt_shell" depends="bootstrap_compile, server_compile">
+        <java classname="com.google.gwt.dev.GWTShell" fork="yes" maxmemory="512m">
+            <classpath refid="gwt_compile.classpath"/>
+            <arg value="-out"/>
+            <arg value="${www.dir}"/>
+            <arg value="%*"/>
+            <arg value="org.seasr.meandre.components.dendrogram.Main/Main.html"/>
+            <arg value="-port"/>
+            <arg value="8989"/>
+        </java>
+    </target>
+
+    <!-- clean -->
+    <target name="clean">
+        <delete dir="${build.dir}" />
+        <delete dir="${classes.dir}" />
+        <delete dir="${war.dir}" />
+        <delete dir="${war.web-inf.dir}"/>
+        <delete dir="${web-inf.classes.dir}"/>
+        <delete dir="${web-inf.lib.dir}"/>
+        <delete dir="${webapp.bootstrap.dir}" />
+    </target>
+</project>
