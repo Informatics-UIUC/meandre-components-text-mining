@@ -126,11 +126,11 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 
 	// io
 	
-	@ComponentInput(description = "Input document.", name = "document_in")
-	public final static String DATA_INPUT_DOC_IN = "document_in";
+	@ComponentInput(description = "Input document.", name = "Document")
+	public final static String DATA_INPUT_DOC_IN = "Document";
 
-	@ComponentOutput(description = "Output document.", name = "document_out")
-	public final static String DATA_OUTPUT_DOC_OUT = "document_out";
+	@ComponentOutput(description = "Output document.", name = "Document")
+	public final static String DATA_OUTPUT_DOC_OUT = "Document";
 
 	private static Logger _logger = Logger.getLogger("OpenNLP_NameFinder");
 
@@ -465,6 +465,8 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 					Annotation ann = itty.next();
 					_logger.info("Entity: " + ann.getContent(idoc) + " <"
 							+ ann.getType() + ">");
+					ctx.getOutputConsole().println("Entity: " + ann.getContent(idoc) + " :"
+							+ ann.getType());
 				}
 			}
 
@@ -473,6 +475,10 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 						+ idoc.getAnnotations(
 								AnnotationConstants.ANNOTATION_SET_ENTITIES)
 								.get().size() + " entity tokens created.\n\n");
+				ctx.getOutputConsole().println("Document parsed.  "
+						+ idoc.getAnnotations(
+								AnnotationConstants.ANNOTATION_SET_ENTITIES)
+								.get().size() + " entity tokens created.");
 			}
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, idoc);
 			m_docsProcessed++;

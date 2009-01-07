@@ -193,11 +193,11 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 
 	// I/O
 
-	@ComponentInput(description = "Input document.", name = "document_in")
-	public final static String DATA_INPUT_DOC_IN = "document_in";
+	@ComponentInput(description = "Input document.", name = "Document")
+	public final static String DATA_INPUT_DOC_IN = "Document";
 
-	@ComponentOutput(description = "Output document.", name = "document_out")
-	public final static String DATA_OUTPUT_DOC_OUT = "document_out";
+	@ComponentOutput(description = "Output document.", name = "Document")
+	public final static String DATA_OUTPUT_DOC_OUT = "Document";
 
 	// ================
 	// Constructor(s)

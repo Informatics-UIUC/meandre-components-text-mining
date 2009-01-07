@@ -91,7 +91,7 @@ description = "<p>Overview:<br>"
 		+ "<p>Writes the file name to the document title and ID.  No date information is "
 		+ "recorded.</p>",
 
-name = "TextFileToDoc", tags = "io read file text")
+name = "Text_File_To_Document", tags = "io read file text")
 public class TextFileToDoc implements ExecutableComponent {
 	// ==============
 	// Data Members
@@ -131,8 +131,8 @@ public class TextFileToDoc implements ExecutableComponent {
 	@ComponentInput(description = "File name.", name = "file_name")
 	public final static String DATA_INPUT_FILE_NAME = "file_name";
 
-	@ComponentOutput(description = "Document object.", name = "document")
-	public final static String DATA_OUTPUT_FILE_DOC = "document";
+	@ComponentOutput(description = "Document object.", name = "Document")
+	public final static String DATA_OUTPUT_FILE_DOC = "Document";
 
 	// ================
 	// Constructor(s)
