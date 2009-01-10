@@ -96,7 +96,8 @@ import org.seasr.components.text.pos.brill.support.LexRule;
 		
 		name = "LexRuleJarReader", 
 		tags = "brill pos io read file text nlp",
-		dependency={"SEASR_Brill.jar"})
+		dependency={"SEASR_Brill.jar"},
+        baseURL="meandre://seasr.org/components/")
 public class LexRuleJarReader implements ExecutableComponent {
 	
 	// ==============

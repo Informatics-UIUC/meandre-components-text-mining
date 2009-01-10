@@ -89,7 +89,8 @@ import org.seasr.components.text.pos.brill.support.LexRule;
 		+ "Brill, Eric, Some Advances In Rule-Based Part of Speech Tagging, AAAI, 1994 </p>", 
 		
 		name = "LexRuleReader", 
-		tags = "brill pos io read file text nlp")
+		tags = "brill pos io read file text nlp",
+        baseURL="meandre://seasr.org/components/")
 public class LexRuleReader implements ExecutableComponent {
 	
 	// ==============

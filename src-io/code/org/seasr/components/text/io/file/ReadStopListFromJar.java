@@ -77,7 +77,8 @@ description = "<p>Overview: <br>"
 		+ "(of strings from the text list) object which is output.  This <i>HashSet</i> object is used "
 		+ "by the <i>Filter Stops</i> component for example." + "</p>",
 
-name = "ReadStopListFromJar", tags = "text read io file stops stopwords nlp", dependency={"SEASR_Brill.jar"})
+name = "ReadStopListFromJar", tags = "text read io file stops stopwords nlp", dependency={"SEASR_Brill.jar"},
+baseURL="meandre://seasr.org/components/")
 public class ReadStopListFromJar implements ExecutableComponent {
 	// ==============
 	// Data Members

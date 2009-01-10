@@ -104,7 +104,8 @@ import org.meandre.annotations.*;
         + "token objects.  If you need GATE token object then you "
         + "must run through the GATE Tokenizer.</p>",
 	name = "DocumentToGATEDocument", 
-	tags = "text gate transform document")
+	tags = "text gate transform document",
+    baseURL="meandre://seasr.org/components/")
 public class DocumentToGATEDocument implements ExecutableComponent
 {
     // ==============
@@ -122,20 +123,20 @@ public class DocumentToGATEDocument implements ExecutableComponent
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	@ComponentProperty(description = "Include title in content? Appends the title to the "
-		+ "front of the document content so that GATE will process it.", 
-		name = "include_title_in_content A boolean value (true or false).", 
+		+ "front of the document content so that GATE will process it. A boolean value (true or false).", 
+		name = "include_title_in_content", 
 		defaultValue = "false")
 	final static String DATA_PROPERTY_INCLUDE_TITLE_IN_CONTENT = "include_title_in_content";
 
 	// io
 	
 	@ComponentInput(description = "Input SEASR document.", 
-			name = "seasr_document_in")
-	public final static String DATA_INPUT_SEASR_DOC_IN = "seasr_document_in";
+			name = "seasr_document")
+	public final static String DATA_INPUT_SEASR_DOC_IN = "seasr_document";
 
 	@ComponentOutput(description = "Output GATE document.", 
-			name = "gate_document_out")
-	public final static String DATA_OUTPUT_GATE_DOC_OUT = "gate_document_out";
+			name = "gate_document")
+	public final static String DATA_OUTPUT_GATE_DOC_OUT = "gate_document";
 
     // ================
     // Constructor(s)

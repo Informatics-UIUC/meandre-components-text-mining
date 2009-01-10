@@ -108,7 +108,9 @@ description = "<p>Usage: TreebankParser <br>"
 		+ "SEASR annotations but treebank format is stored in addition for use in later "
 		+ "components.</p>",
 
-name = "OpenNLP_TreebankParser", tags = "parser text opennlp document", dependency = { "maxent-models.jar" })
+name = "OpenNLP_TreebankParser", tags = "parser text opennlp document", 
+dependency = { "maxent-models.jar" },
+baseURL="meandre://seasr.org/components/")
 public class OpenNLP_TreebankParser implements ExecutableComponent {
 
 	// ==============

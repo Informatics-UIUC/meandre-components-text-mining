@@ -91,7 +91,8 @@ description = "<p>Overview:<br>"
 		+ "<p>Writes the file name to the document title and ID.  No date information is "
 		+ "recorded.</p>",
 
-name = "Text_File_To_Document", tags = "io read file text")
+name = "Text_File_To_Document", tags = "io read file text",
+baseURL="meandre://seasr.org/components/")
 public class TextFileToDoc implements ExecutableComponent {
 	// ==============
 	// Data Members

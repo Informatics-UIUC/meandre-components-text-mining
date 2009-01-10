@@ -87,7 +87,8 @@ import org.seasr.components.text.pos.brill.support.Lexicon;
 		+ "<p>Reference: <br>"
 		+ "Brill, Eric, Some Advances In Rule-Based Part of Speech Tagging, AAAI, 1994 </p>", 
 		
-		name = "LexiconReader", tags = "io read text pos brill lexicon nlp")
+		name = "LexiconReader", tags = "io read text pos brill lexicon nlp",
+        baseURL="meandre://seasr.org/components/")
 public class LexiconReader implements ExecutableComponent {
 	// ==============
 	// Data Members

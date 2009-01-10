@@ -77,7 +77,7 @@ import org.meandre.annotations.*;
  * <p>
  * Detailed Description: The Brill Tagging algorithm has three basic parts --
  * pre-tagging, lexical tagging, and contextual tagging. The pre-tagger is
- * purely a lookup of part-of-speech assignemnt in a dictionary. It can be used
+ * purely a lookup of part-of-speech assignment in a dictionary. It can be used
  * without the other two stages. The lexical and contextual tagging stages apply
  * sets of rules to alter tag assignments. The lexical and contextual taggers
  * depend on the initial assignments of the pre-tagger. Furthermore, it is
@@ -139,7 +139,8 @@ import org.meandre.annotations.*;
 		+ "per the number of tokens.  Memory usage is proportional to the number tokens.</p>"
 		+ "<p>Trigger Criteria: <br>" + "Standard.</p>", 
 		
-		name = "PreTag", tags = "nlp text brill pos", firingPolicy = Component.FiringPolicy.any)
+		name = "PreTag", tags = "nlp text brill pos", firingPolicy = Component.FiringPolicy.any,
+        baseURL="meandre://seasr.org/components/")
 public class PreTag implements ExecutableComponent {
 
 	// ==============

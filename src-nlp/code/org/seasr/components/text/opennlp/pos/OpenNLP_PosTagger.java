@@ -86,7 +86,9 @@ import org.meandre.annotations.*;
 			+ "This component wrapts the POSTagger class from OpenNLP. Part-of-Speech "
 			+ "that are generated for each token are stored as annotations.</p>", 
 		
-		name = "OpenNLP_PosTagger", tags = "pos text opennlp document", dependency = { "maxent-models.jar" })
+		name = "OpenNLP_PosTagger", tags = "pos text opennlp document", 
+		dependency = { "maxent-models.jar" },
+        baseURL="meandre://seasr.org/components/")
 public class OpenNLP_PosTagger implements ExecutableComponent {
 
 	// ==============

@@ -87,7 +87,9 @@ import org.seasr.components.text.util.Factory;
 			+ "segemented into sentences and paragraphs and tokenizes each word (part).  Each token is "
 			+ "recorded as an annotation in the SEASR Document object.", 
 		
-		name = "OpenNLP_Tokenizer", tags = "tokenize text opennlp document", dependency = { "maxent-models.jar" })
+		name = "OpenNLP_Tokenizer", tags = "tokenize text opennlp document", 
+		dependency = { "maxent-models.jar" },
+        baseURL="meandre://seasr.org/components/")
 public class OpenNLP_Tokenizer implements ExecutableComponent {
 
 	// ==============

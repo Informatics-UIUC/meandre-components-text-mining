@@ -128,7 +128,8 @@ description = "<p><b>Overview</b>: <br>"
 
 name = "GATE_PronominalCoreferencer", 
 tags = "text gate coreference document",
-dependency = { "GATE-Home-And-ANNIE-plugin_001.jar", "gate.jar" })
+dependency = { "GATE-Home-And-ANNIE-plugin_001.jar", "gate.jar" },
+baseURL="meandre://seasr.org/components/")
 public class GATE_PronominalCoreferencer implements ExecutableComponent {
 
 	// ==============

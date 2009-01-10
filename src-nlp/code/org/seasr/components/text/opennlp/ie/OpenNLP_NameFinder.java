@@ -91,7 +91,9 @@ description = "<p>Overview:<br> This component wraps the OpenNLP NameFinder clas
 		+ "Part-of-Speech tagged text or text that has been run through the OpenNLP Treebank "
 		+ "parser (use the 'use_treebank' option).</p>",
 
-name = "OpenNLP_NameFinder", tags = "sentence text opennlp document", dependency = { "maxent-models.jar" })
+name = "OpenNLP_NameFinder", tags = "sentence text opennlp document", 
+dependency = { "maxent-models.jar" },
+baseURL="meandre://seasr.org/components/")
 public class OpenNLP_NameFinder implements ExecutableComponent {
 
 	// ==============

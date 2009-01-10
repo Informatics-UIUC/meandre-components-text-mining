@@ -105,7 +105,8 @@ import org.meandre.annotations.*;
 		+ "String keys or values their 'toString()' values "
 		+ "are used in the SEASR feature map.<p>", 
 		name = "GATEDocumentToDocument", 
-		tags = "text gate transform document")
+		tags = "text gate transform document",
+        baseURL="meandre://seasr.org/components/")
 public class GATEDocumentToDocument implements ExecutableComponent {
 	// ==============
 	// Data Members

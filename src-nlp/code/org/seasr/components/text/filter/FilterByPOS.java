@@ -140,7 +140,8 @@ description = "<p>Overview: <br>"
 
 		+ "<p>Trigger Criteria: <br>" + "Standard." + "</p>",
 
-name = "FilterByPOS", tags = "nlp text document filter pos")
+name = "FilterByPOS", tags = "nlp text document filter pos",
+baseURL="meandre://seasr.org/components/")
 public class FilterByPOS implements ExecutableComponent {
 
 	// ==============

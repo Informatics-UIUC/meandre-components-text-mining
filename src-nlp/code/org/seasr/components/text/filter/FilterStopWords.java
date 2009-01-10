@@ -124,7 +124,8 @@ description = "<p>Overview: "
 
 name = "FilterStopWords", 
 tags = "nlp text document filter stops stopwords", 
-firingPolicy = Component.FiringPolicy.any)
+firingPolicy = Component.FiringPolicy.any,
+baseURL="meandre://seasr.org/components/")
 public class FilterStopWords implements ExecutableComponent {
 
 	// ==============

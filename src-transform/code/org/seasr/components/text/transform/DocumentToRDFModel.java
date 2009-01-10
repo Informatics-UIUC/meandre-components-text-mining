@@ -84,7 +84,8 @@ import com.hp.hpl.jena.rdf.model.Model;
 + "per the number of tokens.  Memory usage is proportional to the number tokens."
 + "Trigger Criteria: "
 + "Standard.",
-	name = "DocumentToRDFModel", tags = "text document rdf jena transform")
+	name = "DocumentToRDFModel", tags = "text document rdf jena transform",
+    baseURL="meandre://seasr.org/components/")
 public class DocumentToRDFModel implements ExecutableComponent {
 
 	// ==============

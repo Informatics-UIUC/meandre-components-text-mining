@@ -114,7 +114,8 @@ description = "<p>Overview: <br>"
 		+ "This module will modify (as described above) the document object that is input."
 		+ "</p>" + "<p>" + "Trigger Criteria: <br>" + "All." + "</p>",
 
-name = "AddTokenNGrams", tags = "nlp text document ngram pos")
+name = "AddTokenNGrams", tags = "nlp text document ngram pos",
+baseURL="meandre://seasr.org/components/")
 public class AddTokenNGrams implements ExecutableComponent {
 	// ==============
 	// Data Members

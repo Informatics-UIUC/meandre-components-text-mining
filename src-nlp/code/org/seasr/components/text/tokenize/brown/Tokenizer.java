@@ -91,7 +91,8 @@ import org.meandre.annotations.*;
 		"<p>Trigger Criteria: <br>" +
 		"Standard.</p>",
 	name = "Tokenizer", 
-	tags = "token tokenize text")
+	tags = "token tokenize text",
+    baseURL="meandre://seasr.org/components/")
 public class Tokenizer implements ExecutableComponent {
 
 	// ==============

@@ -93,7 +93,8 @@ import org.seasr.components.text.pos.brill.support.ContextRule;
 		
 		name = "ContextRuleJarReader", 
 		tags = "io read file text brill pos nlp",
-		dependency={"SEASR_Brill.jar"})
+		dependency={"SEASR_Brill.jar"},
+        baseURL="meandre://seasr.org/components/")
 public class ContextRuleJarReader implements ExecutableComponent {
 
 	// ==============

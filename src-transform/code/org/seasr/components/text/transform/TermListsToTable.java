@@ -115,7 +115,9 @@ description = "<p>Overview: <br>"
 		+ "processed until the number told to expect is reached.  At that time the "
 		+ "SparseTable is completed and pushed to output." + "</p>",
 
-name = "TermListsToTable", tags = "text termlist transform table", firingPolicy = Component.FiringPolicy.any)
+name = "TermListsToTable", tags = "text termlist transform table", 
+firingPolicy = Component.FiringPolicy.any,
+baseURL="meandre://seasr.org/components/")
 public class TermListsToTable implements ExecutableComponent {
 
 	// ==============

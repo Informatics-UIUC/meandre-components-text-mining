@@ -88,7 +88,8 @@ import org.seasr.components.text.pos.brill.support.ContextRule;
 		+ "Brill, Eric, Some Advances In Rule-Based Part of Speech Tagging, AAAI, 1994 </p>", 
 		
 		name = "ContextRuleReader", 
-		tags = "io read file text brill pos nlp")
+		tags = "io read file text brill pos nlp",
+        baseURL="meandre://seasr.org/components/")
 public class ContextRuleReader implements ExecutableComponent {
 
 	// ==============

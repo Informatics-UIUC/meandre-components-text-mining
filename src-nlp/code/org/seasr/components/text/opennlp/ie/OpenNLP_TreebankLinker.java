@@ -102,7 +102,9 @@ import org.meandre.components.util.*;
 		description = "<p>Overview: <br>"
 			+ "This class is currently non-functional.  Do not use.", 
 		
-		name = "OpenNLP_TreebankLinker", tags = "sentence text opennlp document", dependency = { "maxent-models.jar" })
+		name = "OpenNLP_TreebankLinker", tags = "sentence text opennlp document", 
+		dependency = { "maxent-models.jar" },
+        baseURL="meandre://seasr.org/components/")
 public class OpenNLP_TreebankLinker implements ExecutableComponent {
 
 	// ==============

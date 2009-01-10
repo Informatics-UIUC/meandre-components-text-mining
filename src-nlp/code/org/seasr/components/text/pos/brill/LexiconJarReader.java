@@ -93,7 +93,8 @@ import org.seasr.components.text.pos.brill.support.Lexicon;
 		
 		name = "LexiconJarReader", 
 		tags = "io read text lexicon brill pos nlp",
-		dependency={"SEASR_Brill.jar"})
+		dependency={"SEASR_Brill.jar"},
+        baseURL="meandre://seasr.org/components/")
 public class LexiconJarReader implements ExecutableComponent {
 	// ==============
 	// Data Members

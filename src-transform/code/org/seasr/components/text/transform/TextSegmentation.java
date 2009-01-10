@@ -111,7 +111,8 @@ import org.seasr.components.text.util.Factory;
 		+ "<p>Each segment inherits the 'parent' document's title, ID, date, and content. "
 		+ "However, the original document's feature map is not included.  This can be modified "
 		+ "in future releases.</p>",
-		name = "TextSegmentation", tags = "text document segment")
+		name = "TextSegmentation", tags = "text document segment",
+        baseURL="meandre://seasr.org/components/")
 public class TextSegmentation implements ExecutableComponent {
 
 	// ==============

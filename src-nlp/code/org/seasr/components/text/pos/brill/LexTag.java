@@ -141,7 +141,8 @@ import org.meandre.annotations.*;
 		+ "per the number of tokens.  Memory usage is proportional to the number tokens.</p>"
 		+ "<p>Trigger Criteria: <br>Standard.</p>", 
 		
-		name = "LexTag", tags = "text brill pos nlp", firingPolicy = Component.FiringPolicy.any)
+		name = "LexTag", tags = "text brill pos nlp", firingPolicy = Component.FiringPolicy.any,
+        baseURL="meandre://seasr.org/components/")
 public class LexTag implements ExecutableComponent {
 
 	// ==============

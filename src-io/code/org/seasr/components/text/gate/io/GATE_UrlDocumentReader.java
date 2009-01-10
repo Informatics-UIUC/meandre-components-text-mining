@@ -119,7 +119,9 @@ description = "<p>Overview: <br>"
 
 		+ "<p>Trigger Criteria: <br>" + "Standard." + "</p>",
 
-name = "GATE_UrlDocumentReader", tags = "io read file text gate document", dependency = { "GATE-Home-And-ANNIE-plugin_001.jar", "gate.jar", "nekohtml-0.9.5.jar", "PDFBox-0.7.2.jar"})
+name = "GATE_UrlDocumentReader", tags = "io read file text gate document", 
+dependency = { "GATE-Home-And-ANNIE-plugin_001.jar", "gate.jar", "nekohtml-0.9.5.jar", "PDFBox-0.7.2.jar"},
+baseURL="meandre://seasr.org/components/")
 public class GATE_UrlDocumentReader extends GATE_DocumentReader {
 
 	// props
