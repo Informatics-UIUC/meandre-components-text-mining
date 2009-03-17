@@ -217,7 +217,7 @@ public class TextFileToDoc implements ExecutableComponent {
 				throw new Exception("Input file does not exist: "
 						+ fvar.getPath());
 			}
-			if (barr == null) {
+			if (webdav && barr == null) {
 				throw new Exception("Webdav file does not exist: "
 						+ m_fileName);
 			}
