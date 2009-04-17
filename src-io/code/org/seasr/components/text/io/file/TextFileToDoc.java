@@ -92,7 +92,7 @@ description = "<p>Overview:<br>"
 		+ "recorded.</p>",
 
 name = "Text_File_To_Document", tags = "io read file text",
-dependency = {"seasr-webdav-1.4.0.jar"},
+dependency = {"meandre-webdav-1.4.0.jar"},
 baseURL="meandre://seasr.org/components/")
 public class TextFileToDoc implements ExecutableComponent {
 	// ==============
