@@ -205,8 +205,8 @@
         <!-- only data structures and utils -->
         <jar destfile="${dist.dir}/${datastructs.jar.file}">
              <fileset dir="${classes.dir}">
-                <include name="org/meandre/components/datatype/**/*.class"/>
-                <include name="org/meandre/components/util/**/*.class"/>
+                <include name="org/seasr/components/text/datatype/**/*.class"/>
+                <include name="org/seasr/components/text/util/**/*.class"/>
              </fileset>
         </jar>
     </target>
