@@ -244,7 +244,7 @@ public class TextSegmentation extends AbstractExecutableComponent {
 		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
 		if (getVerbose(ccp)) {
-			_logger.info("TextSegmentation: END EXEC -- File Names Processed: "
+			componentConsoleHandler.whenLogLevelOutput("info","TextSegmentation: END EXEC -- File Names Processed: "
 					+ _docsProcessed + " in " + (end - _start) / 1000
 					+ " seconds\n");
 		}
@@ -326,7 +326,7 @@ public class TextSegmentation extends AbstractExecutableComponent {
 
 					if (this.getVerbose(cc)) {
 						if (Math.IEEEremainder(segcnt, 100) == 0) {
-							_logger.info("TextSegmentation -- Docs Processed: "
+							componentConsoleHandler.whenLogLevelOutput("info","TextSegmentation -- Docs Processed: "
 									+ segcnt);
 						}
 					}
@@ -337,14 +337,11 @@ public class TextSegmentation extends AbstractExecutableComponent {
 			cc.pushDataComponentToOutput(DATA_OUTPUT_DOC_SEGMENT_CNT, segcnt);
 			_docsProcessed++;
 			if (getVerbose(cc)){
-			_logger.info("TextSegmentation :: Doc: " + idoc.getTitle()
+				componentConsoleHandler.whenLogLevelOutput("info","TextSegmentation :: Doc: " + idoc.getTitle()
 					+ " created " + segcnt
 					+ " segments.");
 			}
 			idoc.free();
-
-			//add on May 27, 2009
-			componentConsoleHandler.whenLogLevelOutput("info","the number of segments is "+segcnt);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());

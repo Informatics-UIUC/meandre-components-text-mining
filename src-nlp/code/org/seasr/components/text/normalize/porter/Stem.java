@@ -186,7 +186,7 @@ public class Stem  extends AbstractExecutableComponent {
 		_logger.fine("dispose() called");
 
 		if (getVerbose(ccp)) {
-			System.out.println("\nEND EXEC -- Stem -- Docs Processed: "
+			componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- Stem -- Docs Processed: "
 					+ m_docsProcessed + "\n");
 		}
 		m_docsProcessed = 0;
@@ -252,9 +252,8 @@ public class Stem  extends AbstractExecutableComponent {
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
 			m_docsProcessed++;
 			if (verbose && (m_docsProcessed % 20 == 0)) {
-				System.out.println("Stem: processed " + m_docsProcessed);
+				componentConsoleHandler.whenLogLevelOutput("info","Stem: processed " + m_docsProcessed);
 			}
-			componentConsoleHandler.whenLogLevelOutput("info","Stem: processed " + m_docsProcessed);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();

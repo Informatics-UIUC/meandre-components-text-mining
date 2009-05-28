@@ -1,36 +1,36 @@
 /**
  * University of Illinois/NCSA
  * Open Source License
- * 
- * Copyright (c) 2008, Board of Trustees-University of Illinois.  
+ *
+ * Copyright (c) 2008, Board of Trustees-University of Illinois.
  * All rights reserved.
- * 
- * Developed by: 
- * 
+ *
+ * Developed by:
+ *
  * Automated Learning Group
  * National Center for Supercomputing Applications
  * http://www.seasr.org
- * 
- *  
+ *
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal with the Software without restriction, including without limitation the
  * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
  * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions: 
- * 
+ * furnished to do so, subject to the following conditions:
+ *
  *  * Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimers. 
- * 
+ *    this list of conditions and the following disclaimers.
+ *
  *  * Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimers in the 
- *    documentation and/or other materials provided with the distribution. 
- * 
+ *    this list of conditions and the following disclaimers in the
+ *    documentation and/or other materials provided with the distribution.
+ *
  *  * Neither the names of Automated Learning Group, The National Center for
  *    Supercomputing Applications, or University of Illinois, nor the names of
  *    its contributors may be used to endorse or promote products derived from
- *    this Software without specific prior written permission. 
- * 
+ *    this Software without specific prior written permission.
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
@@ -59,6 +59,7 @@ import org.seasr.components.text.datatype.corpora.Annotation;
 import org.seasr.components.text.datatype.corpora.AnnotationConstants;
 import org.seasr.components.text.datatype.corpora.AnnotationSet;
 import org.seasr.components.text.datatype.corpora.Document;
+import org.meandre.components.abstracts.AbstractExecutableComponent;
 import org.meandre.core.*;
 import org.meandre.annotations.*;
 import org.seasr.components.text.util.feature_maps.FeatureValueEncoderDecoder;
@@ -100,11 +101,11 @@ import org.seasr.components.text.util.feature_maps.FeatureValueEncoderDecoder;
  * Trigger Criteria: <br>
  * All.
  * </p>
- * 
+ *
  * @author D. Searsmith
- * 
+ *
  * TODO: Testing, Unit Testing
- * 
+ *
  */
 @Component(creator = "Duane Searsmith",
 
@@ -142,7 +143,7 @@ description = "<p>Overview: <br>"
 
 name = "FilterByPOS", tags = "nlp text document filter pos",
 baseURL="meandre://seasr.org/components/")
-public class FilterByPOS implements ExecutableComponent {
+public class FilterByPOS extends AbstractExecutableComponent {
 
 	// ==============
 	// Data Members
@@ -194,7 +195,8 @@ public class FilterByPOS implements ExecutableComponent {
 		return s;
 	}
 
-	public void initialize(ComponentContextProperties ccp) {
+	public void initializeCallBack(ComponentContextProperties ccp)
+    throws Exception {
 		_logger.fine("initialize() called");
 		m_docsProcessed = 0;
 		if (_tags == null) {
@@ -207,24 +209,25 @@ public class FilterByPOS implements ExecutableComponent {
 		}
 	}
 
-	public void dispose(ComponentContextProperties ccp) {
+	public void disposeCallBack(ComponentContextProperties ccp)
+    throws Exception {
 		_logger.fine("dispose() called");
 
 		if (getVerbose(ccp)) {
-			_logger.info("\nEND EXEC -- FilterByPOS -- Docs Processed: "
+			componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- FilterByPOS -- Docs Processed: "
 					+ m_docsProcessed + "\n");
 		}
 		m_docsProcessed = 0;
 	}
 
-	public void execute(ComponentContext ctx)
-			throws ComponentExecutionException, ComponentContextException {
+	public void executeCallBack(ComponentContext ctx)
+    throws Exception {
 		_logger.fine("execute() called");
 
 		// props =====================================
 		boolean verbose = this.getVerbose(ctx);
 		//============================================
-		
+
 		int toks_selected = 0;
 
 		try {
@@ -232,7 +235,7 @@ public class FilterByPOS implements ExecutableComponent {
 					.getDataComponentFromInput(DATA_INPUT_DOCUMENT);
 
 			if (verbose) {
-				System.out.println("FilterByPOS"
+				componentConsoleHandler.whenLogLevelOutput("info","FilterByPOS"
 						+ ": Document: "
 						+ doc.getDocID()
 						+ " has "
@@ -298,7 +301,7 @@ public class FilterByPOS implements ExecutableComponent {
 			}
 
 			if (verbose) {
-				System.out.println("FilterByPOS: " + toks_selected
+				componentConsoleHandler.whenLogLevelOutput("info","FilterByPOS: " + toks_selected
 						+ " tokens were selected for this document -- "
 						+ doc.getTitle() + ", out of " + origSz);
 			}
