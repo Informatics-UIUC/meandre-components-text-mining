@@ -1,36 +1,36 @@
 /**
  * University of Illinois/NCSA
  * Open Source License
- * 
- * Copyright (c) 2008, Board of Trustees-University of Illinois.  
+ *
+ * Copyright (c) 2008, Board of Trustees-University of Illinois.
  * All rights reserved.
- * 
- * Developed by: 
- * 
+ *
+ * Developed by:
+ *
  * Automated Learning Group
  * National Center for Supercomputing Applications
  * http://www.seasr.org
- * 
- *  
+ *
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal with the Software without restriction, including without limitation the
  * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
  * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions: 
- * 
+ * furnished to do so, subject to the following conditions:
+ *
  *  * Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimers. 
- * 
+ *    this list of conditions and the following disclaimers.
+ *
  *  * Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimers in the 
- *    documentation and/or other materials provided with the distribution. 
- * 
+ *    this list of conditions and the following disclaimers in the
+ *    documentation and/or other materials provided with the distribution.
+ *
  *  * Neither the names of Automated Learning Group, The National Center for
  *    Supercomputing Applications, or University of Illinois, nor the names of
  *    its contributors may be used to endorse or promote products derived from
- *    this Software without specific prior written permission. 
- * 
+ *    this Software without specific prior written permission.
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
@@ -61,6 +61,7 @@ import java.util.logging.*;
 //import org.seasr.components.text.opennlp.sentence.OpenNLP_SentenceDetect;
 //import org.seasr.components.text.opennlp.tokenize.OpenNLP_Tokenizer;
 
+import org.meandre.components.abstracts.AbstractExecutableComponent;
 import org.meandre.core.*;
 import org.meandre.annotations.*;
 import org.seasr.components.text.datatype.corpora.Annotation;
@@ -73,39 +74,39 @@ import org.seasr.components.text.util.Factory;
 /**
  * <p>Overview: <br>
  * This component takes in a Document and segments it into documents
- *  of size approximating the input segmentation size in tokens.  This 
- *  component requires that the input document to have been previously 
- *  processed by a sentence splitter and a tokenizer.  Also, the count 
- *  of segments per each document is output.  These counts can be collected 
- *  and used in calculating the total number of new documents (segments) being 
- *  produced.  Some components, down stream, may need to know that they have 
+ *  of size approximating the input segmentation size in tokens.  This
+ *  component requires that the input document to have been previously
+ *  processed by a sentence splitter and a tokenizer.  Also, the count
+ *  of segments per each document is output.  These counts can be collected
+ *  and used in calculating the total number of new documents (segments) being
+ *  produced.  Some components, down stream, may need to know that they have
  *  received all documents and will use this output.</p>
  *  <p>Detailed Description: <br>
- *  The output document sizes will be at least greater than 95% of the approximate 
- *  segment size set by the user.  The default is 200 tokens.  Segments always 
+ *  The output document sizes will be at least greater than 95% of the approximate
+ *  segment size set by the user.  The default is 200 tokens.  Segments always
  *  and end at sentence boundaries.</p>
  *  <p>This component is capable of segmenting multiple documents in a stream.</p>
- *  <p>Each segment inherits the 'parent' document's title, ID, date, and content. 
- *  However, the original document's feature map is not included.  This can be modified 
+ *  <p>Each segment inherits the 'parent' document's title, ID, date, and content.
+ *  However, the original document's feature map is not included.  This can be modified
  *  in future releases.</p>
- * 
+ *
  * @author D. Searsmith
- * 
+ *
  * TODO: Unit Tests
  */
 
 @Component(creator = "Duane Searsmith", description = "<p>Overview: <br>"
-		+ "This component takes in a Document and segments it into documents " 
+		+ "This component takes in a Document and segments it into documents "
 		+ "of size approximating the input segmentation size in tokens.  This "
 		+ "component requires that the input document to have been previously "
-		+ "processed by a sentence splitter and a tokenizer.  Also, the count " 
+		+ "processed by a sentence splitter and a tokenizer.  Also, the count "
 		+ "of segments per each document is output.  These counts can be collected "
 		+ "and used in calculating the total number of new documents (segments) being "
 		+ "produced.  Some components, down stream, may need to know that they have "
 		+ "received all documents and will use this output.</p>"
 		+ "<p>Detailed Description: <br>"
 		+ "The output document sizes will be at least greater than 95% of the approximate "
-		+ "segment size set by the user.  The default is 200 tokens.  Segments always " 
+		+ "segment size set by the user.  The default is 200 tokens.  Segments always "
 		+ "and end at sentence boundaries.</p>"
 		+ "<p>This component is capable of segmenting multiple documents in a stream.</p>"
 		+ "<p>Each segment inherits the 'parent' document's title, ID, date, and content. "
@@ -113,7 +114,7 @@ import org.seasr.components.text.util.Factory;
 		+ "in future releases.</p>",
 		name = "TextSegmentation", tags = "text document segment",
         baseURL="meandre://seasr.org/components/")
-public class TextSegmentation implements ExecutableComponent {
+public class TextSegmentation extends AbstractExecutableComponent {
 
 	// ==============
 	// Data Members
@@ -231,13 +232,15 @@ public class TextSegmentation implements ExecutableComponent {
 	// Interface Impl: ExecutableComponent
 	// =====================================
 
-	public void initialize(ComponentContextProperties ccp) {
+	public void initializeCallBack(ComponentContextProperties ccp)
+    throws Exception {
 		_logger.fine("initialize() called");
 		_docsProcessed = 0;
 		_start = System.currentTimeMillis();
 	}
 
-	public void dispose(ComponentContextProperties ccp) {
+	public void disposeCallBack(ComponentContextProperties ccp)
+    throws Exception {
 		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
 		if (getVerbose(ccp)) {
@@ -248,13 +251,13 @@ public class TextSegmentation implements ExecutableComponent {
 		_docsProcessed = 0;
 	}
 
-	public void execute(ComponentContext ctx)
-			throws ComponentExecutionException, ComponentContextException {
+	public void executeCallBack(ComponentContext cc)
+    throws Exception {
 		_logger.fine("execute() called");
-		long segSz = getSegmentSize(ctx);
+		long segSz = getSegmentSize(cc);
 		segSz = Math.round(segSz*0.95);
 		try {
-			Document idoc = (Document) ctx
+			Document idoc = (Document) cc
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
 			Collection<Annotation> annotsSentC = idoc
 					.getAnnotations(AnnotationConstants.ANNOTATION_SET_SENTENCES);
@@ -270,7 +273,7 @@ public class TextSegmentation implements ExecutableComponent {
 					.getAnnotations(AnnotationConstants.ANNOTATION_SET_SENTENCES);
 			AnnotationSet annotsOSeg = odoc
 			.getAnnotations(AnnotationConstants.ANNOTATION_SET_SEGMENTATION);
-			
+
 			int tokenCnt = 0;
 			odoc.setContent(idoc.getContent());
 			odoc.setDate(idoc.getDate());
@@ -287,22 +290,22 @@ public class TextSegmentation implements ExecutableComponent {
 				}
 				AnnotationSet sentToks = annotsTok.getContained(sent
 						.getStartNodeOffset(), sent.getEndNodeOffset());
-				
+
 				tokenCnt += sentToks.size();
-			
+
 				annotsOTok.addAll(sentToks);
 				annotsOSent.add(sent);
-				
+
 				if (tokenCnt >= segSz){
 					annotsOSeg.add(segStart, sent.getEndNodeOffset(), AnnotationConstants.SEGMENTATION_ANNOT_TYPE, null);
-					
+
 //					System.out.println("Segment: " + segcnt);
 //					System.out.println("Num Tokens: " + annotsOTok.size());
 //					System.out.println("Num Sents: " + annotsOSent.size());
 //					System.out.println("\n\n");
-							
-					
-					ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, odoc);
+
+
+					cc.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, odoc);
 
 					segcnt++;
 					loopcnt = 1;
@@ -321,24 +324,27 @@ public class TextSegmentation implements ExecutableComponent {
 					odoc.setDocID(idoc.getDocID());
 					odoc.setTitle(idoc.getTitle() + " [Segment " + (segcnt + 1) + "]");
 
-					if (this.getVerbose(ctx)) {
+					if (this.getVerbose(cc)) {
 						if (Math.IEEEremainder(segcnt, 100) == 0) {
 							_logger.info("TextSegmentation -- Docs Processed: "
 									+ segcnt);
 						}
 					}
 
-				
+
 				}
 			}
-			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_SEGMENT_CNT, segcnt);
+			cc.pushDataComponentToOutput(DATA_OUTPUT_DOC_SEGMENT_CNT, segcnt);
 			_docsProcessed++;
-			if (getVerbose(ctx)){
+			if (getVerbose(cc)){
 			_logger.info("TextSegmentation :: Doc: " + idoc.getTitle()
 					+ " created " + segcnt
 					+ " segments.");
 			}
 			idoc.free();
+
+			//add on May 27, 2009
+			componentConsoleHandler.whenLogLevelOutput("info","the number of segments is "+segcnt);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			_logger.severe(ex.getMessage());
