@@ -1,36 +1,36 @@
 /**
  * University of Illinois/NCSA
  * Open Source License
- * 
- * Copyright (c) 2008, Board of Trustees-University of Illinois.  
+ *
+ * Copyright (c) 2008, Board of Trustees-University of Illinois.
  * All rights reserved.
- * 
- * Developed by: 
- * 
+ *
+ * Developed by:
+ *
  * Automated Learning Group
  * National Center for Supercomputing Applications
  * http://www.seasr.org
- * 
- *  
+ *
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal with the Software without restriction, including without limitation the
  * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
  * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions: 
- * 
+ * furnished to do so, subject to the following conditions:
+ *
  *  * Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimers. 
- * 
+ *    this list of conditions and the following disclaimers.
+ *
  *  * Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimers in the 
- *    documentation and/or other materials provided with the distribution. 
- * 
+ *    this list of conditions and the following disclaimers in the
+ *    documentation and/or other materials provided with the distribution.
+ *
  *  * Neither the names of Automated Learning Group, The National Center for
  *    Supercomputing Applications, or University of Illinois, nor the names of
  *    its contributors may be used to endorse or promote products derived from
- *    this Software without specific prior written permission. 
- * 
+ *    this Software without specific prior written permission.
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
@@ -62,14 +62,15 @@ import org.meandre.annotations.*;
 import org.seasr.components.text.datatype.termlist.TermList;
 import org.seasr.components.text.datatype.termlist.TermListLite;
 import org.seasr.components.text.datatype.termmap.TermMap;
+import org.meandre.components.abstracts.AbstractExecutableComponent;
 import org.meandre.components.datatype.table.*;
 
 /**
- * 
+ *
  * @author D. Searsmith
- * 
+ *
  * TODO: Testing, Unit Testing
- * 
+ *
  */
 
 @Component(creator = "Duane Searsmith",
@@ -115,10 +116,10 @@ description = "<p>Overview: <br>"
 		+ "processed until the number told to expect is reached.  At that time the "
 		+ "SparseTable is completed and pushed to output." + "</p>",
 
-name = "TermListsToTable", tags = "text termlist transform table", 
+name = "TermListsToTable", tags = "text termlist transform table",
 firingPolicy = Component.FiringPolicy.any,
 baseURL="meandre://seasr.org/components/")
-public class TermListsToTable implements ExecutableComponent {
+public class TermListsToTable extends AbstractExecutableComponent {
 
 	// ==============
 	// Data Members
@@ -211,7 +212,8 @@ public class TermListsToTable implements ExecutableComponent {
 		return Boolean.parseBoolean(s.toLowerCase());
 	}
 
-	public void initialize(ComponentContextProperties ccp) {
+	public void initializeCallBack(ComponentContextProperties ccp)
+    throws Exception {
 		_logger.fine("initialize() called");
 		_docs = new ArrayList<TermList>();
 		_termMaps = new HashMap<ExampleTable, TermMap>();
@@ -227,16 +229,17 @@ public class TermListsToTable implements ExecutableComponent {
 		m_start = System.currentTimeMillis();
 	}
 
-	public void dispose(ComponentContextProperties ccp) {
+	public void disposeCallBack(ComponentContextProperties ccp)
+    throws Exception {
 		_logger.fine("dispose() called");
 		_fact = null;
 		_propList = null;
 		long end = System.currentTimeMillis();
 		if (getVerbose(ccp)) {
-			_logger.info("\nEND EXEC -- TermListsToTable -- Docs Processed: "
+			componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- TermListsToTable -- Docs Processed: "
 					+ m_docsProcessed + " in " + (end - m_start) / 1000
 					+ " seconds\n");
-			_logger.info("\nEND EXEC -- TermListsToTable -- Docs Output: "
+			componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- TermListsToTable -- Docs Output: "
 					+ m_count + " in " + (end - m_start) / 1000 + " seconds\n");
 		}
 		m_docsProcessed = 0;
@@ -249,8 +252,8 @@ public class TermListsToTable implements ExecutableComponent {
 		}
 	}
 
-	public void execute(ComponentContext ctx)
-			throws ComponentExecutionException, ComponentContextException {
+	public void executeCallBack(ComponentContext ctx)
+    throws Exception {
 		_logger.fine("execute() called");
 
 		try {
@@ -271,7 +274,7 @@ public class TermListsToTable implements ExecutableComponent {
 						.getDataComponentFromInput(DATA_INPUT_NUMBER_OF_TERMLIST))
 						.intValue();
 				if (getVerbose(ctx)) {
-					_logger.info("TermListsToTable: Number of records was told to expect: "
+					componentConsoleHandler.whenLogLevelOutput("info","TermListsToTable: Number of records was told to expect: "
 									+ m_numRecs);
 				}
 			}
@@ -283,7 +286,7 @@ public class TermListsToTable implements ExecutableComponent {
 					m_docsProcessed++;
 					_cnter++;
 					if ((tl.getSize() == 0) && (!getProcessEmptyTermLists(ctx))) {
-						_logger.info("Termlist had no terms -- discarding: "
+						componentConsoleHandler.whenLogLevelOutput("info","Termlist had no terms -- discarding: "
 								+ tl.getDocID() + " " + tl.getTitle());
 					} else {
 						int row = _termTable.getNumRows();
@@ -331,7 +334,7 @@ public class TermListsToTable implements ExecutableComponent {
 
 				m_count = _termTable.getNumRows();
 				if (getVerbose(ctx)) {
-					_logger.info("TermListsToTable -- Number of rows added: "
+					componentConsoleHandler.whenLogLevelOutput("info","TermListsToTable -- Number of rows added: "
 							+ m_count);
 				}
 
@@ -391,7 +394,7 @@ public class TermListsToTable implements ExecutableComponent {
 				m_numRecs = Integer.MAX_VALUE;
 				_termTable = _fact.createTable().toExampleTable();
 				if (getVerbose(ctx)) {
-					_logger.info("TermListsToTable(): GlobalTermMap contains "
+					componentConsoleHandler.whenLogLevelOutput("info","TermListsToTable(): GlobalTermMap contains "
 							+ m_gtm.size() + " terms.");
 				}
 				_tmap = new TermMap();
