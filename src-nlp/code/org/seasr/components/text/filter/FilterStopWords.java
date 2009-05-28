@@ -1,36 +1,36 @@
 /**
  * University of Illinois/NCSA
  * Open Source License
- * 
- * Copyright (c) 2008, Board of Trustees-University of Illinois.  
+ *
+ * Copyright (c) 2008, Board of Trustees-University of Illinois.
  * All rights reserved.
- * 
- * Developed by: 
- * 
+ *
+ * Developed by:
+ *
  * Automated Learning Group
  * National Center for Supercomputing Applications
  * http://www.seasr.org
- * 
- *  
+ *
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal with the Software without restriction, including without limitation the
  * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
  * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions: 
- * 
+ * furnished to do so, subject to the following conditions:
+ *
  *  * Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimers. 
- * 
+ *    this list of conditions and the following disclaimers.
+ *
  *  * Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimers in the 
- *    documentation and/or other materials provided with the distribution. 
- * 
+ *    this list of conditions and the following disclaimers in the
+ *    documentation and/or other materials provided with the distribution.
+ *
  *  * Neither the names of Automated Learning Group, The National Center for
  *    Supercomputing Applications, or University of Illinois, nor the names of
  *    its contributors may be used to endorse or promote products derived from
- *    this Software without specific prior written permission. 
- * 
+ *    this Software without specific prior written permission.
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
@@ -63,11 +63,12 @@ import org.seasr.components.text.datatype.corpora.Annotation;
 import org.seasr.components.text.datatype.corpora.AnnotationConstants;
 import org.seasr.components.text.datatype.corpora.AnnotationSet;
 import org.seasr.components.text.datatype.corpora.Document;
+import org.meandre.components.abstracts.AbstractExecutableComponent;
 import org.meandre.core.*;
 import org.meandre.annotations.*;
 
 /**
- * 
+ *
  * <p>
  * Overview: <br>
  * This component takes a document object and stop word list and removes the
@@ -78,13 +79,13 @@ import org.meandre.annotations.*;
  * Data Type Restrictions: <br>
  * The input document must have been tokenized.
  * </p>
- * 
+ *
  * <p>
  * Data Handling: <br>
  * This module will modify (as described above) the document object's that is
  * input.
  * </p>
- * 
+ *
  * <p>
  * Scalability: <br>
  * This module makes one pass over the token list resulting in linear time
@@ -95,9 +96,9 @@ import org.meandre.annotations.*;
  * Trigger Criteria: <br>
  * All.
  * </p>
- * 
+ *
  * @author D. Searsmith
- * 
+ *
  */
 @Component(creator = "Duane Searsmith",
 
@@ -122,11 +123,11 @@ description = "<p>Overview: "
 
 		+ "<p>Trigger Criteria: <br>" + "Any." + "</p>",
 
-name = "FilterStopWords", 
-tags = "nlp text document filter stops stopwords", 
+name = "FilterStopWords",
+tags = "nlp text document filter stops stopwords",
 firingPolicy = Component.FiringPolicy.any,
 baseURL="meandre://seasr.org/components/")
-public class FilterStopWords implements ExecutableComponent {
+public class FilterStopWords extends AbstractExecutableComponent {
 
 	// ==============
 	// Data Members
@@ -172,17 +173,18 @@ public class FilterStopWords implements ExecutableComponent {
 		return Boolean.parseBoolean(s.toLowerCase());
 	}
 
-	public void initialize(ComponentContextProperties ccp) {
+	public void initializeCallBack(ComponentContextProperties ccp)
+    throws Exception {
 		_logger.fine("initialize() called");
 		_docs = new ArrayList<Document>();
 		m_docsProcessed = 0;
 	}
 
-	public void dispose(ComponentContextProperties ccp) {
+	public void disposeCallBack(ComponentContextProperties ccp)
+    throws Exception {
 		_logger.fine("dispose() called");
 		if (this.getVerbose(ccp)) {
-			System.out
-					.println("\nEND EXEC -- FilterStopWords -- Docs Processed: "
+			componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- FilterStopWords -- Docs Processed: "
 							+ m_docsProcessed + "\n");
 		}
 		m_docsProcessed = 0;
@@ -196,18 +198,18 @@ public class FilterStopWords implements ExecutableComponent {
 		}
 	}
 
-	public void execute(ComponentContext ctx)
-			throws ComponentExecutionException, ComponentContextException {
+	public void executeCallBack(ComponentContext cc)
+    throws Exception  {
 		_logger.fine("execute() called");
 
 		try {
-			if (ctx.isInputAvailable(DATA_INPUT_STOP_WORD_SET)) {
-				m_stops = (Set<?>) ctx
+			if (cc.isInputAvailable(DATA_INPUT_STOP_WORD_SET)) {
+				m_stops = (Set<?>) cc
 						.getDataComponentFromInput(DATA_INPUT_STOP_WORD_SET);
 			}
 
-			if (ctx.isInputAvailable(DATA_INPUT_DOCUMENT)) {
-				_docs.add((Document) ctx
+			if (cc.isInputAvailable(DATA_INPUT_DOCUMENT)) {
+				_docs.add((Document) cc
 						.getDataComponentFromInput(DATA_INPUT_DOCUMENT));
 			}
 
@@ -221,11 +223,13 @@ public class FilterStopWords implements ExecutableComponent {
 					int cnt = 0;
 
 					ArrayList<Annotation> removes = new ArrayList<Annotation>();
+
 					for (Iterator<Annotation> iter = annots.iterator(); iter
 							.hasNext();) {
 						Annotation tok = iter.next();
 						if (tok.getType().equals(
 								AnnotationConstants.TOKEN_ANNOT_TYPE)) {
+
 							String img = tok.getContent(doc);
 							if (m_stops.contains(img.toLowerCase())) {
 								removes.add(tok);
@@ -237,12 +241,12 @@ public class FilterStopWords implements ExecutableComponent {
 						annots.remove(removes.get(i2));
 					}
 
-					if (getVerbose(ctx)) {
-						System.out.println("Number of stop words removed for "
+					if (getVerbose(cc)) {
+						componentConsoleHandler.whenLogLevelOutput("info","Number of stop words removed for "
 								+ doc.getTitle() + ": " + cnt);
 					}
 
-					ctx.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
+					cc.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
 					m_docsProcessed++;
 
 				}
