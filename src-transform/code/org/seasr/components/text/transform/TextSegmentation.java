@@ -234,26 +234,21 @@ public class TextSegmentation extends AbstractExecutableComponent {
 
 	public void initializeCallBack(ComponentContextProperties ccp)
     throws Exception {
-		_logger.fine("initialize() called");
 		_docsProcessed = 0;
 		_start = System.currentTimeMillis();
 	}
 
 	public void disposeCallBack(ComponentContextProperties ccp)
     throws Exception {
-		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
-		if (getVerbose(ccp)) {
-			componentConsoleHandler.whenLogLevelOutput("info","TextSegmentation: END EXEC -- File Names Processed: "
-					+ _docsProcessed + " in " + (end - _start) / 1000
-					+ " seconds\n");
-		}
+		componentConsoleHandler.whenLogLevelOutput("info","TextSegmentation: END EXEC -- File Names Processed: "
+				+ _docsProcessed + " in " + (end - _start) / 1000
+				+ " seconds\n");
 		_docsProcessed = 0;
 	}
 
 	public void executeCallBack(ComponentContext cc)
     throws Exception {
-		_logger.fine("execute() called");
 		long segSz = getSegmentSize(cc);
 		segSz = Math.round(segSz*0.95);
 		try {
@@ -324,23 +319,16 @@ public class TextSegmentation extends AbstractExecutableComponent {
 					odoc.setDocID(idoc.getDocID());
 					odoc.setTitle(idoc.getTitle() + " [Segment " + (segcnt + 1) + "]");
 
-					if (this.getVerbose(cc)) {
-						if (Math.IEEEremainder(segcnt, 100) == 0) {
-							componentConsoleHandler.whenLogLevelOutput("info","TextSegmentation -- Docs Processed: "
-									+ segcnt);
-						}
+					if (Math.IEEEremainder(segcnt, 100) == 0) {
+						componentConsoleHandler.whenLogLevelOutput("info","TextSegmentation -- Docs Processed: "
+								+ segcnt);
 					}
-
-
 				}
 			}
 			cc.pushDataComponentToOutput(DATA_OUTPUT_DOC_SEGMENT_CNT, segcnt);
 			_docsProcessed++;
-			if (getVerbose(cc)){
-				componentConsoleHandler.whenLogLevelOutput("info","TextSegmentation :: Doc: " + idoc.getTitle()
-					+ " created " + segcnt
-					+ " segments.");
-			}
+
+			componentConsoleHandler.whenLogLevelOutput("info",segcnt + " segmemts created.");
 			idoc.free();
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -214,7 +214,6 @@ public class TermListsToTable extends AbstractExecutableComponent {
 
 	public void initializeCallBack(ComponentContextProperties ccp)
     throws Exception {
-		_logger.fine("initialize() called");
 		_docs = new ArrayList<TermList>();
 		_termMaps = new HashMap<ExampleTable, TermMap>();
 		_fact = null;
@@ -231,17 +230,15 @@ public class TermListsToTable extends AbstractExecutableComponent {
 
 	public void disposeCallBack(ComponentContextProperties ccp)
     throws Exception {
-		_logger.fine("dispose() called");
 		_fact = null;
 		_propList = null;
 		long end = System.currentTimeMillis();
-		if (getVerbose(ccp)) {
-			componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- TermListsToTable -- Docs Processed: "
-					+ m_docsProcessed + " in " + (end - m_start) / 1000
-					+ " seconds\n");
-			componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- TermListsToTable -- Docs Output: "
-					+ m_count + " in " + (end - m_start) / 1000 + " seconds\n");
-		}
+		componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- TermListsToTable -- Docs Processed: "
+				+ m_docsProcessed + " in " + (end - m_start) / 1000
+				+ " seconds\n");
+		componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- TermListsToTable -- Docs Output: "
+				+ m_count + " in " + (end - m_start) / 1000 + " seconds\n");
+
 		m_docsProcessed = 0;
 		_cnter = 0;
 		m_numRecs = Integer.MAX_VALUE;
@@ -254,8 +251,6 @@ public class TermListsToTable extends AbstractExecutableComponent {
 
 	public void executeCallBack(ComponentContext ctx)
     throws Exception {
-		_logger.fine("execute() called");
-
 		try {
 
 			if (ctx.isInputAvailable(DATA_INPUT_TABLE_FACTORY)) {
@@ -333,10 +328,7 @@ public class TermListsToTable extends AbstractExecutableComponent {
 			if (_cnter >= m_numRecs) {
 
 				m_count = _termTable.getNumRows();
-				if (getVerbose(ctx)) {
-					componentConsoleHandler.whenLogLevelOutput("info","TermListsToTable -- Number of rows added: "
-							+ m_count);
-				}
+				componentConsoleHandler.whenLogLevelOutput("info", m_count + " rows added.");
 
 				HashMap<String, Integer> colprops = new HashMap<String, Integer>();
 				// add column for each document property
@@ -393,10 +385,8 @@ public class TermListsToTable extends AbstractExecutableComponent {
 				}
 				m_numRecs = Integer.MAX_VALUE;
 				_termTable = _fact.createTable().toExampleTable();
-				if (getVerbose(ctx)) {
-					componentConsoleHandler.whenLogLevelOutput("info","TermListsToTable(): GlobalTermMap contains "
-							+ m_gtm.size() + " terms.");
-				}
+				componentConsoleHandler.whenLogLevelOutput("info","GlobalTermMap contains "
+						+ m_gtm.size() + " terms.");
 				_tmap = new TermMap();
 				m_gtm = new HashMap<String, Integer>();
 				_propList = new ArrayList<Map<String, String>>();
