@@ -176,27 +176,20 @@ public class Stem  extends AbstractExecutableComponent {
 
 	public void initializeCallBack(ComponentContextProperties ccp)
     throws Exception {
-		_logger.fine("initialize() called");
 		m_docsProcessed = 0;
 		_stemmer = null;
 	}
 
 	public void disposeCallBack(ComponentContextProperties ccp)
     throws Exception {
-		_logger.fine("dispose() called");
-
-		if (getVerbose(ccp)) {
-			componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- Stem -- Docs Processed: "
-					+ m_docsProcessed + "\n");
-		}
+		componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- Stem -- Docs Processed: "
+				+ m_docsProcessed + "\n");
 		m_docsProcessed = 0;
 		_stemmer = null;
 	}
 
 	public void executeCallBack(ComponentContext ctx)
     throws Exception {
-		_logger.fine("execute() called");
-
 		// props ==============================
 		boolean verbose = this.getVerbose(ctx);
 		//=====================================
@@ -251,8 +244,8 @@ public class Stem  extends AbstractExecutableComponent {
 
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
 			m_docsProcessed++;
-			if (verbose && (m_docsProcessed % 20 == 0)) {
-				componentConsoleHandler.whenLogLevelOutput("info","Stem: processed " + m_docsProcessed);
+			if ((m_docsProcessed % 20 == 0)) {
+				componentConsoleHandler.whenLogLevelOutput("info", m_docsProcessed+" are processed.");
 			}
 
 		} catch (Exception ex) {
