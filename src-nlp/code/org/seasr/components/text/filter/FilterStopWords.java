@@ -175,18 +175,14 @@ public class FilterStopWords extends AbstractExecutableComponent {
 
 	public void initializeCallBack(ComponentContextProperties ccp)
     throws Exception {
-		_logger.fine("initialize() called");
 		_docs = new ArrayList<Document>();
 		m_docsProcessed = 0;
 	}
 
 	public void disposeCallBack(ComponentContextProperties ccp)
     throws Exception {
-		_logger.fine("dispose() called");
-		if (this.getVerbose(ccp)) {
-			componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- FilterStopWords -- Docs Processed: "
-							+ m_docsProcessed + "\n");
-		}
+		componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- FilterStopWords -- Docs Processed: "
+						+ m_docsProcessed + "\n");
 		m_docsProcessed = 0;
 		if (m_stops != null) {
 			m_stops.clear();
@@ -200,8 +196,6 @@ public class FilterStopWords extends AbstractExecutableComponent {
 
 	public void executeCallBack(ComponentContext cc)
     throws Exception  {
-		_logger.fine("execute() called");
-
 		try {
 			if (cc.isInputAvailable(DATA_INPUT_STOP_WORD_SET)) {
 				m_stops = (Set<?>) cc
@@ -241,10 +235,8 @@ public class FilterStopWords extends AbstractExecutableComponent {
 						annots.remove(removes.get(i2));
 					}
 
-					if (getVerbose(cc)) {
-						componentConsoleHandler.whenLogLevelOutput("info","Number of stop words removed for "
-								+ doc.getTitle() + ": " + cnt);
-					}
+					componentConsoleHandler.whenLogLevelOutput("info","Number of stop words removed for "
+							+ doc.getTitle() + ": " + cnt);
 
 					cc.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
 					m_docsProcessed++;

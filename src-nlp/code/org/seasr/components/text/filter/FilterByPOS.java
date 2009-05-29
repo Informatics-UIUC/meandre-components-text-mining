@@ -197,7 +197,6 @@ public class FilterByPOS extends AbstractExecutableComponent {
 
 	public void initializeCallBack(ComponentContextProperties ccp)
     throws Exception {
-		_logger.fine("initialize() called");
 		m_docsProcessed = 0;
 		if (_tags == null) {
 			_tags = new HashSet<String>();
@@ -211,19 +210,13 @@ public class FilterByPOS extends AbstractExecutableComponent {
 
 	public void disposeCallBack(ComponentContextProperties ccp)
     throws Exception {
-		_logger.fine("dispose() called");
-
-		if (getVerbose(ccp)) {
-			componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- FilterByPOS -- Docs Processed: "
-					+ m_docsProcessed + "\n");
-		}
+		componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- FilterByPOS -- Docs Processed: "
+				+ m_docsProcessed + "\n");
 		m_docsProcessed = 0;
 	}
 
 	public void executeCallBack(ComponentContext ctx)
     throws Exception {
-		_logger.fine("execute() called");
-
 		// props =====================================
 		boolean verbose = this.getVerbose(ctx);
 		//============================================
@@ -234,14 +227,11 @@ public class FilterByPOS extends AbstractExecutableComponent {
 			Document doc = (Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOCUMENT);
 
-			if (verbose) {
-				componentConsoleHandler.whenLogLevelOutput("info","FilterByPOS"
-						+ ": Document: "
-						+ doc.getDocID()
-						+ " has "
-						+ doc.getAnnotations(AnnotationConstants.ANNOTATION_SET_TOKENS).size()
-						+ " num tokens -- " + doc.getTitle());
-			}
+			componentConsoleHandler.whenLogLevelOutput("info", doc.getDocID()
+					+ " has "
+					+ doc.getAnnotations(AnnotationConstants.ANNOTATION_SET_TOKENS).size()
+					+ " num tokens.");
+
 			ArrayList<Annotation> removes = new ArrayList<Annotation>();
 			AnnotationSet annots = doc
 			.getAnnotations(AnnotationConstants.ANNOTATION_SET_TOKENS);
@@ -300,11 +290,9 @@ public class FilterByPOS extends AbstractExecutableComponent {
 				annots.remove(removes.get(i));
 			}
 
-			if (verbose) {
-				componentConsoleHandler.whenLogLevelOutput("info","FilterByPOS: " + toks_selected
-						+ " tokens were selected for this document -- "
-						+ doc.getTitle() + ", out of " + origSz);
-			}
+			componentConsoleHandler.whenLogLevelOutput("info", toks_selected
+					+ " tokens were selected "
+					+ " out of " + origSz);
 
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
 			m_docsProcessed++;
