@@ -48,59 +48,22 @@ package org.seasr.components.text.normalize.porter;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Logger;
 
-import org.seasr.components.text.normalize.porter.support.*;
-
-// ===============
-// Other Imports
-// ===============
-
-// import org.meandre.tools.components.*;
-// import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
-
+import org.meandre.annotations.Component;
+import org.meandre.annotations.ComponentInput;
+import org.meandre.annotations.ComponentOutput;
+import org.meandre.components.abstracts.AbstractExecutableComponent;
+import org.meandre.core.ComponentContext;
+import org.meandre.core.ComponentContextProperties;
+import org.meandre.core.ComponentExecutionException;
 import org.seasr.components.text.datatype.corpora.Annotation;
 import org.seasr.components.text.datatype.corpora.AnnotationConstants;
 import org.seasr.components.text.datatype.corpora.AnnotationSet;
 import org.seasr.components.text.datatype.corpora.Document;
-import org.meandre.components.abstracts.AbstractExecutableComponent;
-import org.meandre.core.*;
-import org.meandre.annotations.*;
+import org.seasr.components.text.normalize.porter.support.PorterStemmer;
 import org.seasr.components.text.util.feature_maps.FeatureValueEncoderDecoder;
 
 /**
- *
- * <p>
- * Overview: <br>
- * This component transforms terms into their word stems. In this way, different
- * forms of the same word (plurals etc...) will be recognized as the same term.
- * The algorithm used is the Porter stemming method.
- * </p>
- * <p>
- * References: <br>
- * See: http://www.tartarus.org/~martin/PorterStemmer/
- * </p>
- * <p>
- * Data Type Restrictions: <br>
- * The input document must have been tokenized.
- * </p>
- * <p>
- * Data Handling: <br>
- * This component will modify (as described above) the document object that is
- * input.
- * </p>
- * <p>
- * Scalability: <br>
- * This component makes one pass over the token list resulting in linear time
- * complexity per the number of tokens. Memory usage is proportional to the
- * number tokens.
- * </p>
- * <p>
- * Trigger Criteria: <br>
- * All.
- * </p>
- *
- *
  * @author D. Searsmith
  *
  * TODO: Testing, Unit Tests
@@ -144,13 +107,6 @@ public class Stem  extends AbstractExecutableComponent {
 	private int m_docsProcessed = 0;
 	private PorterStemmer _stemmer = null;
 
-	private static Logger _logger = Logger.getLogger("Stem");
-
-	// props
-
-	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
-	final static String DATA_PROPERTY_VERBOSE = "verbose";
-
 	// IO
 
 	@ComponentInput(description = "Document object.", name = "document")
@@ -160,19 +116,8 @@ public class Stem  extends AbstractExecutableComponent {
 	public final static String DATA_OUTPUT_DOCUMENT = "document";
 
 	// ================
-	// Constructor(s)
-	// ================
-	public Stem() {
-	}
-
-	// ================
 	// Public Methods
 	// ================
-
-	public boolean getVerbose(ComponentContextProperties ccp) {
-		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
-		return Boolean.parseBoolean(s.toLowerCase());
-	}
 
 	public void initializeCallBack(ComponentContextProperties ccp)
     throws Exception {
@@ -182,7 +127,7 @@ public class Stem  extends AbstractExecutableComponent {
 
 	public void disposeCallBack(ComponentContextProperties ccp)
     throws Exception {
-		componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- Stem -- Docs Processed: "
+		console.info("END EXEC -- Stem -- Docs Processed: "
 				+ m_docsProcessed + "\n");
 		m_docsProcessed = 0;
 		_stemmer = null;
@@ -190,9 +135,6 @@ public class Stem  extends AbstractExecutableComponent {
 
 	public void executeCallBack(ComponentContext ctx)
     throws Exception {
-		// props ==============================
-		boolean verbose = this.getVerbose(ctx);
-		//=====================================
 
 		try {
 			if (_stemmer == null) {
@@ -245,13 +187,13 @@ public class Stem  extends AbstractExecutableComponent {
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
 			m_docsProcessed++;
 			if ((m_docsProcessed % 20 == 0)) {
-				componentConsoleHandler.whenLogLevelOutput("info", m_docsProcessed+" are processed.");
+				console.info(m_docsProcessed+" are processed.");
 			}
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: Stem.execute()");
+			ctx.getLogger().severe(ex.getMessage());
+			ctx.getLogger().severe("ERROR: Stem.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}

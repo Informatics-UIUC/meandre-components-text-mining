@@ -46,24 +46,27 @@ package org.seasr.components.text.transform;
 // Java Imports
 // ==============
 
-import java.util.*;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-// ===============
-// Other Imports
-// ===============
-
-import org.meandre.core.*;
-import org.meandre.annotations.*;
-
-// import org.meandre.tools.components.*;
-// import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
-
+import org.meandre.annotations.Component;
+import org.meandre.annotations.ComponentInput;
+import org.meandre.annotations.ComponentOutput;
+import org.meandre.annotations.ComponentProperty;
+import org.meandre.components.abstracts.AbstractExecutableComponent;
+import org.meandre.components.datatype.table.Column;
+import org.meandre.components.datatype.table.ColumnTypes;
+import org.meandre.components.datatype.table.ExampleTable;
+import org.meandre.components.datatype.table.TableFactory;
+import org.meandre.core.ComponentContext;
+import org.meandre.core.ComponentContextProperties;
+import org.meandre.core.ComponentExecutionException;
 import org.seasr.components.text.datatype.termlist.TermList;
 import org.seasr.components.text.datatype.termlist.TermListLite;
 import org.seasr.components.text.datatype.termmap.TermMap;
-import org.meandre.components.abstracts.AbstractExecutableComponent;
-import org.meandre.components.datatype.table.*;
 
 /**
  *
@@ -152,12 +155,7 @@ public class TermListsToTable extends AbstractExecutableComponent {
 
 	public static HashMap<ExampleTable, TermMap> _termMaps = null;
 
-	private static Logger _logger = Logger.getLogger("TermListsToTable");
-
 	// props
-
-	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
-	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	@ComponentProperty(description = "Allow empty term lists? A boolean value (true or false).", name = "allow_empty_term_lists", defaultValue = "false")
 	final static String DATA_PROPERTY_ALLOW_EMPTY_TERMLISTS = "allow_empty_term_lists";
@@ -183,19 +181,8 @@ public class TermListsToTable extends AbstractExecutableComponent {
 	public final static String DATA_OUPUT_TABLE = "document";
 
 	// ================
-	// Constructor(s)
-	// ================
-	public TermListsToTable() {
-	}
-
-	// ================
 	// Public Methods
 	// ================
-
-	public boolean getVerbose(ComponentContextProperties ccp) {
-		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
-		return Boolean.parseBoolean(s.toLowerCase());
-	}
 
 	public boolean getProcessEmptyTermLists(ComponentContextProperties ccp) {
 		String s = ccp.getProperty(DATA_PROPERTY_ALLOW_EMPTY_TERMLISTS);
@@ -233,10 +220,10 @@ public class TermListsToTable extends AbstractExecutableComponent {
 		_fact = null;
 		_propList = null;
 		long end = System.currentTimeMillis();
-		componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- TermListsToTable -- Docs Processed: "
+		console.info("\nEND EXEC -- TermListsToTable -- Docs Processed: "
 				+ m_docsProcessed + " in " + (end - m_start) / 1000
 				+ " seconds\n");
-		componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- TermListsToTable -- Docs Output: "
+		console.info("\nEND EXEC -- TermListsToTable -- Docs Output: "
 				+ m_count + " in " + (end - m_start) / 1000 + " seconds\n");
 
 		m_docsProcessed = 0;
@@ -268,10 +255,8 @@ public class TermListsToTable extends AbstractExecutableComponent {
 				m_numRecs = ((Integer) ctx
 						.getDataComponentFromInput(DATA_INPUT_NUMBER_OF_TERMLIST))
 						.intValue();
-				if (getVerbose(ctx)) {
-					componentConsoleHandler.whenLogLevelOutput("info","TermListsToTable: Number of records was told to expect: "
+				console.info("TermListsToTable: Number of records was told to expect: "
 									+ m_numRecs);
-				}
 			}
 
 			if ((_termTable != null) && (!_docs.isEmpty())) {
@@ -281,7 +266,7 @@ public class TermListsToTable extends AbstractExecutableComponent {
 					m_docsProcessed++;
 					_cnter++;
 					if ((tl.getSize() == 0) && (!getProcessEmptyTermLists(ctx))) {
-						componentConsoleHandler.whenLogLevelOutput("info","Termlist had no terms -- discarding: "
+						console.info("Termlist had no terms -- discarding: "
 								+ tl.getDocID() + " " + tl.getTitle());
 					} else {
 						int row = _termTable.getNumRows();
@@ -310,7 +295,7 @@ public class TermListsToTable extends AbstractExecutableComponent {
 									.getTermOrigFormsByImage(term);
 
 							// added by Bei Yu to avoid the null pointer problem
-							// caused by empty oforms
+							// caused by empty forms
 							if (oforms == null) {
 								oforms = new ArrayList<String>();
 							}
@@ -328,7 +313,7 @@ public class TermListsToTable extends AbstractExecutableComponent {
 			if (_cnter >= m_numRecs) {
 
 				m_count = _termTable.getNumRows();
-				componentConsoleHandler.whenLogLevelOutput("info", m_count + " rows added.");
+				console.info(m_count + " rows added.");
 
 				HashMap<String, Integer> colprops = new HashMap<String, Integer>();
 				// add column for each document property
@@ -385,7 +370,7 @@ public class TermListsToTable extends AbstractExecutableComponent {
 				}
 				m_numRecs = Integer.MAX_VALUE;
 				_termTable = _fact.createTable().toExampleTable();
-				componentConsoleHandler.whenLogLevelOutput("info","GlobalTermMap contains "
+				console.info("GlobalTermMap contains "
 						+ m_gtm.size() + " terms.");
 				_tmap = new TermMap();
 				m_gtm = new HashMap<String, Integer>();
@@ -395,8 +380,8 @@ public class TermListsToTable extends AbstractExecutableComponent {
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: TermListsToTable.execute()");
+			ctx.getLogger().severe(ex.getMessage());
+			ctx.getLogger().severe("ERROR: TermListsToTable.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}

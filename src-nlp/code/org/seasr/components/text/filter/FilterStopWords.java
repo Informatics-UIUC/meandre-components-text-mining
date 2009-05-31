@@ -50,15 +50,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.Iterator;
-import java.util.logging.Logger;
-
-// ===============
-// Other Imports
-// ===============
-
-// import org.meandre.tools.components.*;
-// import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
-
 import org.seasr.components.text.datatype.corpora.Annotation;
 import org.seasr.components.text.datatype.corpora.AnnotationConstants;
 import org.seasr.components.text.datatype.corpora.AnnotationSet;
@@ -68,35 +59,6 @@ import org.meandre.core.*;
 import org.meandre.annotations.*;
 
 /**
- *
- * <p>
- * Overview: <br>
- * This component takes a document object and stop word list and removes the
- * stop words from the document. By default, each term in the document is
- * converted to lower case before the comparison to stop words is made.
- * </p>
- * <p>
- * Data Type Restrictions: <br>
- * The input document must have been tokenized.
- * </p>
- *
- * <p>
- * Data Handling: <br>
- * This module will modify (as described above) the document object's that is
- * input.
- * </p>
- *
- * <p>
- * Scalability: <br>
- * This module makes one pass over the token list resulting in linear time
- * complexity per the number of tokens. Memory usage is proportional to the
- * number tokens.
- * </p>
- * <p>
- * Trigger Criteria: <br>
- * All.
- * </p>
- *
  * @author D. Searsmith
  *
  */
@@ -139,13 +101,6 @@ public class FilterStopWords extends AbstractExecutableComponent {
 
 	private Set<?> m_stops = null;
 
-	private static Logger _logger = Logger.getLogger("FilterStopWords");
-
-	// props
-
-	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
-	final static String DATA_PROPERTY_VERBOSE = "verbose";
-
 	// IO
 
 	@ComponentInput(description = "Stop word set.", name = "stops_set")
@@ -158,20 +113,8 @@ public class FilterStopWords extends AbstractExecutableComponent {
 	public final static String DATA_OUTPUT_DOCUMENT = "document";
 
 	// ================
-	// Constructor(s)
-	// ================
-
-	public FilterStopWords() {
-	}
-
-	// ================
 	// Public Methods
 	// ================
-
-	public boolean getVerbose(ComponentContextProperties ccp) {
-		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
-		return Boolean.parseBoolean(s.toLowerCase());
-	}
 
 	public void initializeCallBack(ComponentContextProperties ccp)
     throws Exception {
@@ -181,8 +124,8 @@ public class FilterStopWords extends AbstractExecutableComponent {
 
 	public void disposeCallBack(ComponentContextProperties ccp)
     throws Exception {
-		componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- FilterStopWords -- Docs Processed: "
-						+ m_docsProcessed + "\n");
+		console.info("END EXEC -- FilterStopWords -- Docs Processed: "
+						+ m_docsProcessed);
 		m_docsProcessed = 0;
 		if (m_stops != null) {
 			m_stops.clear();
@@ -235,7 +178,7 @@ public class FilterStopWords extends AbstractExecutableComponent {
 						annots.remove(removes.get(i2));
 					}
 
-					componentConsoleHandler.whenLogLevelOutput("info","Number of stop words removed for "
+					console.info("Number of stop words removed for "
 							+ doc.getTitle() + ": " + cnt);
 
 					cc.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
@@ -246,8 +189,8 @@ public class FilterStopWords extends AbstractExecutableComponent {
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: FilterStopWords.execute()");
+			cc.getLogger().severe(ex.getMessage());
+			cc.getLogger().severe("ERROR: FilterStopWords.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}

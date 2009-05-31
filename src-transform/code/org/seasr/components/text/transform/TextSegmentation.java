@@ -46,24 +46,17 @@ package org.seasr.components.text.transform;
 // Java Imports
 // ==============
 
-import java.util.*;
-import java.util.logging.*;
+import java.util.Collection;
+import java.util.Iterator;
 
-// ===============
-// Other Imports
-// ===============
-
-// import org.meandre.tools.components.*;
-// import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
-
-//import org.meandre.components.io.*;
-//import org.seasr.components.text.io.file.TextFileToDoc;
-//import org.seasr.components.text.opennlp.sentence.OpenNLP_SentenceDetect;
-//import org.seasr.components.text.opennlp.tokenize.OpenNLP_Tokenizer;
-
+import org.meandre.annotations.Component;
+import org.meandre.annotations.ComponentInput;
+import org.meandre.annotations.ComponentOutput;
+import org.meandre.annotations.ComponentProperty;
 import org.meandre.components.abstracts.AbstractExecutableComponent;
-import org.meandre.core.*;
-import org.meandre.annotations.*;
+import org.meandre.core.ComponentContext;
+import org.meandre.core.ComponentContextProperties;
+import org.meandre.core.ComponentExecutionException;
 import org.seasr.components.text.datatype.corpora.Annotation;
 import org.seasr.components.text.datatype.corpora.AnnotationConstants;
 import org.seasr.components.text.datatype.corpora.AnnotationSet;
@@ -124,15 +117,10 @@ public class TextSegmentation extends AbstractExecutableComponent {
 
 	private long _start = 0;
 
-	private static Logger _logger = Logger.getLogger("TextSegmentation");
-
 	// props
 
 	@ComponentProperty(description = "Aproximate segment size in tokens?", name = "segment_size", defaultValue = "500")
 	public final static String DATA_PROPERTY_SEGMENT_SIZE = "segment_size";
-
-	@ComponentProperty(description = "Verbose output?", name = "verbose", defaultValue = "false")
-	public final static String DATA_PROPERTY_VERBOSE = "verbose";
 
 	// io
 
@@ -146,82 +134,8 @@ public class TextSegmentation extends AbstractExecutableComponent {
 	public final static String DATA_OUTPUT_DOC_SEGMENT_CNT = "document_segement_count";
 
 	// ================
-	// Constructor(s)
-	// ================
-	public TextSegmentation() {
-	}
-
-	// ================
-	// Static Methods
-	// ================
-
-	/**
-	 * Test
-	 */
-	static public void main(String[] args) {
-//		// get a flow builder instance
-//		FlowBuilderAPI flowBuilder = new FlowBuilderAPI();
-//		// get a flow object
-//		WorkingFlow wflow = flowBuilder.newWorkingFlow("test");
-//		// add a component
-//		String pushString = wflow
-//				.addComponent("org.meandre.components.io.PushString");
-//		// set a component property
-//		wflow.setComponentInstanceProp(pushString, "string",
-//				"c:/tmp/ThreeLives.txt");
-//		// add another component
-//		String reader = wflow
-//				.addComponent("org.seasr.components.text.io.file.TextFileToDoc");
-//
-//		// make a connection between two components
-//		wflow.connectComponents(pushString, PushString.DATA_OUTPUT_OUTPUT_STRING, reader,
-//				TextFileToDoc.DATA_INPUT_FILE_NAME);
-//
-//		// add another component
-//		String sentdetector = wflow
-//				.addComponent("org.seasr.components.text.opennlp.sentence.OpenNLP_SentenceDetect");
-//
-//		// make a connection between two components
-//		wflow.connectComponents(reader, TextFileToDoc.DATA_OUTPUT_FILE_DOC,
-//				sentdetector, OpenNLP_SentenceDetect.DATA_INPUT_DOC_IN);
-//
-//		// add another component
-//		String tokenizer = wflow
-//				.addComponent("org.seasr.components.text.opennlp.tokenize.OpenNLP_Tokenizer");
-//
-//		// make a connection between two components
-//		wflow.connectComponents(sentdetector,
-//				OpenNLP_SentenceDetect.DATA_OUTPUT_DOC_OUT, tokenizer,
-//				OpenNLP_Tokenizer.DATA_INPUT_DOC_IN);
-//
-//		// add another component
-//		String segmenter = wflow
-//				.addComponent("org.seasr.components.text.transform.TextSegmentation");
-//
-//		// make a connection between two components
-//		wflow.connectComponents(tokenizer,
-//				OpenNLP_Tokenizer.DATA_OUTPUT_DOC_OUT, segmenter,
-//				TextSegmentation.DATA_INPUT_DOC_IN);
-//
-//		// set a component property
-//		wflow.setComponentInstanceProp(segmenter, "verbose", "true");
-//
-//		// execute the flow specifying that we want a web UI displayed
-//		flowBuilder.execute(wflow, false);
-//
-//		// For some reason the process does not end without a forced exit.
-//		System.exit(0);
-
-	}
-
-	// ================
 	// Public Methods
 	// ================
-
-	public boolean getVerbose(ComponentContextProperties ccp) {
-		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
-		return Boolean.parseBoolean(s.toLowerCase());
-	}
 
 	public int getSegmentSize(ComponentContextProperties ccp) {
 		String s = ccp.getProperty(DATA_PROPERTY_SEGMENT_SIZE);
@@ -241,9 +155,9 @@ public class TextSegmentation extends AbstractExecutableComponent {
 	public void disposeCallBack(ComponentContextProperties ccp)
     throws Exception {
 		long end = System.currentTimeMillis();
-		componentConsoleHandler.whenLogLevelOutput("info","TextSegmentation: END EXEC -- File Names Processed: "
+		console.info("TextSegmentation: END EXEC -- File Names Processed: "
 				+ _docsProcessed + " in " + (end - _start) / 1000
-				+ " seconds\n");
+				+ " seconds");
 		_docsProcessed = 0;
 	}
 
@@ -294,12 +208,6 @@ public class TextSegmentation extends AbstractExecutableComponent {
 				if (tokenCnt >= segSz){
 					annotsOSeg.add(segStart, sent.getEndNodeOffset(), AnnotationConstants.SEGMENTATION_ANNOT_TYPE, null);
 
-//					System.out.println("Segment: " + segcnt);
-//					System.out.println("Num Tokens: " + annotsOTok.size());
-//					System.out.println("Num Sents: " + annotsOSent.size());
-//					System.out.println("\n\n");
-
-
 					cc.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, odoc);
 
 					segcnt++;
@@ -320,7 +228,7 @@ public class TextSegmentation extends AbstractExecutableComponent {
 					odoc.setTitle(idoc.getTitle() + " [Segment " + (segcnt + 1) + "]");
 
 					if (Math.IEEEremainder(segcnt, 100) == 0) {
-						componentConsoleHandler.whenLogLevelOutput("info","TextSegmentation -- Docs Processed: "
+						console.info("TextSegmentation -- Docs Processed: "
 								+ segcnt);
 					}
 				}
@@ -328,12 +236,12 @@ public class TextSegmentation extends AbstractExecutableComponent {
 			cc.pushDataComponentToOutput(DATA_OUTPUT_DOC_SEGMENT_CNT, segcnt);
 			_docsProcessed++;
 
-			componentConsoleHandler.whenLogLevelOutput("info",segcnt + " segmemts created.");
+			console.info(segcnt + " segmemts created.");
 			idoc.free();
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: TextSegmentation.execute()");
+			cc.getLogger().severe(ex.getMessage());
+			cc.getLogger().severe("ERROR: TextSegmentation.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}

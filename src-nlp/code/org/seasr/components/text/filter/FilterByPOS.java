@@ -64,44 +64,7 @@ import org.meandre.core.*;
 import org.meandre.annotations.*;
 import org.seasr.components.text.util.feature_maps.FeatureValueEncoderDecoder;
 
-/**
- * <p>
- * Overview: <br>
- * This component reads a document object as input and filters the tokens for
- * that document based on part of speech tag information.
- * </p>
- * <p>
- * Detailed Description: <br>
- * A document object is taken as input. The token list is retrieved from the
- * document and only those tokens with part of speech tags that match at least
- * one value in the user defined list are retained. The filtered list of token
- * annotations is placed into the document (replacing the old list) and then the
- * document is output.
- * </p>
- * <p>
- * References: <br>
- * N/A.
- * </p>
- * <p>
- * Data Type Restrictions: <br>
- * The input document must have been tokenized.
- * </p>
- * <p>
- * Data Handling: <br>
- * This module will modify (as described above) the document object that is
- * input.
- * </p>
- * <p>
- * Scalability: <br>
- * This module makes one pass over the token annotation list resulting in linear
- * time complexity per the number of tokens. Memory usage is proportional to the
- * number tokens.
- * </p>
- * <p>
- * Trigger Criteria: <br>
- * All.
- * </p>
- *
+/*
  * @author D. Searsmith
  *
  * TODO: Testing, Unit Testing
@@ -120,10 +83,6 @@ description = "<p>Overview: <br>"
 		+ "one value in the user defined list are retained. The filtered list of token "
 		+ "annotations is placed into the document (replacing the old list) and then "
 		+ "the document is output."
-		+ "</p>"
-
-		+ "<p>References: <br>"
-		+ "N/A."
 		+ "</p>"
 
 		+ "<p>Data Type Restrictions: <br>"
@@ -153,14 +112,9 @@ public class FilterByPOS extends AbstractExecutableComponent {
 
 	private Set<String> _tags = null;
 
-	private static Logger _logger = Logger.getLogger("FilterStopWords");
-
 	// props
 
-	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
-	final static String DATA_PROPERTY_VERBOSE = "verbose";
-
-	@ComponentProperty(description = "Comma delimited of tags to allow.?", name = "tag_list", defaultValue = "NN,NNP,NNPS,NNS,NP,NPS")
+	@ComponentProperty(description = "Comma separated list of POS tags.", name = "tag_list", defaultValue = "NN,NNP,NNPS,NNS,NP,NPS")
 	final static String DATA_PROPERTY_TAG_LIST = "tag_list";
 
 	// IO
@@ -171,24 +125,9 @@ public class FilterByPOS extends AbstractExecutableComponent {
 	@ComponentOutput(description = "Document object.", name = "document")
 	public final static String DATA_OUTPUT_DOCUMENT = "document";
 
-	// ============
-	// Properties
-	// ============
-
-	// ================
-	// Constructor(s)
-	// ================
-	public FilterByPOS() {
-	}
-
 	// ================
 	// Public Methods
 	// ================
-
-	public boolean getVerbose(ComponentContextProperties ccp) {
-		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
-		return Boolean.parseBoolean(s.toLowerCase());
-	}
 
 	public String getTagList(ComponentContextProperties ccp) {
 		String s = ccp.getProperty(DATA_PROPERTY_TAG_LIST);
@@ -210,16 +149,13 @@ public class FilterByPOS extends AbstractExecutableComponent {
 
 	public void disposeCallBack(ComponentContextProperties ccp)
     throws Exception {
-		componentConsoleHandler.whenLogLevelOutput("info","\nEND EXEC -- FilterByPOS -- Docs Processed: "
-				+ m_docsProcessed + "\n");
+		console.fine("END EXEC -- FilterByPOS -- Docs Processed: "
+				+ m_docsProcessed);
 		m_docsProcessed = 0;
 	}
 
 	public void executeCallBack(ComponentContext ctx)
     throws Exception {
-		// props =====================================
-		boolean verbose = this.getVerbose(ctx);
-		//============================================
 
 		int toks_selected = 0;
 
@@ -227,7 +163,7 @@ public class FilterByPOS extends AbstractExecutableComponent {
 			Document doc = (Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOCUMENT);
 
-			componentConsoleHandler.whenLogLevelOutput("info", doc.getDocID()
+			console.info(doc.getDocID()
 					+ " has "
 					+ doc.getAnnotations(AnnotationConstants.ANNOTATION_SET_TOKENS).size()
 					+ " num tokens.");
@@ -265,8 +201,7 @@ public class FilterByPOS extends AbstractExecutableComponent {
 					ArrayList<Annotation> list = FeatureValueEncoderDecoder
 							.decodeToListofAnnotations(tok
 									.getFeatures()
-									.get(
-											AnnotationConstants.NGRAM_ANNOT_FEAT_TOKEN_LIST));
+									.get(AnnotationConstants.NGRAM_ANNOT_FEAT_TOKEN_LIST));
 					boolean keep = false;
 					for (int i = 0, n = list.size(); i < n; i++) {
 						Annotation tok2 = list.get(i);
@@ -290,7 +225,7 @@ public class FilterByPOS extends AbstractExecutableComponent {
 				annots.remove(removes.get(i));
 			}
 
-			componentConsoleHandler.whenLogLevelOutput("info", toks_selected
+			console.info(toks_selected
 					+ " tokens were selected "
 					+ " out of " + origSz);
 
@@ -299,8 +234,8 @@ public class FilterByPOS extends AbstractExecutableComponent {
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: FilterByPOS.execute()");
+			ctx.getLogger().severe(ex.getMessage());
+			ctx.getLogger().severe("ERROR: FilterByPOS.execute()");
 			throw new ComponentExecutionException(ex);
 		}
 	}
