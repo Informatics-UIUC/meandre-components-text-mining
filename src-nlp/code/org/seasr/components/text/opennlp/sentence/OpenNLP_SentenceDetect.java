@@ -77,7 +77,7 @@ import org.seasr.components.text.opennlp.OpenNLPBaseUtilities;
 			+ "This component wraps the SentenceDetector from the OpenNLP package.</p>",
 		name = "OpenNLP_SentenceDetect",
 		tags = "sentence text opennlp document",
-		dependency={"opennlp-english-models.jar","trove-2.0.3.jar"},
+		dependency={"maxent-models.jar","trove-2.0.3.jar"},
         baseURL="meandre://seasr.org/components/")
 public class OpenNLP_SentenceDetect extends OpenNLPBaseUtilities {
 

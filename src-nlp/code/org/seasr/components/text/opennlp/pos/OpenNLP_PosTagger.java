@@ -84,7 +84,7 @@ import org.seasr.components.text.opennlp.OpenNLPBaseUtilities;
 			+ "that are generated for each token are stored as annotations.</p>",
 
 		name = "OpenNLP_PosTagger", tags = "pos text opennlp document",
-		dependency = { "opennlp-english-models.jar" },
+		dependency = { "maxent-models.jar" },
         baseURL="meandre://seasr.org/components/")
 public class OpenNLP_PosTagger extends OpenNLPBaseUtilities {
 
@@ -200,9 +200,9 @@ public class OpenNLP_PosTagger extends OpenNLPBaseUtilities {
 		// exist.
 
 		try {
-			File modelFile = new File(sOpenNLPDir + "postag" + File.separator + "tag.bin.gz");
+			File modelFile = new File(sOpenNLPDir + "parser" + File.separator + "tag.bin.gz");
 			File dictFile = new File(sOpenNLPDir + "parser" + File.separator + "dict.bin.gz");
-			File tagFile = new File(sOpenNLPDir + "postag" + File.separator + "tagdict");
+			File tagFile = new File(sOpenNLPDir + "parser" + File.separator + "tagdict");
 			_tagger = new PosTagger(modelFile.getCanonicalPath(),
 					new Dictionary(dictFile.getCanonicalPath()),
 					new POSDictionary(tagFile.getCanonicalPath(), true));

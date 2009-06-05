@@ -101,7 +101,7 @@ description = "<p>Usage: TreebankParser <br>"
 		+ "components.</p>",
 
 name = "OpenNLP_TreebankParser", tags = "parser text opennlp document",
-dependency = { "opennlp-english-models.jar" },
+dependency = { "maxent-models.jar" },
 baseURL="meandre://seasr.org/components/")
 public class OpenNLP_TreebankParser implements ExecutableComponent {
 
@@ -386,7 +386,7 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 	}
 
 	public void initialize(ComponentContextProperties ccp) {
-	    throw new RuntimeException("This component has not been transitioned to use the opennlp-english-models.jar model file yet!");
+	    throw new RuntimeException("This component has not been transitioned to use the maxent-models.jar model file yet!");
 //		_logger = ccp.getLogger();
 //		_logger.fine("initialize() called");
 //		m_docsProcessed = 0;

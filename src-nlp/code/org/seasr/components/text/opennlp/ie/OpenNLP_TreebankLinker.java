@@ -90,7 +90,7 @@ import org.seasr.components.text.opennlp.OpenNLPBaseUtilities;
 			+ "This class is currently non-functional.  Do not use.",
 
 		name = "OpenNLP_TreebankLinker", tags = "sentence text opennlp document",
-		dependency = { "opennlp-english-models.jar" },
+		dependency = { "maxent-models.jar" },
         baseURL="meandre://seasr.org/components/")
 public class OpenNLP_TreebankLinker extends OpenNLPBaseUtilities {
 

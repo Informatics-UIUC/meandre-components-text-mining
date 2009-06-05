@@ -93,7 +93,7 @@ description = "<p>Overview:<br> This component wraps the OpenNLP NameFinder clas
 		+ "parser (use the 'use_treebank' option).</p>",
 
 name = "OpenNLP_NameFinder", tags = "sentence text opennlp document",
-dependency = { "opennlp-english-models.jar" },
+dependency = { "maxent-models.jar" },
 baseURL="meandre://seasr.org/components/")
 public class OpenNLP_NameFinder extends OpenNLPBaseUtilities {
 
@@ -283,9 +283,9 @@ public class OpenNLP_NameFinder extends OpenNLPBaseUtilities {
 				_logger.info("Loading ... " + modelFile.getCanonicalPath());
 				_finders[i] = new NameFinderME(new BinaryGISModelReader(
 						modelFile).getModel());
-				_logger.info("Finished loading ... "
-						+ modelFile.getCanonicalPath());
 			}
+
+			_logger.info("Finished loading models");
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			throw new RuntimeException(ioe);
@@ -472,10 +472,6 @@ public class OpenNLP_NameFinder extends OpenNLPBaseUtilities {
 						+ idoc.getAnnotations(
 								AnnotationConstants.ANNOTATION_SET_ENTITIES)
 								.get().size() + " entity tokens created.\n\n");
-				ctx.getOutputConsole().println("Document parsed.  "
-						+ idoc.getAnnotations(
-								AnnotationConstants.ANNOTATION_SET_ENTITIES)
-								.get().size() + " entity tokens created.");
 			}
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, idoc);
 			m_docsProcessed++;
