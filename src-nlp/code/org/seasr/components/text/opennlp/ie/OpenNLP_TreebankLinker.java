@@ -1,36 +1,36 @@
 /**
  * University of Illinois/NCSA
  * Open Source License
- * 
- * Copyright (c) 2008, Board of Trustees-University of Illinois.  
+ *
+ * Copyright (c) 2008, Board of Trustees-University of Illinois.
  * All rights reserved.
- * 
- * Developed by: 
- * 
+ *
+ * Developed by:
+ *
  * Automated Learning Group
  * National Center for Supercomputing Applications
  * http://www.seasr.org
- * 
- *  
+ *
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal with the Software without restriction, including without limitation the
  * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
  * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions: 
- * 
+ * furnished to do so, subject to the following conditions:
+ *
  *  * Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimers. 
- * 
+ *    this list of conditions and the following disclaimers.
+ *
  *  * Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimers in the 
- *    documentation and/or other materials provided with the distribution. 
- * 
+ *    this list of conditions and the following disclaimers in the
+ *    documentation and/or other materials provided with the distribution.
+ *
  *  * Neither the names of Automated Learning Group, The National Center for
  *    Supercomputing Applications, or University of Illinois, nor the names of
  *    its contributors may be used to endorse or promote products derived from
- *    this Software without specific prior written permission. 
- * 
+ *    this Software without specific prior written permission.
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
@@ -38,7 +38,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * WITH THE SOFTWARE.
- */ 
+ */
 
 package org.seasr.components.text.opennlp.ie;
 
@@ -47,72 +47,59 @@ package org.seasr.components.text.opennlp.ie;
 //==============
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
-//===============
-// Other Imports
-//===============
-
 import opennlp.tools.coref.DiscourseEntity;
 import opennlp.tools.coref.Linker;
+import opennlp.tools.coref.LinkerMode;
 import opennlp.tools.coref.mention.DefaultParse;
-import opennlp.tools.coref.mention.Mention;
 import opennlp.tools.coref.mention.MentionContext;
 import opennlp.tools.lang.english.TreebankLinker;
 import opennlp.tools.parser.Parse;
 import opennlp.tools.parser.ParserME;
 import opennlp.tools.util.Span;
-import opennlp.tools.coref.LinkerMode;
 
-//import org.meandre.tools.components.*;
-//import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
-
-import org.seasr.components.text.datatype.corpora.Annotation;
-import org.seasr.components.text.datatype.corpora.AnnotationConstants;
-import org.seasr.components.text.datatype.corpora.AnnotationSet;
-import org.seasr.components.text.datatype.corpora.Document;
-import org.meandre.core.*;
-import org.meandre.components.datatype.table.util.*;
-import org.meandre.annotations.*;
-import org.seasr.components.text.*;
-import org.meandre.components.util.*;
+import org.meandre.annotations.Component;
+import org.meandre.annotations.ComponentInput;
+import org.meandre.annotations.ComponentOutput;
+import org.meandre.annotations.ComponentProperty;
+import org.meandre.core.ComponentContext;
+import org.meandre.core.ComponentContextProperties;
+import org.meandre.core.ComponentExecutionException;
+import org.seasr.components.text.opennlp.OpenNLPBaseUtilities;
 
 //import net.didion.jwnl.*;
 
 /**
  * @author D. Searsmith
- * 
+ *
  * TODO: Testing, Unit Tests
  * TODO: This class has a bug write now interfacing with wordnet libraries which are required
  * for the OpenNLPlinker to function.  This class is currently NON-FUNCTIONAL. FIX THIS.
  */
 
-@Component(creator = "Duane Searsmith", 
-		
+@Component(creator = "Duane Searsmith",
+
 		description = "<p>Overview: <br>"
-			+ "This class is currently non-functional.  Do not use.", 
-		
-		name = "OpenNLP_TreebankLinker", tags = "sentence text opennlp document", 
-		dependency = { "maxent-models.jar" },
+			+ "This class is currently non-functional.  Do not use.",
+
+		name = "OpenNLP_TreebankLinker", tags = "sentence text opennlp document",
+		dependency = { "opennlp-english-models.jar" },
         baseURL="meandre://seasr.org/components/")
-public class OpenNLP_TreebankLinker implements ExecutableComponent {
+public class OpenNLP_TreebankLinker extends OpenNLPBaseUtilities {
 
 	// ==============
 	// Data Members
 	// ==============
 
 	Linker _linker = null;
-	
+
 	private int m_docsProcessed = 0;
 
 	private long m_start = 0;
@@ -120,12 +107,12 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 	private String _version = "1.0";
 
 	// props
-	
+
 	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	@ComponentProperty(description = "Model files for v1.3.0.", 
-			name = "mod_files", 
+	@ComponentProperty(description = "Model files for v1.3.0.",
+			name = "mod_files",
 			defaultValue = "plmodel.bin.gz," +
 			"sim.bin.gz," +
 			"cmodel.nr.bin.gz," +
@@ -151,7 +138,7 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 	final static String DATA_PROPERTY_MODEL_FILES_VER_1_3_0 = "mod_files";
 
 	// io
-	
+
 	@ComponentInput(description = "Input document.", name = "Document")
 	public final static String DATA_INPUT_DOC_IN = "Document";
 
@@ -257,8 +244,8 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 //		// make a connection between two components
 //		wflow.connectComponents(finder,
 //				DATA_OUTPUT_DOC_OUT, linker,
-//				DATA_INPUT_DOC_IN);		
-//		
+//				DATA_INPUT_DOC_IN);
+//
 //		// execute the flow specifying that we want a web UI displayed
 //		flowBuilder.execute(wflow, false);
 //
@@ -280,13 +267,14 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 		String s = ccp.getProperty(DATA_PROPERTY_MODEL_FILES_VER_1_3_0);
 		return s;
 	}
-	
-	public void initialize(ComponentContextProperties ccp) {
+
+	public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
+	    super.initializeCallBack(ccp);
+
 		System.getProperties().put("WNSEARCHDIR", "c:/tmp/DICT1.5");
 //		try {
 //			JWNL.initialize(new FileInputStream("c:/JAVA/jwnl14-rc1/config/file_properties.xml"));
 //		} catch(Exception e){}
-		_logger.fine("initialize() called");
 		m_docsProcessed = 0;
 		m_start = System.currentTimeMillis();
 
@@ -303,15 +291,11 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 			File modelFile = null;
 			for (int i = 0; i < numFiles; i++) {
 				String modelName = files[i];
-				modelFile = MeandreJarFileReaderUtil
-						.findAndInstallFileResource("models/English/coref/"
-								+ modelName,
-								"/opennlp/models/English/coref_" + _version + "/"
-										+ modelName, (ComponentContext)ccp);
-				if (modelFile == null) {
+				modelFile = new File(sOpenNLPDir + "coref/" + modelName);
+				if (!modelFile.exists()) {
 					throw new RuntimeException(
-							"Unable to resove resource to a file: "
-									+ "models/English/coref/" + modelName);
+							"Unable to find resource file: "
+									+ modelFile.toString());
 				}
 				_logger.info("Finished installing ... "
 						+ modelFile.getCanonicalPath());
@@ -323,8 +307,7 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 		}
 	}
 
-	public void dispose(ComponentContextProperties ccp) {
-		_logger.fine("dispose() called");
+	public void disposeCallBack(ComponentContextProperties ccp) throws Exception {
 		long end = System.currentTimeMillis();
 		if (getVerbose(ccp)) {
 			_logger.info("\nEND EXEC -- OpenNLP_TreebankLinker -- Docs Processed: "
@@ -336,10 +319,9 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 
 
 	@SuppressWarnings("unchecked")
-	public void execute(ComponentContext ctx)
-			throws ComponentExecutionException, ComponentContextException {
+	public void executeCallBack(ComponentContext ctx)
+			throws Exception {
 		try {
-			_logger.fine("execute() called");
 			throw new ComponentExecutionException("This class is currently non functional. Please do not use.");
 //			Document idoc = (Document) ctx
 //					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
@@ -360,7 +342,7 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 //				 * paragraph boundaries. I don't think that in this instance it
 //				 * will ever fire because we don't mark paragraph boundaries as
 //				 * (empty) sentence annotations.
-//				 * 
+//				 *
 //				 * TODO: When we include paragraph annotations, then use those
 //				 * to trigger this clearing of the previous token maps as well
 //				 * as the occurrence of empty sentence annotations.
@@ -401,13 +383,13 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 //				        for (int ei=0,en=extents.length;ei<en;ei++) {
 //				          // System.err.println("PennTreebankLiner.main:
 //							// "+ei+" "+extents[ei]);
-//				          
+//
 //				          if (extents[ei].getParse() == null) {
 //				            Parse snp = new Parse(p.getText(),extents[ei].getSpan(),"NML",1.0);
 //				            p.insert(snp);
 //				            extents[ei].setParse(new DefaultParse(snp,sentenceNumber));
 //				          }
-//				          
+//
 //				        }
 //				        document.addAll(Arrays.asList(extents));
 //				        sentenceNumber++;
@@ -447,12 +429,12 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 			throw new ComponentExecutionException(ex);
 		}
 	}
-	
+
 	class CorefParse {
-		  
+
 		  private Map parseMap;
 		  private List parses;
-		  
+
 		  public CorefParse(List parses, DiscourseEntity[] entities) {
 		    this.parses = parses;
 		    parseMap = new HashMap();
@@ -466,7 +448,7 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 		      }
 		    }
 		  }
-		  
+
 		  public void show() {
 		    for (int pi=0,pn=parses.size();pi<pn;pi++) {
 		      Parse p = (Parse) parses.get(pi);
@@ -474,7 +456,7 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 		      System.out.println();
 		    }
 		  }
-		  
+
 		  private void show(Parse p) {
 		    int start;
 		    start = p.getSpan().getStart();
@@ -502,5 +484,5 @@ public class OpenNLP_TreebankLinker implements ExecutableComponent {
 		      System.out.print(")");
 		    }
 		  }
-		}	
+		}
 }

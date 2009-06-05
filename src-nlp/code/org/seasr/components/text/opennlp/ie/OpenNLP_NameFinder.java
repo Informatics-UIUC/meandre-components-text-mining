@@ -1,36 +1,36 @@
 /**
  * University of Illinois/NCSA
  * Open Source License
- * 
- * Copyright (c) 2008, Board of Trustees-University of Illinois.  
+ *
+ * Copyright (c) 2008, Board of Trustees-University of Illinois.
  * All rights reserved.
- * 
- * Developed by: 
- * 
+ *
+ * Developed by:
+ *
  * Automated Learning Group
  * National Center for Supercomputing Applications
  * http://www.seasr.org
- * 
- *  
+ *
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal with the Software without restriction, including without limitation the
  * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
  * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions: 
- * 
+ * furnished to do so, subject to the following conditions:
+ *
  *  * Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimers. 
- * 
+ *    this list of conditions and the following disclaimers.
+ *
  *  * Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimers in the 
- *    documentation and/or other materials provided with the distribution. 
- * 
+ *    this list of conditions and the following disclaimers in the
+ *    documentation and/or other materials provided with the distribution.
+ *
  *  * Neither the names of Automated Learning Group, The National Center for
  *    Supercomputing Applications, or University of Illinois, nor the names of
  *    its contributors may be used to endorse or promote products derived from
- *    this Software without specific prior written permission. 
- * 
+ *    this Software without specific prior written permission.
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
@@ -66,21 +66,23 @@ import opennlp.tools.namefind.NameFinderME;
 import opennlp.tools.parser.Parse;
 import opennlp.tools.util.Span;
 
-// import org.meandre.tools.components.*;
-// import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
-
+import org.meandre.annotations.Component;
+import org.meandre.annotations.ComponentInput;
+import org.meandre.annotations.ComponentOutput;
+import org.meandre.annotations.ComponentProperty;
+import org.meandre.core.ComponentContext;
+import org.meandre.core.ComponentContextProperties;
+import org.meandre.core.ComponentExecutionException;
 import org.seasr.components.text.datatype.corpora.Annotation;
 import org.seasr.components.text.datatype.corpora.AnnotationConstants;
 import org.seasr.components.text.datatype.corpora.AnnotationSet;
 import org.seasr.components.text.datatype.corpora.Document;
-import org.meandre.core.*;
-import org.meandre.components.util.MeandreJarFileReaderUtil;
-import org.meandre.annotations.*;
+import org.seasr.components.text.opennlp.OpenNLPBaseUtilities;
 import org.seasr.components.text.util.feature_maps.FeatureValueEncoderDecoder;
 
 /**
  * @author D. Searsmith
- * 
+ *
  * TODO: Testing, Unit Tests
  */
 
@@ -91,10 +93,10 @@ description = "<p>Overview:<br> This component wraps the OpenNLP NameFinder clas
 		+ "Part-of-Speech tagged text or text that has been run through the OpenNLP Treebank "
 		+ "parser (use the 'use_treebank' option).</p>",
 
-name = "OpenNLP_NameFinder", tags = "sentence text opennlp document", 
-dependency = { "maxent-models.jar" },
+name = "OpenNLP_NameFinder", tags = "sentence text opennlp document",
+dependency = { "opennlp-english-models.jar" },
 baseURL="meandre://seasr.org/components/")
-public class OpenNLP_NameFinder implements ExecutableComponent {
+public class OpenNLP_NameFinder extends OpenNLPBaseUtilities {
 
 	// ==============
 	// Data Members
@@ -105,7 +107,6 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 
 	private long m_start = 0;
 
-	private String _version = "1.0";
 
 	volatile private NameFinderME[] _finders = null;
 
@@ -116,7 +117,7 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 	// ============
 
 	// props
-	
+
 	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	final static String DATA_PROPERTY_VERBOSE = "verbose";
 
@@ -127,14 +128,14 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 	final static String DATA_PROPERTY_ENTITIES = "entities";
 
 	// io
-	
+
 	@ComponentInput(description = "Input document.", name = "Document")
 	public final static String DATA_INPUT_DOC_IN = "Document";
 
 	@ComponentOutput(description = "Output document.", name = "Document")
 	public final static String DATA_OUTPUT_DOC_OUT = "Document";
 
-	private static Logger _logger = Logger.getLogger("OpenNLP_NameFinder");
+	private static Logger _logger;
 
 	// ================
 	// Constructor(s)
@@ -227,7 +228,7 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 		// // set a component property
 		// wflow.setComponentInstanceProp(finder,
 		// OpenNLP_NameFinder.DATA_PROPERTY_USE_TREEBANK, "true");
-		//		
+		//
 		// // execute the flow specifying that we want a web UI displayed
 		// flowBuilder.execute(wflow, false);
 		//
@@ -254,8 +255,10 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 		return s;
 	}
 
-	public void initialize(ComponentContextProperties ccp) {
-		_logger.fine("initialize() called");
+	public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
+	    super.initializeCallBack(ccp);
+
+	    _logger = console;
 		m_docsProcessed = 0;
 		m_start = System.currentTimeMillis();
 
@@ -272,17 +275,11 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 			_finders = new NameFinderME[numTypes];
 			for (int i = 0; i < numTypes; i++) {
 				String modelName = _types[i];
-				File modelFile = MeandreJarFileReaderUtil
-						.findAndInstallFileResource("models/English/namefind/"
-								+ modelName + ".bin.gz",
-								"/opennlp/models/English/namefind/" + modelName
-										+ "_" + _version + ".bin.gz",
-								(ComponentContext) ccp);
-				if (modelFile == null) {
+				File modelFile = new File(sOpenNLPDir + "namefind/"+ modelName + ".bin.gz");
+				if (!modelFile.exists()) {
 					throw new RuntimeException(
-							"UNable to resove resource to a file: "
-									+ "models/English/namefind/" + modelName
-									+ ".bin.gz");
+							"Unable to find resource file: "
+									+ modelFile.toString());
 				}
 				_logger.info("Loading ... " + modelFile.getCanonicalPath());
 				_finders[i] = new NameFinderME(new BinaryGISModelReader(
@@ -296,7 +293,7 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 		}
 	}
 
-	public void dispose(ComponentContextProperties ccp) {
+	public void disposeCallBack(ComponentContextProperties ccp) throws Exception {
 		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
 		if (getVerbose(ccp)) {
@@ -310,10 +307,9 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void execute(ComponentContext ctx)
-			throws ComponentExecutionException, ComponentContextException {
+	public void executeCallBack(ComponentContext ctx)
+			throws Exception {
 		try {
-			_logger.fine("execute() called");
 			Document idoc = (Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
 
@@ -337,7 +333,7 @@ public class OpenNLP_NameFinder implements ExecutableComponent {
 				 * paragraph boundaries. I don't think that in this instance it
 				 * will ever fire because we don't mark paragraph boundaries as
 				 * (empty) sentence annotations.
-				 * 
+				 *
 				 * TODO: When we include paragraph annotations, then use those
 				 * to trigger this clearing of the previous token maps as well
 				 * as the occurrence of empty sentence annotations.

@@ -1,36 +1,36 @@
 /**
  * University of Illinois/NCSA
  * Open Source License
- * 
- * Copyright (c) 2008, Board of Trustees-University of Illinois.  
+ *
+ * Copyright (c) 2008, Board of Trustees-University of Illinois.
  * All rights reserved.
- * 
- * Developed by: 
- * 
+ *
+ * Developed by:
+ *
  * Automated Learning Group
  * National Center for Supercomputing Applications
  * http://www.seasr.org
- * 
- *  
+ *
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal with the Software without restriction, including without limitation the
  * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
  * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions: 
- * 
+ * furnished to do so, subject to the following conditions:
+ *
  *  * Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimers. 
- * 
+ *    this list of conditions and the following disclaimers.
+ *
  *  * Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimers in the 
- *    documentation and/or other materials provided with the distribution. 
- * 
+ *    this list of conditions and the following disclaimers in the
+ *    documentation and/or other materials provided with the distribution.
+ *
  *  * Neither the names of Automated Learning Group, The National Center for
  *    Supercomputing Applications, or University of Illinois, nor the names of
  *    its contributors may be used to endorse or promote products derived from
- *    this Software without specific prior written permission. 
- * 
+ *    this Software without specific prior written permission.
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
@@ -38,7 +38,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * WITH THE SOFTWARE.
- */ 
+ */
 
 package org.seasr.components.text.opennlp.sentence;
 
@@ -46,43 +46,40 @@ package org.seasr.components.text.opennlp.sentence;
 //Java Imports
 //==============
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
-import java.util.logging.*;
+import java.util.logging.Logger;
 
-//===============
-//Other Imports
-//===============
+import opennlp.tools.lang.english.SentenceDetector;
 
-//import org.meandre.tools.components.*;
-//import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
-
+import org.meandre.annotations.Component;
+import org.meandre.annotations.ComponentInput;
+import org.meandre.annotations.ComponentOutput;
+import org.meandre.annotations.ComponentProperty;
+import org.meandre.core.ComponentContext;
+import org.meandre.core.ComponentContextProperties;
+import org.meandre.core.ComponentExecutionException;
 import org.seasr.components.text.datatype.corpora.Annotation;
 import org.seasr.components.text.datatype.corpora.AnnotationConstants;
 import org.seasr.components.text.datatype.corpora.AnnotationSet;
 import org.seasr.components.text.datatype.corpora.Document;
-import org.meandre.core.*;
-import org.meandre.components.util.MeandreJarFileReaderUtil;
-import org.meandre.annotations.*;
-
-import opennlp.tools.lang.english.*;
+import org.seasr.components.text.opennlp.OpenNLPBaseUtilities;
 
 
 /**
  * @author D. Searsmith
- * 
+ *
  * TODO: Testing, Unit Tests
  */
 
 @Component(creator = "Duane Searsmith",
-		
+
 		description = "<p>Overview: <br>"
-			+ "This component wraps the SentenceDetector from the OpenNLP package.</p>", 
-		name = "OpenNLP_SentenceDetect", 
+			+ "This component wraps the SentenceDetector from the OpenNLP package.</p>",
+		name = "OpenNLP_SentenceDetect",
 		tags = "sentence text opennlp document",
-		dependency={"maxent-models.jar","trove-2.0.3.jar"},
+		dependency={"opennlp-english-models.jar","trove-2.0.3.jar"},
         baseURL="meandre://seasr.org/components/")
-public class OpenNLP_SentenceDetect implements ExecutableComponent {
+public class OpenNLP_SentenceDetect extends OpenNLPBaseUtilities {
 
 	// ==============
 	// Data Members
@@ -95,27 +92,21 @@ public class OpenNLP_SentenceDetect implements ExecutableComponent {
 
 	private SentenceDetector _sentDetector = null;
 
-	private static Logger _logger = Logger.getLogger("OpenNLP_SentenceDetect");
+	private static Logger _logger;
 
 	// props
-	
+
 	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	public final static String DATA_PROPERTY_VERBOSE = "verbose";
 
-	@ComponentProperty(description = "Resource model file name.", name = "resource_name", defaultValue = "models/English/sentdetect/EnglishSD.bin.gz")
-	public final static String DATA_PROPERTY_RESOURCE_NAME = "resource_name";
-
-	@ComponentProperty(description = "Model file name.", name = "filename", defaultValue = "/opennlp/models/English/sentdetect/EnglishSD.bin.gz")
-	public final static String DATA_PROPERTY_FILENAME = "filename";
-
 	// io
-	
+
 	@ComponentInput(description = "Input document.", name = "Document")
 	public final static String DATA_INPUT_DOC_IN = "Document";
 
 	@ComponentOutput(description = "Output document.", name = "Document")
 	public final static String DATA_OUTPUT_DOC_OUT = "Document";
-	
+
 	// ================
 	// Constructor(s)
 	// ================
@@ -167,41 +158,29 @@ public class OpenNLP_SentenceDetect implements ExecutableComponent {
 	// ================
 
 	// Property Getters
-	
+
 	public boolean getVerbose(ComponentContextProperties ccp) {
 		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
 		return Boolean.parseBoolean(s.toLowerCase());
 	}
 
-	public String getResourceName(ComponentContextProperties ccp) {
-		String s = ccp.getProperty(DATA_PROPERTY_RESOURCE_NAME);
-		return s;
-	}
+	public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
+	    super.initializeCallBack(ccp);
 
-	public String getFilename(ComponentContextProperties ccp) {
-		String s = ccp.getProperty(DATA_PROPERTY_FILENAME);
-		return s;
-	}	
-
-	public void initialize(ComponentContextProperties ccp) {
-		_logger = ccp.getLogger();
-		_logger.fine("initialize() called");
+		_logger = console;
 		m_docsProcessed = 0;
 		m_start = System.currentTimeMillis();
 
 		// Write model file to disk if it doesn't already
 		// exist.
-
-		try {
-			File modelFile = MeandreJarFileReaderUtil
-			.findAndInstallFileResource(
-					getResourceName(ccp),
-					getFilename(ccp), (ComponentContext)ccp);
-			_sentDetector = new SentenceDetector(modelFile.getPath());
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			throw new RuntimeException(ioe);
-		}
+        try {
+            _sentDetector = new SentenceDetector(sOpenNLPDir+"sentdetect"+File.separator+
+                    sLanguage.substring(0,1).toUpperCase()+sLanguage.substring(1)+"SD.bin.gz");
+        }
+        catch ( Throwable t ) {
+            console.severe("Failed to open tokenizer model for " + sLanguage);
+            throw new ComponentExecutionException(t);
+        }
 	}
 
 	public void dispose(ComponentContextProperties ccp) {
@@ -215,8 +194,8 @@ public class OpenNLP_SentenceDetect implements ExecutableComponent {
 		_sentDetector = null;
 	}
 
-	public void execute(ComponentContext ctx)
-			throws ComponentExecutionException, ComponentContextException {
+	public void executeCallBack(ComponentContext ctx)
+			throws Exception {
 		try {
 			Document idoc = (Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
@@ -226,7 +205,7 @@ public class OpenNLP_SentenceDetect implements ExecutableComponent {
 					.getAnnotations(AnnotationConstants.ANNOTATION_SET_SENTENCES);
 			String s = idoc.getContent();
 			int[] starts = _sentDetector.sentPosDetect(idoc.getContent());
-			
+
 			if (starts.length == 0) {
 				annots.add(0, s.length(),
 						AnnotationConstants.SENTENCE_ANNOT_TYPE, null);
@@ -245,7 +224,7 @@ public class OpenNLP_SentenceDetect implements ExecutableComponent {
 							AnnotationConstants.SENTENCE_ANNOT_TYPE, null);
 				}
 			}
-			
+
 			// ============================
 
 			if (getVerbose(ctx)) {

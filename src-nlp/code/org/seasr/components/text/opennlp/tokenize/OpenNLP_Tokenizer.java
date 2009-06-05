@@ -1,36 +1,36 @@
 /**
  * University of Illinois/NCSA
  * Open Source License
- * 
- * Copyright (c) 2008, Board of Trustees-University of Illinois.  
+ *
+ * Copyright (c) 2008, Board of Trustees-University of Illinois.
  * All rights reserved.
- * 
- * Developed by: 
- * 
+ *
+ * Developed by:
+ *
  * Automated Learning Group
  * National Center for Supercomputing Applications
  * http://www.seasr.org
- * 
- *  
+ *
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal with the Software without restriction, including without limitation the
  * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
  * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions: 
- * 
+ * furnished to do so, subject to the following conditions:
+ *
  *  * Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimers. 
- * 
+ *    this list of conditions and the following disclaimers.
+ *
  *  * Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimers in the 
- *    documentation and/or other materials provided with the distribution. 
- * 
+ *    this list of conditions and the following disclaimers in the
+ *    documentation and/or other materials provided with the distribution.
+ *
  *  * Neither the names of Automated Learning Group, The National Center for
  *    Supercomputing Applications, or University of Illinois, nor the names of
  *    its contributors may be used to endorse or promote products derived from
- *    this Software without specific prior written permission. 
- * 
+ *    this Software without specific prior written permission.
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
@@ -38,7 +38,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * WITH THE SOFTWARE.
- */ 
+ */
 
 package org.seasr.components.text.opennlp.tokenize;
 
@@ -47,50 +47,46 @@ package org.seasr.components.text.opennlp.tokenize;
 //==============
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-//===============
-//Other Imports
-//===============
-
-import opennlp.maxent.io.SuffixSensitiveGISModelReader;
+import opennlp.tools.lang.english.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
-import opennlp.tools.util.*;
+import opennlp.tools.util.Span;
 
-//import org.meandre.tools.components.*;
-//import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
-
+import org.meandre.annotations.Component;
+import org.meandre.annotations.ComponentInput;
+import org.meandre.annotations.ComponentOutput;
+import org.meandre.annotations.ComponentProperty;
+import org.meandre.core.ComponentContext;
+import org.meandre.core.ComponentContextProperties;
+import org.meandre.core.ComponentExecutionException;
 import org.seasr.components.text.datatype.corpora.Annotation;
 import org.seasr.components.text.datatype.corpora.AnnotationConstants;
 import org.seasr.components.text.datatype.corpora.AnnotationSet;
 import org.seasr.components.text.datatype.corpora.Document;
 import org.seasr.components.text.datatype.corpora.FeatureMap;
-import org.meandre.core.*;
-import org.meandre.components.util.MeandreJarFileReaderUtil;
-import org.meandre.annotations.*;
-
-
+import org.seasr.components.text.opennlp.OpenNLPBaseUtilities;
 import org.seasr.components.text.util.Factory;
 
 /**
  * @author D. Searsmith
- * 
+ *
  * TODO: Testing, Unit Tests
  */
 
-@Component(creator = "Duane Searsmith", 
-		
+@Component(creator = "Duane Searsmith",
+
 		description = "<p>Overview: <br>"
 			+ "This component wraps the OpenNLP Tokenizer class.  This class takes text that has been "
 			+ "segemented into sentences and paragraphs and tokenizes each word (part).  Each token is "
-			+ "recorded as an annotation in the SEASR Document object.", 
-		
-		name = "OpenNLP_Tokenizer", tags = "tokenize text opennlp document", 
-		dependency = { "maxent-models.jar" },
+			+ "recorded as an annotation in the SEASR Document object.",
+
+		name = "OpenNLP_Tokenizer", tags = "tokenize text opennlp document",
+		dependency = { "opennlp-english-models.jar" },
         baseURL="meandre://seasr.org/components/")
-public class OpenNLP_Tokenizer implements ExecutableComponent {
+public class OpenNLP_Tokenizer extends OpenNLPBaseUtilities {
 
 	// ==============
 	// Data Members
@@ -103,7 +99,7 @@ public class OpenNLP_Tokenizer implements ExecutableComponent {
 
 	private TokenizerME _tokenizer = null;
 
-	private static Logger _logger = Logger.getLogger("OpenNLP_Tokenizer");
+	private static Logger _logger;
 
 	// props
 
@@ -113,14 +109,8 @@ public class OpenNLP_Tokenizer implements ExecutableComponent {
 	@ComponentProperty(description = "Exclude tokenization of the title? A boolean value (true or false).", name = "exclude_title", defaultValue = "true")
 	final static String DATA_PROPERTY_EXCLUDE_TITLE = "exclude_title";
 
-	@ComponentProperty(description = "Resource model file name.", name = "resource_name", defaultValue = "models/English/tokenize/EnglishTok.bin.gz")
-	final static String DATA_PROPERTY_RESOURCE_NAME = "resource_name";
-
-	@ComponentProperty(description = "Model file name.", name = "filename", defaultValue = "/opennlp/models/English/tokenize/EnglishTok.bin.gz")
-	final static String DATA_PROPERTY_FILENAME = "filename";
-
 	// io
-	
+
 	@ComponentInput(description = "Input document.", name = "Document")
 	public final static String DATA_INPUT_DOC_IN = "Document";
 
@@ -194,7 +184,7 @@ public class OpenNLP_Tokenizer implements ExecutableComponent {
 	// ================
 
 	// Property Getters
-	
+
 	public boolean getVerbose(ComponentContextProperties ccp) {
 		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
 		return Boolean.parseBoolean(s.toLowerCase());
@@ -205,37 +195,25 @@ public class OpenNLP_Tokenizer implements ExecutableComponent {
 		return Boolean.parseBoolean(s.toLowerCase());
 	}
 
-	public String getResourceName(ComponentContextProperties ccp) {
-		String s = ccp.getProperty(DATA_PROPERTY_RESOURCE_NAME);
-		return s;
-	}
+	public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
+		super.initializeCallBack(ccp);
 
-	public String getFilename(ComponentContextProperties ccp) {
-		String s = ccp.getProperty(DATA_PROPERTY_FILENAME);
-		return s;
-	}
-
-	public void initialize(ComponentContextProperties ccp) {
-		_logger = ccp.getLogger();
-		_logger.fine("initialize() called");
+		_logger = console;
 		m_docsProcessed = 0;
 		m_start = System.currentTimeMillis();
 
-		// Write model file to disk if it doesn't already
-		// exist.
-
-		try {
-			File modelFile = MeandreJarFileReaderUtil
-					.findAndInstallFileResource(getResourceName(ccp), getFilename(ccp), (ComponentContext)ccp);
-			_tokenizer = new TokenizerME((new SuffixSensitiveGISModelReader(
-					modelFile)).getModel());
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			throw new RuntimeException(ioe);
-		}
+		// Initialize the tokenizer
+        try {
+            _tokenizer = new Tokenizer(sOpenNLPDir+"tokenize"+File.separator+
+                    sLanguage.substring(0,1).toUpperCase()+sLanguage.substring(1)+"Tok.bin.gz");
+        }
+        catch ( Throwable t ) {
+            console.log(Level.SEVERE,"Failed to open tokenizer model for " + sLanguage, t);
+            throw new ComponentExecutionException(t);
+        }
 	}
 
-	public void dispose(ComponentContextProperties ccp) {
+	public void disposeCallBack(ComponentContextProperties ccp) throws Exception {
 		long end = System.currentTimeMillis();
 		if (getVerbose(ccp)) {
 			_logger.info("\nEND EXEC -- OpenNLP_Tokenizer -- Docs Processed: "
@@ -246,8 +224,8 @@ public class OpenNLP_Tokenizer implements ExecutableComponent {
 		_tokenizer = null;
 	}
 
-	public void execute(ComponentContext ctx)
-			throws ComponentExecutionException, ComponentContextException {
+	public void executeCallBack(ComponentContext ctx)
+			throws Exception {
 		try {
 			Document idoc = (Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
@@ -276,9 +254,9 @@ public class OpenNLP_Tokenizer implements ExecutableComponent {
 								AnnotationConstants.TOKEN_ANNOT_TYPE, null);
 					} else if (i == 0) {
 						/**
-						 * So this feature is added for cross compatibility issues with 
+						 * So this feature is added for cross compatibility issues with
 						 * SEASR POS tagger.  But also it is general information that is
-						 * useful to know about a token. 
+						 * useful to know about a token.
 						 */
 						FeatureMap fm = Factory.newFeatureMap();
 						fm
@@ -289,9 +267,9 @@ public class OpenNLP_Tokenizer implements ExecutableComponent {
 								AnnotationConstants.TOKEN_ANNOT_TYPE, fm);
 					} else {
 						/**
-						 * So this feature is added for cross compatibility issues with 
+						 * So this feature is added for cross compatibility issues with
 						 * SEASR POS tagger.  But also it is general information that is
-						 * useful to know about a token. 
+						 * useful to know about a token.
 						 */
 						FeatureMap fm = Factory.newFeatureMap();
 						fm
