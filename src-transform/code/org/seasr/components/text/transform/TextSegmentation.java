@@ -236,7 +236,7 @@ public class TextSegmentation extends AbstractExecutableComponent {
 			cc.pushDataComponentToOutput(DATA_OUTPUT_DOC_SEGMENT_CNT, segcnt);
 			_docsProcessed++;
 
-			console.info(segcnt + " segmemts created.");
+			console.info(segcnt + " segments created.");
 			idoc.free();
 		} catch (Exception ex) {
 			ex.printStackTrace();
