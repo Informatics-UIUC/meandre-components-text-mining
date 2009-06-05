@@ -321,7 +321,7 @@ public class OpenNLP_TreebankLinker extends OpenNLPBaseUtilities {
 	@SuppressWarnings("unchecked")
 	public void executeCallBack(ComponentContext ctx)
 			throws Exception {
-		try {
+
 			throw new ComponentExecutionException("This class is currently non functional. Please do not use.");
 //			Document idoc = (Document) ctx
 //					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
@@ -422,12 +422,7 @@ public class OpenNLP_TreebankLinker extends OpenNLPBaseUtilities {
 //// }
 //			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, idoc);
 //			m_docsProcessed++;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: OpenNLP_TreebankLinker.execute()");
-			throw new ComponentExecutionException(ex);
-		}
+
 	}
 
 	class CorefParse {

@@ -226,7 +226,7 @@ public class OpenNLP_Tokenizer extends OpenNLPBaseUtilities {
 
 	public void executeCallBack(ComponentContext ctx)
 			throws Exception {
-		try {
+
 			Document idoc = (Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
 
@@ -330,11 +330,6 @@ public class OpenNLP_Tokenizer extends OpenNLPBaseUtilities {
 			}
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, idoc);
 			m_docsProcessed++;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: OpenNLP_Tokenizer.execute()");
-			throw new ComponentExecutionException(ex);
-		}
+
 	}
 }

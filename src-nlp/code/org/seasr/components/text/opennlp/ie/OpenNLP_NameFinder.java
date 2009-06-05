@@ -72,7 +72,6 @@ import org.meandre.annotations.ComponentOutput;
 import org.meandre.annotations.ComponentProperty;
 import org.meandre.core.ComponentContext;
 import org.meandre.core.ComponentContextProperties;
-import org.meandre.core.ComponentExecutionException;
 import org.seasr.components.text.datatype.corpora.Annotation;
 import org.seasr.components.text.datatype.corpora.AnnotationConstants;
 import org.seasr.components.text.datatype.corpora.AnnotationSet;
@@ -309,7 +308,7 @@ public class OpenNLP_NameFinder extends OpenNLPBaseUtilities {
 	@SuppressWarnings("unchecked")
 	public void executeCallBack(ComponentContext ctx)
 			throws Exception {
-		try {
+
 			Document idoc = (Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOC_IN);
 
@@ -480,12 +479,6 @@ public class OpenNLP_NameFinder extends OpenNLPBaseUtilities {
 			}
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, idoc);
 			m_docsProcessed++;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			_logger.severe(ex.getMessage());
-			_logger.severe("ERROR: OpenNLP_NameFinder.execute()");
-			throw new ComponentExecutionException(ex);
-		}
 	}
 
 	@SuppressWarnings("unchecked")
