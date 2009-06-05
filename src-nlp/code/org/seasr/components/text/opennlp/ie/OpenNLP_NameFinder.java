@@ -275,7 +275,7 @@ public class OpenNLP_NameFinder extends OpenNLPBaseUtilities {
 			_finders = new NameFinderME[numTypes];
 			for (int i = 0; i < numTypes; i++) {
 				String modelName = _types[i];
-				File modelFile = new File(sOpenNLPDir + "namefind/"+ modelName + ".bin.gz");
+				File modelFile = new File(sOpenNLPDir + "namefind"+File.separator+ modelName + ".bin.gz");
 				if (!modelFile.exists()) {
 					throw new RuntimeException(
 							"Unable to find resource file: "
