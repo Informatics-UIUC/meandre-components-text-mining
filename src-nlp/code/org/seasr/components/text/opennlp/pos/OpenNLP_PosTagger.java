@@ -202,7 +202,7 @@ public class OpenNLP_PosTagger extends OpenNLPBaseUtilities {
 
 		try {
 			File modelFile = new File(sOpenNLPDir + "postag/tag.bin.gz");
-			File dictFile = new File(sOpenNLPDir + "parser/tagdict");
+			File dictFile = new File(sOpenNLPDir + "parser/dict.bin.gz");
 			File tagFile = new File(sOpenNLPDir + "postag/tagdict");
 			_tagger = new PosTagger(modelFile.getCanonicalPath(),
 					new Dictionary(dictFile.getCanonicalPath()),
