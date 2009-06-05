@@ -1,36 +1,36 @@
 /**
  * University of Illinois/NCSA
  * Open Source License
- * 
- * Copyright (c) 2008, Board of Trustees-University of Illinois.  
+ *
+ * Copyright (c) 2008, Board of Trustees-University of Illinois.
  * All rights reserved.
- * 
- * Developed by: 
- * 
+ *
+ * Developed by:
+ *
  * Automated Learning Group
  * National Center for Supercomputing Applications
  * http://www.seasr.org
- * 
- *  
+ *
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal with the Software without restriction, including without limitation the
  * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
  * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions: 
- * 
+ * furnished to do so, subject to the following conditions:
+ *
  *  * Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimers. 
- * 
+ *    this list of conditions and the following disclaimers.
+ *
  *  * Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimers in the 
- *    documentation and/or other materials provided with the distribution. 
- * 
+ *    this list of conditions and the following disclaimers in the
+ *    documentation and/or other materials provided with the distribution.
+ *
  *  * Neither the names of Automated Learning Group, The National Center for
  *    Supercomputing Applications, or University of Illinois, nor the names of
  *    its contributors may be used to endorse or promote products derived from
- *    this Software without specific prior written permission. 
- * 
+ *    this Software without specific prior written permission.
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
@@ -46,47 +46,39 @@ package org.seasr.components.text.opennlp.parser;
 // Java Imports
 // ==============
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.HashMap;
-import java.util.Map;
 
-// ===============
-// Other Imports
-// ===============
-
-import opennlp.maxent.io.SuffixSensitiveGISModelReader;
-import opennlp.tools.lang.english.HeadRules;
-import opennlp.tools.lang.english.ParserChunker;
-import opennlp.tools.lang.english.ParserTagger;
 import opennlp.tools.lang.english.TreebankParser;
-import opennlp.tools.parser.*;
+import opennlp.tools.parser.Parse;
+import opennlp.tools.parser.ParserME;
 
-import org.seasr.components.text.util.Factory;
-
-// import org.meandre.tools.components.*;
-// import org.meandre.tools.components.FlowBuilderAPI.WorkingFlow;
-
+import org.meandre.annotations.Component;
+import org.meandre.annotations.ComponentInput;
+import org.meandre.annotations.ComponentOutput;
+import org.meandre.annotations.ComponentProperty;
+import org.meandre.core.ComponentContext;
+import org.meandre.core.ComponentContextException;
+import org.meandre.core.ComponentContextProperties;
+import org.meandre.core.ComponentExecutionException;
+import org.meandre.core.ExecutableComponent;
 import org.seasr.components.text.datatype.corpora.Annotation;
 import org.seasr.components.text.datatype.corpora.AnnotationConstants;
 import org.seasr.components.text.datatype.corpora.AnnotationSet;
 import org.seasr.components.text.datatype.corpora.Document;
 import org.seasr.components.text.datatype.corpora.FeatureMap;
-import org.meandre.core.*;
-import org.meandre.components.util.MeandreJarFileReaderUtil;
-import org.meandre.annotations.*;
+import org.seasr.components.text.util.Factory;
 import org.seasr.components.text.util.feature_maps.FeatureValueEncoderDecoder;
 
 /**
  * @author D. Searsmith
- * 
+ *
  * TODO: Testing, Unit Tests
  */
 
@@ -108,8 +100,8 @@ description = "<p>Usage: TreebankParser <br>"
 		+ "SEASR annotations but treebank format is stored in addition for use in later "
 		+ "components.</p>",
 
-name = "OpenNLP_TreebankParser", tags = "parser text opennlp document", 
-dependency = { "maxent-models.jar" },
+name = "OpenNLP_TreebankParser", tags = "parser text opennlp document",
+dependency = { "opennlp-english-models.jar" },
 baseURL="meandre://seasr.org/components/")
 public class OpenNLP_TreebankParser implements ExecutableComponent {
 
@@ -394,67 +386,68 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 	}
 
 	public void initialize(ComponentContextProperties ccp) {
-		_logger = ccp.getLogger();
-		_logger.fine("initialize() called");
-		m_docsProcessed = 0;
-		m_start = System.currentTimeMillis();
-
-		_posiToTokenS = new HashMap<Integer, Annotation>();
-		_posiToTokenE = new HashMap<Integer, Annotation>();
-
-		// Write model files to disk if they don't already
-		// exist, and then instantiate a parser.
-
-		try {
-			File buildModelFile = MeandreJarFileReaderUtil
-					.findAndInstallFileResource(getBuildModelResourceName(ccp),
-							getBuildModelFilename(ccp), (ComponentContext) ccp);
-			File checkModelFile = MeandreJarFileReaderUtil
-					.findAndInstallFileResource(getCheckModelResourceName(ccp),
-							getCheckModelFilename(ccp), (ComponentContext) ccp);
-			File taggerModelFile = MeandreJarFileReaderUtil
-					.findAndInstallFileResource(
-							getTaggerModelResourceName(ccp),
-							getTaggerModelFilename(ccp), (ComponentContext) ccp);
-			File chunkerModelFile = MeandreJarFileReaderUtil
-					.findAndInstallFileResource(
-							getChunkerModelResourceName(ccp),
-							getChunkerModelFilename(ccp),
-							(ComponentContext) ccp);
-			File hrulesModelFile = MeandreJarFileReaderUtil
-					.findAndInstallFileResource(getHeadRulesResourceName(ccp),
-							getHeadRulesFilename(ccp), (ComponentContext) ccp);
-			if (getUseTagDictionary(ccp)) {
-				File tagDictionaryFile = MeandreJarFileReaderUtil
-						.findAndInstallFileResource(
-								getTagDictionaryResourceName(ccp),
-								getTagDictionaryFilename(ccp),
-								(ComponentContext) ccp);
-
-				_parser = new ParserME(new SuffixSensitiveGISModelReader(
-						buildModelFile).getModel(),
-						new SuffixSensitiveGISModelReader(checkModelFile)
-								.getModel(), new ParserTagger(taggerModelFile
-								.getCanonicalPath(), tagDictionaryFile
-								.getCanonicalPath(),
-								getUseCaseSensitiveTagDictionary(ccp)),
-						new ParserChunker(chunkerModelFile.getCanonicalPath()),
-						new HeadRules(hrulesModelFile.getCanonicalPath()),
-						getBeamSize(ccp), getAdvancePercentage(ccp));
-			} else {
-				_parser = new ParserME(new SuffixSensitiveGISModelReader(
-						buildModelFile).getModel(),
-						new SuffixSensitiveGISModelReader(checkModelFile)
-								.getModel(), new ParserTagger(taggerModelFile
-								.getCanonicalPath(), null), new ParserChunker(
-								chunkerModelFile.getCanonicalPath()),
-						new HeadRules(hrulesModelFile.getCanonicalPath()),
-						getBeamSize(ccp), getAdvancePercentage(ccp));
-			}
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			throw new RuntimeException(ioe);
-		}
+	    throw new RuntimeException("This component has not been transitioned to use the opennlp-english-models.jar model file yet!");
+//		_logger = ccp.getLogger();
+//		_logger.fine("initialize() called");
+//		m_docsProcessed = 0;
+//		m_start = System.currentTimeMillis();
+//
+//		_posiToTokenS = new HashMap<Integer, Annotation>();
+//		_posiToTokenE = new HashMap<Integer, Annotation>();
+//
+//		// Write model files to disk if they don't already
+//		// exist, and then instantiate a parser.
+//
+//		try {
+//			File buildModelFile = MeandreJarFileReaderUtil
+//					.findAndInstallFileResource(getBuildModelResourceName(ccp),
+//							getBuildModelFilename(ccp), (ComponentContext) ccp);
+//			File checkModelFile = MeandreJarFileReaderUtil
+//					.findAndInstallFileResource(getCheckModelResourceName(ccp),
+//							getCheckModelFilename(ccp), (ComponentContext) ccp);
+//			File taggerModelFile = MeandreJarFileReaderUtil
+//					.findAndInstallFileResource(
+//							getTaggerModelResourceName(ccp),
+//							getTaggerModelFilename(ccp), (ComponentContext) ccp);
+//			File chunkerModelFile = MeandreJarFileReaderUtil
+//					.findAndInstallFileResource(
+//							getChunkerModelResourceName(ccp),
+//							getChunkerModelFilename(ccp),
+//							(ComponentContext) ccp);
+//			File hrulesModelFile = MeandreJarFileReaderUtil
+//					.findAndInstallFileResource(getHeadRulesResourceName(ccp),
+//							getHeadRulesFilename(ccp), (ComponentContext) ccp);
+//			if (getUseTagDictionary(ccp)) {
+//				File tagDictionaryFile = MeandreJarFileReaderUtil
+//						.findAndInstallFileResource(
+//								getTagDictionaryResourceName(ccp),
+//								getTagDictionaryFilename(ccp),
+//								(ComponentContext) ccp);
+//
+//				_parser = new ParserME(new SuffixSensitiveGISModelReader(
+//						buildModelFile).getModel(),
+//						new SuffixSensitiveGISModelReader(checkModelFile)
+//								.getModel(), new ParserTagger(taggerModelFile
+//								.getCanonicalPath(), tagDictionaryFile
+//								.getCanonicalPath(),
+//								getUseCaseSensitiveTagDictionary(ccp)),
+//						new ParserChunker(chunkerModelFile.getCanonicalPath()),
+//						new HeadRules(hrulesModelFile.getCanonicalPath()),
+//						getBeamSize(ccp), getAdvancePercentage(ccp));
+//			} else {
+//				_parser = new ParserME(new SuffixSensitiveGISModelReader(
+//						buildModelFile).getModel(),
+//						new SuffixSensitiveGISModelReader(checkModelFile)
+//								.getModel(), new ParserTagger(taggerModelFile
+//								.getCanonicalPath(), null), new ParserChunker(
+//								chunkerModelFile.getCanonicalPath()),
+//						new HeadRules(hrulesModelFile.getCanonicalPath()),
+//						getBeamSize(ccp), getAdvancePercentage(ccp));
+//			}
+//		} catch (IOException ioe) {
+//			ioe.printStackTrace();
+//			throw new RuntimeException(ioe);
+//		}
 	}
 
 	public void dispose(ComponentContextProperties ccp) {
@@ -571,14 +564,14 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 	 * Sometimes the OpenNLP parser parses things like "(yards)" as "(yards )"
 	 * (i.e. 2 tokens instead of three. To compensate for this error I am simply
 	 * deleting the "untokenized" paren and allowing the parse to proceed.
-	 * 
+	 *
 	 * TODO: Detect untokenized parens and treat them as separate tokens for the
 	 * purposes of the parser. This still means the actual tokenization is
 	 * flawed but that is a tokenizer issue.
-	 * 
+	 *
 	 * NOTE: SEASR tokenizer (brown) doesn't seem to have this issue being rule
 	 * based.
-	 * 
+	 *
 	 * @param token
 	 * @return
 	 */
@@ -601,7 +594,7 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 	 * each Parse object at this level denotes a separate unique parse. Also
 	 * note that no parse objects indicates that the parser could find no parse,
 	 * and a single parse annotation is created with type "NO PARSE".
-	 * 
+	 *
 	 * @param parses
 	 * @param sent
 	 * @param parseSet
@@ -656,7 +649,7 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 	 * set of parses. If this parse has a parent, set the parent parse
 	 * annotation ID, and set this as a ,e,ber of the parent's children.
 	 * Children are sets of annotation ID's.
-	 * 
+	 *
 	 * The parse annotation span in the subject of analysis (SOFA), document in
 	 * most cases, needs to be calculated using the actual start and end token
 	 * annotations of the document. So, two maps are used to store the token
@@ -666,8 +659,8 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 	 * sentence because extra spaces were added to the sentence from the
 	 * document to conform to the needed input format for OpenNLP
 	 * TreelinkParser.
-	 * 
-	 * 
+	 *
+	 *
 	 * @param parses
 	 * @param parseSet
 	 * @param par
@@ -726,7 +719,7 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 
 	/**
 	 * For each sentence parse call the print routines.
-	 * 
+	 *
 	 * @param parses
 	 * @param sent
 	 */
@@ -751,7 +744,7 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 	/**
 	 * For each level of the parse tree, construct the the String to print for
 	 * that line and print it to standard out.
-	 * 
+	 *
 	 * @param parses
 	 * @param len
 	 */
@@ -787,16 +780,16 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 	 * Build a part of a String to be printed that contains one annotation type.
 	 * Potentially many calls to this method will be concatenated to make one
 	 * line of parse tree output.
-	 * 
+	 *
 	 * @param prtChar
 	 *            String Character to use to denote span of this annotation.
-	 * 
+	 *
 	 * @param strlen
 	 *            int Length of sentence.
-	 * 
+	 *
 	 * @param msg
 	 *            String Type value to display for this annotation.
-	 * 
+	 *
 	 * @return A string the length of the Span of the annotation with annotation
 	 *         type in the center and prtChar printed out to either side.
 	 */
@@ -819,7 +812,7 @@ public class OpenNLP_TreebankParser implements ExecutableComponent {
 
 	/**
 	 * Produce a string of spaces of length x.
-	 * 
+	 *
 	 * @param x
 	 *            int Length.
 	 * @return String String of space chars.
