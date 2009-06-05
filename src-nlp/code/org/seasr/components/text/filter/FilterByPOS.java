@@ -163,7 +163,7 @@ public class FilterByPOS extends AbstractExecutableComponent {
 			Document doc = (Document) ctx
 					.getDataComponentFromInput(DATA_INPUT_DOCUMENT);
 
-			console.info(doc.getDocID()
+			console.fine(doc.getDocID()
 					+ " has "
 					+ doc.getAnnotations(AnnotationConstants.ANNOTATION_SET_TOKENS).size()
 					+ " num tokens.");
@@ -225,7 +225,7 @@ public class FilterByPOS extends AbstractExecutableComponent {
 				annots.remove(removes.get(i));
 			}
 
-			console.info(toks_selected
+			console.fine(toks_selected
 					+ " tokens were selected "
 					+ " out of " + origSz);
 

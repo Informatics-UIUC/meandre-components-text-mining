@@ -178,7 +178,7 @@ public class FilterStopWords extends AbstractExecutableComponent {
 						annots.remove(removes.get(i2));
 					}
 
-					console.info("Number of stop words removed for "
+					console.fine("Number of stop words removed for "
 							+ doc.getTitle() + ": " + cnt);
 
 					cc.pushDataComponentToOutput(DATA_OUTPUT_DOCUMENT, doc);
