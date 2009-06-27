@@ -84,7 +84,7 @@ import org.seasr.components.text.opennlp.OpenNLPBaseUtilities;
 			+ "that are generated for each token are stored as annotations.</p>",
 
 		name = "OpenNLP_PosTagger", tags = "pos text opennlp document",
-		dependency = { "maxent-models.jar" },
+		dependency = { "maxent-models.jar", "trove-2.0.3.jar" },
         baseURL="meandre://seasr.org/components/")
 public class OpenNLP_PosTagger extends OpenNLPBaseUtilities {
 

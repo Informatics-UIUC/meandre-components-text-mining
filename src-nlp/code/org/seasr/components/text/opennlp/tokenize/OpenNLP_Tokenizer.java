@@ -84,7 +84,7 @@ import org.seasr.components.text.util.Factory;
 			+ "recorded as an annotation in the SEASR Document object.",
 
 		name = "OpenNLP_Tokenizer", tags = "tokenize text opennlp document",
-		dependency = { "maxent-models.jar" },
+		dependency = { "maxent-models.jar", "trove-2.0.3.jar" },
         baseURL="meandre://seasr.org/components/")
 public class OpenNLP_Tokenizer extends OpenNLPBaseUtilities {
 

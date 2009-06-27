@@ -93,7 +93,7 @@ description = "<p>Overview:<br> This component wraps the OpenNLP NameFinder clas
 		+ "parser (use the 'use_treebank' option).</p>",
 
 name = "OpenNLP_NameFinder", tags = "sentence text opennlp document",
-dependency = { "maxent-models.jar" },
+dependency = { "maxent-models.jar", "trove-2.0.3.jar" },
 baseURL="meandre://seasr.org/components/")
 public class OpenNLP_NameFinder extends OpenNLPBaseUtilities {
 
