@@ -49,7 +49,8 @@ import org.meandre.annotations.ComponentProperty;
 import org.meandre.components.abstracts.AbstractExecutableComponent;
 import org.meandre.core.ComponentContextException;
 import org.meandre.core.ComponentContextProperties;
-import org.seasr.components.text.opennlp.JARInstaller.InstallStatus;
+import org.seasr.meandre.support.io.JARInstaller;
+import org.seasr.meandre.support.io.JARInstaller.InstallStatus;
 
 /**
  * Provides basic utilities for the OpenNLP components.
@@ -80,7 +81,8 @@ public abstract class OpenNLPBaseUtilities extends AbstractExecutableComponent {
 
 	//--------------------------------------------------------------------------------------------
 
-	public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
+	@Override
+    public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
         sOpenNLPDir = ccp.getRunDirectory()+File.separator+"opennlp";
 
         this.sLanguage = ccp.getProperty(PROP_LANGUAGE).trim().toLowerCase();
@@ -103,7 +105,8 @@ public abstract class OpenNLPBaseUtilities extends AbstractExecutableComponent {
                         +sLanguage.substring(0,1).toUpperCase()+sLanguage.substring(1)+File.separator;
 	}
 
-	public void disposeCallBack(ComponentContextProperties ccp) throws Exception {
+	@Override
+    public void disposeCallBack(ComponentContextProperties ccp) throws Exception {
 		this.sLanguage = null;
 	}
 }

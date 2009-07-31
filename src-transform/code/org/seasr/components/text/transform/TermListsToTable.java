@@ -67,8 +67,6 @@ import org.meandre.core.ComponentExecutionException;
 import org.seasr.components.text.datatype.termlist.TermList;
 import org.seasr.components.text.datatype.termlist.TermListLite;
 import org.seasr.components.text.datatype.termmap.TermMap;
-import org.seasr.datatypes.BasicDataTypesTools;
-import org.seasr.meandre.components.tools.Names;
 import org.seasr.meandre.support.parsers.DataTypeParser;
 
 
@@ -203,7 +201,8 @@ public class TermListsToTable extends AbstractExecutableComponent {
 		return Boolean.parseBoolean(s.toLowerCase());
 	}
 
-	public void initializeCallBack(ComponentContextProperties ccp)
+	@Override
+    public void initializeCallBack(ComponentContextProperties ccp)
     throws Exception {
 		_docs = new ArrayList<TermList>();
 		_termMaps = new HashMap<ExampleTable, TermMap>();
@@ -219,7 +218,8 @@ public class TermListsToTable extends AbstractExecutableComponent {
 		m_start = System.currentTimeMillis();
 	}
 
-	public void disposeCallBack(ComponentContextProperties ccp)
+	@Override
+    public void disposeCallBack(ComponentContextProperties ccp)
     throws Exception {
 		_fact = null;
 		_propList = null;
@@ -240,7 +240,8 @@ public class TermListsToTable extends AbstractExecutableComponent {
 		}
 	}
 
-	public void executeCallBack(ComponentContext ctx)
+	@Override
+    public void executeCallBack(ComponentContext ctx)
     throws Exception {
 		try {
 
@@ -256,7 +257,7 @@ public class TermListsToTable extends AbstractExecutableComponent {
 			}
 
 			if (ctx.isInputAvailable(DATA_INPUT_NUMBER_OF_TERMLIST)) {
-				m_numRecs = DataTypeParser.parseAsInteger(ctx.getDataComponentFromInput(DATA_INPUT_NUMBER_OF_TERMLIST));
+				m_numRecs = DataTypeParser.parseAsInteger(ctx.getDataComponentFromInput(DATA_INPUT_NUMBER_OF_TERMLIST))[0];
 				console.info("TermListsToTable: Number of records was told to expect: "
 									+ m_numRecs);
 			}
@@ -274,9 +275,9 @@ public class TermListsToTable extends AbstractExecutableComponent {
 						int row = _termTable.getNumRows();
 						_termTable.addRows(1);
 						for (Iterator<String> it = tl.getTerms(); it.hasNext();) {
-							String term = (String) it.next();
+							String term = it.next();
 
-							Integer colobj = (Integer) m_gtm.get(term);
+							Integer colobj = m_gtm.get(term);
 							int col = 0;
 							boolean flag = false;
 							if (colobj == null) {
@@ -289,7 +290,7 @@ public class TermListsToTable extends AbstractExecutableComponent {
 							int freq = tl.getTermFreqByImage(term);
 
 							// set the value in the table
-							_termTable.setDouble((double) freq, row, col);
+							_termTable.setDouble(freq, row, col);
 							if (flag) {
 								_termTable.setColumnLabel(term, col);
 							}
@@ -325,7 +326,7 @@ public class TermListsToTable extends AbstractExecutableComponent {
 					Map<String, String> m = _propList.get(i);
 					for (Iterator<String> it = m.keySet().iterator(); it
 							.hasNext();) {
-						String key = (String) it.next();
+						String key = it.next();
 						String ob = m.get(key);
 						Integer icol = colprops.get(key);
 						boolean flag = false;
