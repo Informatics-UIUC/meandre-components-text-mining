@@ -67,6 +67,10 @@ import org.meandre.core.ComponentExecutionException;
 import org.seasr.components.text.datatype.termlist.TermList;
 import org.seasr.components.text.datatype.termlist.TermListLite;
 import org.seasr.components.text.datatype.termmap.TermMap;
+import org.seasr.datatypes.BasicDataTypesTools;
+import org.seasr.meandre.components.tools.Names;
+import org.seasr.meandre.support.parsers.DataTypeParser;
+
 
 /**
  *
@@ -252,9 +256,7 @@ public class TermListsToTable extends AbstractExecutableComponent {
 			}
 
 			if (ctx.isInputAvailable(DATA_INPUT_NUMBER_OF_TERMLIST)) {
-				m_numRecs = ((Integer) ctx
-						.getDataComponentFromInput(DATA_INPUT_NUMBER_OF_TERMLIST))
-						.intValue();
+				m_numRecs = DataTypeParser.parseAsInteger(ctx.getDataComponentFromInput(DATA_INPUT_NUMBER_OF_TERMLIST));
 				console.info("TermListsToTable: Number of records was told to expect: "
 									+ m_numRecs);
 			}
