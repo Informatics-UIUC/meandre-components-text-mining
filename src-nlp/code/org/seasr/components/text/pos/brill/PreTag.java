@@ -61,7 +61,6 @@ import org.seasr.components.text.datatype.corpora.AnnotationConstants;
 import org.seasr.components.text.datatype.corpora.AnnotationSet;
 import org.seasr.components.text.datatype.corpora.Document;
 import org.seasr.components.text.datatype.pos.PoSTag;
-import org.seasr.components.text.pos.brill.support.Lexicon;
 import org.meandre.core.*;
 import org.meandre.annotations.*;
 

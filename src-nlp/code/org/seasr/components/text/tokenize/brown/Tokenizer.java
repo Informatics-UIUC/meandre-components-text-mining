@@ -57,7 +57,6 @@ import org.seasr.components.text.datatype.corpora.AnnotationConstants;
 import org.seasr.components.text.datatype.corpora.AnnotationSet;
 import org.seasr.components.text.datatype.corpora.Document;
 import org.seasr.components.text.datatype.corpora.FeatureMap;
-import org.seasr.components.text.tokenize.brown.support.Tokenize;
 
 import org.meandre.core.*;
 

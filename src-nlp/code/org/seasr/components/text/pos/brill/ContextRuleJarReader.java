@@ -62,7 +62,6 @@ import java.util.logging.*;
 import org.meandre.core.*;
 import org.meandre.components.util.MeandreJarFileReaderUtil;
 import org.meandre.annotations.*;
-import org.seasr.components.text.pos.brill.support.ContextRule;
 
 
 

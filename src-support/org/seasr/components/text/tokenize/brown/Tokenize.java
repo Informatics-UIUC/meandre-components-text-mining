@@ -40,7 +40,7 @@
  * WITH THE SOFTWARE.
  */ 
 
-package org.seasr.components.text.tokenize.brown.support;
+package org.seasr.components.text.tokenize.brown;
 
 //==============
 // Java Imports

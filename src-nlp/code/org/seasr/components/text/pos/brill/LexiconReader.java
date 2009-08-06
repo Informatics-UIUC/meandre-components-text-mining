@@ -62,7 +62,6 @@ import org.meandre.core.ExecutableComponent;
 
 import org.meandre.core.*;
 import org.meandre.annotations.*;
-import org.seasr.components.text.pos.brill.support.Lexicon;
 
 /**
  * 

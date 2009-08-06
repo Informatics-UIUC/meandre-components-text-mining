@@ -34,7 +34,6 @@ import edu.northwestern.at.monk.model.*;
 public class MonkToTermList implements ExecutableComponent {
 	
 	
-	
 	@ComponentInput(description = "work or workpart id", name = "tag")
 	private static final String DATA_IN_1 ="tag";
 	

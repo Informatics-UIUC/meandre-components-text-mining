@@ -88,7 +88,7 @@ description = "<p>Overview: <br>"
 		+ "Corpus: Chaucer (cha), NCF (ncf), Shakespeare (sha), Spenser (spe), Stein (stein).", 
 		tags = "monk data access io table text", 
 		name = "MonkDBAccessor",
-		dependency = { "monk.jar"},
+		dependency = { "monkdb-1.0.20.jar"},
         baseURL="meandre://seasr.org/components/")
 public class MonkDBAccessor implements ExecutableComponent {
 

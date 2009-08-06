@@ -53,7 +53,6 @@ import java.util.logging.*;
 //===============
 
 import org.seasr.components.text.datatype.corpora.Document;
-import org.seasr.components.text.transform.support.DocToRDFModel;
 
 import org.meandre.core.*;
 import org.meandre.annotations.*;

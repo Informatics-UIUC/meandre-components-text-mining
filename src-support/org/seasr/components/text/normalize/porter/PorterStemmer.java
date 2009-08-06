@@ -40,9 +40,10 @@
  * WITH THE SOFTWARE.
  */
 
-package org.seasr.components.text.normalize.porter.support;
+package org.seasr.components.text.normalize.porter;
 
 import java.io.*;
+
 
 public class PorterStemmer {
 

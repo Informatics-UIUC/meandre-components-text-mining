@@ -34,6 +34,9 @@ public class MonkWorkToWorkPart implements ExecutableComponent {
 	@ComponentInput(description = "Work Tag", name = "workTag")
 	private static final String DATA_IN_1 = "workTag";
 	
+	@ComponentInput(description = "MONK db connection status", name = "db_status")
+	private static final String DATA_IN_2 ="db_status";
+	
 	@ComponentOutput(description = "WorkPart Tag", name = "workPartTag")
 	private static final String DATA_OUT_1 = "workPartTag";
 	

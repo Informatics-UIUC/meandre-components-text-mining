@@ -40,7 +40,7 @@
    Release 4
 
 */
-package org.seasr.components.text.normalize.porter.support;
+package org.seasr.components.text.normalize.porter;
 
 import java.io.*;
 

@@ -62,9 +62,6 @@ import org.seasr.components.text.datatype.corpora.AnnotationSet;
 import org.seasr.components.text.datatype.corpora.Document;
 import org.seasr.components.text.datatype.corpora.DocumentConstants;
 import org.seasr.components.text.datatype.corpora.FeatureMap;
-import org.seasr.components.text.pos.brill.support.ContextRule;
-import org.seasr.components.text.pos.brill.support.DocTokMap;
-import org.seasr.components.text.pos.brill.support.Lexicon;
 import org.meandre.core.*;
 import org.meandre.annotations.*;
 
