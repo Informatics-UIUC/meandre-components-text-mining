@@ -90,7 +90,7 @@ import org.seasr.components.text.opennlp.OpenNLPBaseUtilities;
 			+ "This class is currently non-functional.  Do not use.",
 
 		name = "OpenNLP_TreebankLinker", tags = "sentence text opennlp document",
-		dependency = { "maxent-models.jar" },
+		dependency = { "maxent-models.jar", "components-foundry-support.jar" },
         baseURL="meandre://seasr.org/components/")
 public class OpenNLP_TreebankLinker extends OpenNLPBaseUtilities {
 
@@ -104,7 +104,7 @@ public class OpenNLP_TreebankLinker extends OpenNLPBaseUtilities {
 
 	private long m_start = 0;
 
-	private String _version = "1.0";
+	private final String _version = "1.0";
 
 	// props
 
@@ -268,7 +268,8 @@ public class OpenNLP_TreebankLinker extends OpenNLPBaseUtilities {
 		return s;
 	}
 
-	public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
+	@Override
+    public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
 	    super.initializeCallBack(ccp);
 
 		System.getProperties().put("WNSEARCHDIR", "c:/tmp/DICT1.5");
@@ -307,7 +308,8 @@ public class OpenNLP_TreebankLinker extends OpenNLPBaseUtilities {
 		}
 	}
 
-	public void disposeCallBack(ComponentContextProperties ccp) throws Exception {
+	@Override
+    public void disposeCallBack(ComponentContextProperties ccp) throws Exception {
 		long end = System.currentTimeMillis();
 		if (getVerbose(ccp)) {
 			_logger.info("\nEND EXEC -- OpenNLP_TreebankLinker -- Docs Processed: "
@@ -318,7 +320,8 @@ public class OpenNLP_TreebankLinker extends OpenNLPBaseUtilities {
 	}
 
 
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public void executeCallBack(ComponentContext ctx)
 			throws Exception {
 
@@ -427,8 +430,8 @@ public class OpenNLP_TreebankLinker extends OpenNLPBaseUtilities {
 
 	class CorefParse {
 
-		  private Map parseMap;
-		  private List parses;
+		  private final Map parseMap;
+		  private final List parses;
 
 		  public CorefParse(List parses, DiscourseEntity[] entities) {
 		    this.parses = parses;

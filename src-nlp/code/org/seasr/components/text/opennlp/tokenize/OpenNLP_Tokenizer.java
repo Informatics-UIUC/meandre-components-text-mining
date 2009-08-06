@@ -84,7 +84,7 @@ import org.seasr.components.text.util.Factory;
 			+ "recorded as an annotation in the SEASR Document object.",
 
 		name = "OpenNLP_Tokenizer", tags = "tokenize text opennlp document",
-		dependency = { "maxent-models.jar", "trove-2.0.3.jar" },
+		dependency = { "maxent-models.jar", "trove-2.0.3.jar", "components-foundry-support.jar" },
         baseURL="meandre://seasr.org/components/")
 public class OpenNLP_Tokenizer extends OpenNLPBaseUtilities {
 
@@ -195,7 +195,8 @@ public class OpenNLP_Tokenizer extends OpenNLPBaseUtilities {
 		return Boolean.parseBoolean(s.toLowerCase());
 	}
 
-	public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
+	@Override
+    public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
 		super.initializeCallBack(ccp);
 
 		_logger = console;
@@ -213,7 +214,8 @@ public class OpenNLP_Tokenizer extends OpenNLPBaseUtilities {
         }
 	}
 
-	public void disposeCallBack(ComponentContextProperties ccp) throws Exception {
+	@Override
+    public void disposeCallBack(ComponentContextProperties ccp) throws Exception {
 		long end = System.currentTimeMillis();
 		if (getVerbose(ccp)) {
 			_logger.info("\nEND EXEC -- OpenNLP_Tokenizer -- Docs Processed: "
@@ -224,7 +226,8 @@ public class OpenNLP_Tokenizer extends OpenNLPBaseUtilities {
 		_tokenizer = null;
 	}
 
-	public void executeCallBack(ComponentContext ctx)
+	@Override
+    public void executeCallBack(ComponentContext ctx)
 			throws Exception {
 
 			Document idoc = (Document) ctx

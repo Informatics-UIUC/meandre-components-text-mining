@@ -84,7 +84,7 @@ import org.seasr.components.text.opennlp.OpenNLPBaseUtilities;
 			+ "that are generated for each token are stored as annotations.</p>",
 
 		name = "OpenNLP_PosTagger", tags = "pos text opennlp document",
-		dependency = { "maxent-models.jar", "trove-2.0.3.jar" },
+		dependency = { "maxent-models.jar", "trove-2.0.3.jar", "components-foundry-support.jar" },
         baseURL="meandre://seasr.org/components/")
 public class OpenNLP_PosTagger extends OpenNLPBaseUtilities {
 
@@ -189,7 +189,8 @@ public class OpenNLP_PosTagger extends OpenNLPBaseUtilities {
 		return Boolean.parseBoolean(s.toLowerCase());
 	}
 
-	public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
+	@Override
+    public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
 	    super.initializeCallBack(ccp);
 
 		_logger = console;
@@ -212,7 +213,8 @@ public class OpenNLP_PosTagger extends OpenNLPBaseUtilities {
 		}
 	}
 
-	public void disposeCallBack(ComponentContextProperties ccp) throws Exception {
+	@Override
+    public void disposeCallBack(ComponentContextProperties ccp) throws Exception {
 		long end = System.currentTimeMillis();
 		if (getVerbose(ccp)) {
 			_logger.info("\nEND EXEC -- OpenNLP_PosTagger -- Docs Processed: "
@@ -223,7 +225,8 @@ public class OpenNLP_PosTagger extends OpenNLPBaseUtilities {
 		_tagger = null;
 	}
 
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public void executeCallBack(ComponentContext ctx)
 			throws Exception {
 

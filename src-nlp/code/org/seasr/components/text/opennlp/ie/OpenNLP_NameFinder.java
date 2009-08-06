@@ -93,7 +93,7 @@ description = "<p>Overview:<br> This component wraps the OpenNLP NameFinder clas
 		+ "parser (use the 'use_treebank' option).</p>",
 
 name = "OpenNLP_NameFinder", tags = "sentence text opennlp document",
-dependency = { "maxent-models.jar", "trove-2.0.3.jar" },
+dependency = { "maxent-models.jar", "trove-2.0.3.jar", "components-foundry-support.jar" },
 baseURL="meandre://seasr.org/components/")
 public class OpenNLP_NameFinder extends OpenNLPBaseUtilities {
 
@@ -254,7 +254,8 @@ public class OpenNLP_NameFinder extends OpenNLPBaseUtilities {
 		return s;
 	}
 
-	public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
+	@Override
+    public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
 	    super.initializeCallBack(ccp);
 
 	    _logger = console;
@@ -292,7 +293,8 @@ public class OpenNLP_NameFinder extends OpenNLPBaseUtilities {
 		}
 	}
 
-	public void disposeCallBack(ComponentContextProperties ccp) throws Exception {
+	@Override
+    public void disposeCallBack(ComponentContextProperties ccp) throws Exception {
 		_logger.fine("dispose() called");
 		long end = System.currentTimeMillis();
 		if (getVerbose(ccp)) {
@@ -305,7 +307,8 @@ public class OpenNLP_NameFinder extends OpenNLPBaseUtilities {
 		_finders = null;
 	}
 
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public void executeCallBack(ComponentContext ctx)
 			throws Exception {
 
@@ -503,7 +506,7 @@ public class OpenNLP_NameFinder extends OpenNLPBaseUtilities {
 
 	private void addNames(String tag, List<Span> names, Parse[] tokens) {
 		for (int ni = 0, nn = names.size(); ni < nn; ni++) {
-			Span nameTokenSpan = (Span) names.get(ni);
+			Span nameTokenSpan = names.get(ni);
 			Parse startToken = tokens[nameTokenSpan.getStart()];
 			Parse endToken = tokens[nameTokenSpan.getEnd()];
 			Parse commonParent = startToken.getCommonParent(endToken);

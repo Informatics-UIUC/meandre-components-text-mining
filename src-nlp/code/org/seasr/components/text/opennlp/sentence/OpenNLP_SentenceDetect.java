@@ -77,7 +77,7 @@ import org.seasr.components.text.opennlp.OpenNLPBaseUtilities;
 			+ "This component wraps the SentenceDetector from the OpenNLP package.</p>",
 		name = "OpenNLP_SentenceDetect",
 		tags = "sentence text opennlp document",
-		dependency={"maxent-models.jar","trove-2.0.3.jar"},
+		dependency={"maxent-models.jar","trove-2.0.3.jar", "components-foundry-support.jar"},
         baseURL="meandre://seasr.org/components/")
 public class OpenNLP_SentenceDetect extends OpenNLPBaseUtilities {
 
@@ -106,7 +106,8 @@ public class OpenNLP_SentenceDetect extends OpenNLPBaseUtilities {
 		return Boolean.parseBoolean(s.toLowerCase());
 	}
 
-	public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
+	@Override
+    public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
 	    super.initializeCallBack(ccp);
 
 		_logger = console;
@@ -124,7 +125,8 @@ public class OpenNLP_SentenceDetect extends OpenNLPBaseUtilities {
         }
 	}
 
-	public void dispose(ComponentContextProperties ccp) {
+	@Override
+    public void dispose(ComponentContextProperties ccp) {
 		long end = System.currentTimeMillis();
 		_logger.info("END EXEC -- OpenNLP_SentenceDetect -- Docs Processed: "
 					+ m_docsProcessed);
@@ -132,7 +134,8 @@ public class OpenNLP_SentenceDetect extends OpenNLPBaseUtilities {
 		_sentDetector = null;
 	}
 
-	public void executeCallBack(ComponentContext ctx)
+	@Override
+    public void executeCallBack(ComponentContext ctx)
 			throws Exception {
 
 			Document idoc = (Document) ctx
