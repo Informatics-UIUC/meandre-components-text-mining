@@ -72,7 +72,15 @@ public abstract class OpenNLPBaseUtilities extends AbstractExecutableComponent {
 		)
 	protected static final String PROP_LANGUAGE = "language";
 
+	@ComponentProperty(
+			name = "openNLPdir",
+			description = "OpenNLP directory, if non-empty, skip install",
+		    defaultValue = ""
+		)
+	protected static final String PROP_OPENNLP_DIR = "openNLPdir";
+
 	//--------------------------------------------------------------------------------------------
+
 
 	protected String sOpenNLPDir;
 	/** The language of the text being processed */
@@ -83,26 +91,34 @@ public abstract class OpenNLPBaseUtilities extends AbstractExecutableComponent {
 
 	@Override
     public void initializeCallBack(ComponentContextProperties ccp) throws Exception {
-        sOpenNLPDir = ccp.getRunDirectory()+File.separator+"opennlp";
 
-        this.sLanguage = ccp.getProperty(PROP_LANGUAGE).trim().toLowerCase();
+		this.sLanguage = ccp.getProperty(PROP_LANGUAGE).trim().toLowerCase();
 
-        File modelsJar = new File(ccp.getPublicResourcesDirectory() + File.separator +
-                "contexts" + File.separator + "java" + File.separator + "maxent-models.jar");
-        if (!modelsJar.exists())
-            throw new ComponentContextException("Could not find dependency: " + modelsJar.toString());
+		sOpenNLPDir = ccp.getProperty(PROP_OPENNLP_DIR).trim();
+		if (sOpenNLPDir.length() == 0)
+		    sOpenNLPDir = ccp.getRunDirectory()+File.separator+"opennlp";
 
-        console.fine("Installing " + sLanguage + " models from: " + modelsJar.toString());
+		File modelsJar = new File(ccp.getPublicResourcesDirectory() + File.separator +
+		        "contexts" + File.separator + "java" + File.separator + "maxent-models.jar");
+		if (!modelsJar.exists())
+		    modelsJar = new File(sOpenNLPDir + File.separator + "maxent-models.jar");
 
-        InstallStatus status = JARInstaller.installFromStream(new FileInputStream(modelsJar), sOpenNLPDir, false);
-        if (status == InstallStatus.SKIPPED)
-            console.fine("Installation skipped - models already installed");
+		if (!modelsJar.exists())
+		    throw new ComponentContextException("Could not find dependency: " + modelsJar.toString());
 
-        if (status == InstallStatus.FAILED)
-            throw new ComponentContextException("Failed to install OpenNLP models at " + new File(sOpenNLPDir).getAbsolutePath());
+		console.fine("Installing " + sLanguage + " models from: " + modelsJar.toString());
 
-        sOpenNLPDir += File.separator+"models"+File.separator
-                        +sLanguage.substring(0,1).toUpperCase()+sLanguage.substring(1)+File.separator;
+		InstallStatus status = JARInstaller.installFromStream(new FileInputStream(modelsJar), sOpenNLPDir, false);
+		if (status == InstallStatus.SKIPPED)
+		    console.fine("Installation skipped - models already installed");
+
+		if (status == InstallStatus.FAILED)
+			throw new ComponentContextException("Failed to install OpenNLP models at " + new File(sOpenNLPDir).getAbsolutePath());
+
+		// constructs the final OpenNLP models path based on the language chosen
+		// example:  <sOpenNLPDir>/models/English/
+		sOpenNLPDir += (sOpenNLPDir.endsWith(File.separator) ? "" : File.separator) + "models" + File.separator
+		                + sLanguage.substring(0,1).toUpperCase() + sLanguage.substring(1) + File.separator;
 	}
 
 	@Override
