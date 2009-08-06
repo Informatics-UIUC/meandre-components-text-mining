@@ -88,76 +88,18 @@ public class OpenNLP_SentenceDetect extends OpenNLPBaseUtilities {
 	// Options
 	private int m_docsProcessed = 0;
 
-	private long m_start = 0;
-
 	private SentenceDetector _sentDetector = null;
 
 	private static Logger _logger;
 
-	// props
-
 	@ComponentProperty(description = "Verbose output? A boolean value (true or false).", name = "verbose", defaultValue = "false")
 	public final static String DATA_PROPERTY_VERBOSE = "verbose";
-
-	// io
 
 	@ComponentInput(description = "Input document.", name = "Document")
 	public final static String DATA_INPUT_DOC_IN = "Document";
 
 	@ComponentOutput(description = "Output document.", name = "Document")
 	public final static String DATA_OUTPUT_DOC_OUT = "Document";
-
-	// ================
-	// Constructor(s)
-	// ================
-
-	public OpenNLP_SentenceDetect() {
-	}
-
-	static public void main(String[] args) {
-
-//		// get a flow builder instance
-//		FlowBuilderAPI flowBuilder = new FlowBuilderAPI();
-//		// get a flow object
-//		WorkingFlow wflow = flowBuilder.newWorkingFlow("test");
-//		// add a component
-//		String pushString = wflow
-//				.addComponent("org.seasr.meandre.components.io.PushString");
-//		// set a component property
-//		wflow.setComponentInstanceProp(pushString, "string",
-//				"c:/tmp/sample.txt");
-//		// add another component
-//		String reader = wflow
-//				.addComponent("org.seasr.meandre.components.t2k.io.file.TextFileToDoc");
-//
-//		// make a connection between two components
-//		wflow.connectComponents(pushString, "output_string", reader,
-//				TextFileToDoc.DATA_INPUT_FILE_NAME);
-//
-//		// add another component
-//		String sentdetector = wflow
-//				.addComponent("org.seasr.meandre.components.t2k.sentence.opennlp.OpenNLP_SentenceDetect");
-//
-//		// make a connection between two components
-//		wflow.connectComponents(reader, TextFileToDoc.DATA_OUTPUT_FILE_DOC,
-//				sentdetector, OpenNLP_SentenceDetect.DATA_INPUT_DOC_IN);
-//
-//		// set a component property
-//		wflow.setComponentInstanceProp(sentdetector, "verbose", "true");
-//
-//		// execute the flow specifying that we want a web UI displayed
-//		flowBuilder.execute(wflow, false);
-//
-//		// For some reason the process does not end without a forced exit.
-//		System.exit(0);
-
-	}
-
-	// ================
-	// Public Methods
-	// ================
-
-	// Property Getters
 
 	public boolean getVerbose(ComponentContextProperties ccp) {
 		String s = ccp.getProperty(DATA_PROPERTY_VERBOSE);
@@ -169,7 +111,6 @@ public class OpenNLP_SentenceDetect extends OpenNLPBaseUtilities {
 
 		_logger = console;
 		m_docsProcessed = 0;
-		m_start = System.currentTimeMillis();
 
 		// Write model file to disk if it doesn't already
 		// exist.
@@ -185,11 +126,8 @@ public class OpenNLP_SentenceDetect extends OpenNLPBaseUtilities {
 
 	public void dispose(ComponentContextProperties ccp) {
 		long end = System.currentTimeMillis();
-		if (getVerbose(ccp)) {
-			_logger.info("\nEND EXEC -- OpenNLP_SentenceDetect -- Docs Processed: "
-					+ m_docsProcessed + " in " + (end - m_start) / 1000
-					+ " seconds\n");
-		}
+		_logger.info("END EXEC -- OpenNLP_SentenceDetect -- Docs Processed: "
+					+ m_docsProcessed);
 		m_docsProcessed = 0;
 		_sentDetector = null;
 	}
@@ -243,14 +181,12 @@ public class OpenNLP_SentenceDetect extends OpenNLPBaseUtilities {
 				}
 			}
 
-			if (getVerbose(ctx)) {
-				_logger.info("\n\nDocument parsed.  "
+			_logger.info("Document parsed.  "
 						+ idoc.getAnnotations(AnnotationConstants.ANNOTATION_SET_SENTENCES).get(
 								AnnotationConstants.SENTENCE_ANNOT_TYPE).size()
-						+ " tokens created.\n\n");
-			}
+						+ " tokens created.");
+			
 			ctx.pushDataComponentToOutput(DATA_OUTPUT_DOC_OUT, idoc);
 			m_docsProcessed++;
-
 	}
 }
